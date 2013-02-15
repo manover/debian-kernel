@@ -1,0 +1,162 @@
+From: Bjorn Helgaas <bjorn.helgaas@hp.com>
+Date: Tue, 23 Feb 2010 10:24:41 -0700
+Subject: x86/PCI: use host bridge _CRS info by default on 2008 and newer
+ machines
+
+Part of commit 7bc5e3f2be32ae6fb0c74cd0f707f986b3a01a26 upstream.
+
+The main benefit of using ACPI host bridge window information is that
+we can do better resource allocation in systems with multiple host bridges,
+e.g., http://bugzilla.kernel.org/show_bug.cgi?id=14183
+
+Sometimes we need _CRS information even if we only have one host bridge,
+e.g., https://bugs.launchpad.net/ubuntu/+source/linux/+bug/341681
+
+Most of these systems are relatively new, so this patch turns on
+"pci=use_crs" only on machines with a BIOS date of 2008 or newer.
+
+Signed-off-by: Bjorn Helgaas <bjorn.helgaas@hp.com>
+Signed-off-by: Jesse Barnes <jbarnes@virtuousgeek.org>
+[bwh: Conservative backport to squeeze:
+ - Adjust context
+ - Don't enable it based on BIOS date, but do start applying quirks for
+   specific models]
+---
+--- a/Documentation/kernel-parameters.txt
++++ b/Documentation/kernel-parameters.txt
+@@ -1927,8 +1927,11 @@ and is between 256 and 4096 characters. It is defined in the file
+ 				IRQ routing is enabled.
+ 		noacpi		[X86] Do not use ACPI for IRQ routing
+ 				or for PCI scanning.
+-		use_crs		[X86] Use _CRS for PCI resource
+-				allocation.
++		use_crs		[X86] Use PCI host bridge window information
++				from ACPI.  If you need to use this, please
++				report a bug.
++		nocrs		[X86] Ignore PCI host bridge windows from ACPI.
++			        If you need to use this, please report a bug.
+ 		routeirq	Do IRQ routing for all PCI devices.
+ 				This is normally done in pci_enable_device(),
+ 				so this option is a temporary workaround
+--- a/arch/ia64/include/asm/acpi.h
++++ b/arch/ia64/include/asm/acpi.h
+@@ -98,6 +98,7 @@ ia64_acpi_release_global_lock (unsigned int *lock)
+ #endif
+ #define acpi_processor_cstate_check(x) (x) /* no idle limits on IA64 :) */
+ static inline void disable_acpi(void) { }
++static inline void pci_acpi_crs_quirks(void) { }
+ 
+ const char *acpi_get_sysname (void);
+ int acpi_request_vector (u32 int_type);
+--- a/arch/x86/include/asm/pci_x86.h
++++ b/arch/x86/include/asm/pci_x86.h
+@@ -29,6 +29,7 @@
+ #define PCI_CHECK_ENABLE_AMD_MMCONF	0x20000
+ #define PCI_HAS_IO_ECS		0x40000
+ #define PCI_NOASSIGN_ROMS	0x80000
++#define PCI_ROOT_NO_CRS		0x100000
+ 
+ extern unsigned int pci_probe;
+ extern unsigned long pirq_table_addr;
+--- a/arch/x86/pci/acpi.c
++++ b/arch/x86/pci/acpi.c
+@@ -14,6 +14,46 @@ struct pci_root_info {
+ 	int busnum;
+ };
+ 
++static bool pci_use_crs = false;
++
++static int __init set_use_crs(const struct dmi_system_id *id)
++{
++	pci_use_crs = true;
++	return 0;
++}
++
++static const struct dmi_system_id pci_use_crs_table[] __initconst = {
++	/* http://bugzilla.kernel.org/show_bug.cgi?id=14183 */
++	{
++		.callback = set_use_crs,
++		.ident = "IBM System x3800",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "IBM"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "x3800"),
++		},
++	},
++	{}
++};
++
++void __init pci_acpi_crs_quirks(void)
++{
++	dmi_check_system(pci_use_crs_table);
++
++	/*
++	 * If the user specifies "pci=use_crs" or "pci=nocrs" explicitly, that
++	 * takes precedence over anything we figured out above.
++	 */
++	if (pci_probe & PCI_ROOT_NO_CRS)
++		pci_use_crs = false;
++	else if (pci_probe & PCI_USE__CRS)
++		pci_use_crs = true;
++
++	printk(KERN_INFO "PCI: %s host bridge windows from ACPI; "
++	       "if necessary, use \"pci=%s\" and report a bug\n",
++	       pci_use_crs ? "Using" : "Ignoring",
++	       pci_use_crs ? "nocrs" : "use_crs");
++}
++
+ static acpi_status
+ resource_to_addr(struct acpi_resource *resource,
+ 			struct acpi_resource_address64 *addr)
+@@ -107,7 +147,7 @@ setup_resource(struct acpi_resource *acpi_res, void *data)
+ 	res->end = end;
+ 	res->child = NULL;
+ 
+-	if (!(pci_probe & PCI_USE__CRS)) {
++	if (!pci_use_crs) {
+ 		printk(KERN_DEBUG "host bridge window %pR (ignored)\n", res);
+ 		return AE_OK;
+ 	}
+@@ -130,11 +170,6 @@ get_current_resources(struct acpi_device *device, int busnum,
+ 	struct pci_root_info info;
+ 	size_t size;
+ 
+-	if (!(pci_probe & PCI_USE__CRS))
+-		dev_info(&device->dev,
+-			 "ignoring host bridge windows from ACPI; "
+-			 "boot with \"pci=use_crs\" to use them\n");
+-
+ 	info.bus = bus;
+ 	info.res_num = 0;
+ 	acpi_walk_resources(device->handle, METHOD_NAME__CRS, count_resource,
+--- a/arch/x86/pci/common.c
++++ b/arch/x86/pci/common.c
+@@ -518,6 +518,9 @@ char * __devinit  pcibios_setup(char *str)
+ 	} else if (!strcmp(str, "use_crs")) {
+ 		pci_probe |= PCI_USE__CRS;
+ 		return NULL;
++	} else if (!strcmp(str, "nocrs")) {
++		pci_probe |= PCI_ROOT_NO_CRS;
++		return NULL;
+ 	} else if (!strcmp(str, "earlydump")) {
+ 		pci_early_dump_regs = 1;
+ 		return NULL;
+--- a/drivers/acpi/pci_root.c
++++ b/drivers/acpi/pci_root.c
+@@ -606,6 +606,7 @@ static int __init acpi_pci_root_init(void)
+ 	if (acpi_pci_disabled)
+ 		return 0;
+ 
++	pci_acpi_crs_quirks();
+ 	if (acpi_bus_register_driver(&acpi_pci_root_driver) < 0)
+ 		return -ENODEV;
+ 
+--- a/include/acpi/acpi_drivers.h
++++ b/include/acpi/acpi_drivers.h
+@@ -104,6 +104,7 @@ int acpi_pci_bind_root(struct acpi_device *device);
+ 
+ struct pci_bus *pci_acpi_scan_root(struct acpi_device *device, int domain,
+ 				   int bus);
++void pci_acpi_crs_quirks(void);
+ 
+ /* --------------------------------------------------------------------------
+                                     Processor

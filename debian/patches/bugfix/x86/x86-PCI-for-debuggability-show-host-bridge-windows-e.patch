@@ -1,0 +1,73 @@
+From: Bjorn Helgaas <bjorn.helgaas@hp.com>
+Date: Wed, 4 Nov 2009 10:39:13 -0700
+Subject: x86/PCI: for debuggability, show host bridge windows even when
+ ignoring _CRS
+
+commit f1db6fde09e201218f488d7205a7cd7bc448d496 upstream.
+
+We have occasional problems with PCI resource allocation, and sometimes
+they could be avoided by paying attention to what ACPI tells us about
+the host bridges.  This patch doesn't change the behavior, but it prints
+window information that should make debugging easier.
+
+Signed-off-by: Bjorn Helgaas <bjorn.helgaas@hp.com>
+Signed-off-by: Jesse Barnes <jbarnes@virtuousgeek.org>
+[bwh: Backported to 2.6.32:
+ - Adjust context
+ - Don't use pci_root_info::bridge in debug message]
+---
+--- a/arch/x86/pci/acpi.c
++++ b/arch/x86/pci/acpi.c
+@@ -91,11 +91,12 @@ setup_resource(struct acpi_resource *acpi_res, void *data)
+ 	start = addr.minimum + addr.translation_offset;
+ 	end = start + addr.address_length - 1;
+ 	if (info->res_num >= max_root_bus_resources) {
+-		printk(KERN_WARNING "PCI: Failed to allocate 0x%lx-0x%lx "
+-			"from %s for %s due to _CRS returning more than "
+-			"%d resource descriptors\n", (unsigned long) start,
+-			(unsigned long) end, root->name, info->name,
+-			max_root_bus_resources);
++		if (pci_probe & PCI_USE__CRS)
++			printk(KERN_WARNING "PCI: Failed to allocate "
++			       "0x%lx-0x%lx from %s for %s due to _CRS "
++			       "returning more than %d resource descriptors\n",
++			       (unsigned long) start, (unsigned long) end,
++			       root->name, info->name, max_root_bus_resources);
+ 		return AE_OK;
+ 	}
+ 
+@@ -106,6 +107,11 @@ setup_resource(struct acpi_resource *acpi_res, void *data)
+ 	res->end = end;
+ 	res->child = NULL;
+ 
++	if (!(pci_probe & PCI_USE__CRS)) {
++		printk(KERN_DEBUG "host bridge window %pR (ignored)\n", res);
++		return AE_OK;
++	}
++
+ 	if (insert_resource(root, res)) {
+ 		printk(KERN_ERR "PCI: Failed to allocate 0x%lx-0x%lx "
+ 			"from %s for %s\n", (unsigned long) res->start,
+@@ -124,6 +131,11 @@ get_current_resources(struct acpi_device *device, int busnum,
+ 	struct pci_root_info info;
+ 	size_t size;
+ 
++	if (!(pci_probe & PCI_USE__CRS))
++		dev_info(&device->dev,
++			 "ignoring host bridge windows from ACPI; "
++			 "boot with \"pci=use_crs\" to use them\n");
++
+ 	info.bus = bus;
+ 	info.res_num = 0;
+ 	acpi_walk_resources(device->handle, METHOD_NAME__CRS, count_resource,
+@@ -209,9 +221,7 @@ struct pci_bus * __devinit pci_acpi_scan_root(struct acpi_device *device, int do
+ 	} else {
+ 		bus = pci_create_bus(NULL, busnum, &pci_root_ops, sd);
+ 		if (bus) {
+-			if (pci_probe & PCI_USE__CRS)
+-				get_current_resources(device, busnum, domain,
+-							bus);
++			get_current_resources(device, busnum, domain, bus);
+ 			bus->subordinate = pci_scan_child_bus(bus);
+ 		}
+ 	}

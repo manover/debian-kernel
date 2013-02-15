@@ -1,0 +1,3 @@
++ bugfix/x86/x86-PCI-for-debuggability-show-host-bridge-windows-e.patch
++ bugfix/x86/x86-PCI-use-host-bridge-_CRS-info-by-default-on-2008.patch
++ bugfix/x86/x86-PCI-Use-_CRS-by-default-on-VMware.patch

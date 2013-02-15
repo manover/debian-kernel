@@ -1,3 +1,10 @@
+linux-2.6 (2.6.32-49) UNRELEASED; urgency=low
+
+  * [x86] PCI: Use _CRS by default on IBM System x3800 and VMware
+    (Closes: #700544)
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Fri, 15 Feb 2013 02:55:05 +0000
+
 linux-2.6 (2.6.32-48) stable; urgency=low
 
   * [s390] s390/time: fix sched_clock() overflow (Closes: #698382) 
