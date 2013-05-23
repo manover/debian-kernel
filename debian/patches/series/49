@@ -1,3 +1,4 @@
 + bugfix/x86/x86-PCI-for-debuggability-show-host-bridge-windows-e.patch
 + bugfix/x86/x86-PCI-use-host-bridge-_CRS-info-by-default-on-2008.patch
 + bugfix/x86/x86-PCI-Use-_CRS-by-default-on-VMware.patch
++ features/all/xen/Xen-register-panic-notifier-to-take-crashes-of-xen-g.patch

@@ -1,7 +1,11 @@
 linux-2.6 (2.6.32-49) UNRELEASED; urgency=low
 
+  [ Ben Hutchings ]
   * [x86] PCI: Use _CRS by default on IBM System x3800 and VMware
     (Closes: #700544)
+
+  [ Ian Campbell ]
+  * xen: signal crash to host on panic (Closes: #706692)
 
  -- Ben Hutchings <ben@decadent.org.uk>  Fri, 15 Feb 2013 02:55:05 +0000
 

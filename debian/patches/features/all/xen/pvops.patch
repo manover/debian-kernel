@@ -18,7 +18,8 @@ $ git diff debian-base..debian-pvops
 [bwh: Updated context in xen_smp_prepare_cpus() to apply after 2.6.32.47.]
 [bwh: Updated the removed implementation of blkfront_closing() to match
  2.6.32.59.  The fix made there appears to be unnecessary here.]
-
+[ijc: Update after pulling f09f6d194d85043e0eb105a577e7ad6d8170ab66
+ into base kernel, removing those hunks here.]
 diff --git a/Documentation/kernel-parameters.txt b/Documentation/kernel-parameters.txt
 index 9238f05..eb729e4 100644
 --- a/Documentation/kernel-parameters.txt
@@ -3751,7 +3752,7 @@ index d96d81f..ce8db7a 100644
  	.io_delay = xen_io_delay,
  
  	/* Xen takes care of %gs when switching to usermode for us */
-@@ -1020,15 +1064,40 @@ static void xen_machine_halt(void)
+@@ -1020,6 +1064,14 @@ static void xen_machine_halt(void)
  	xen_reboot(SHUTDOWN_poweroff);
  }
  
@@ -3766,25 +3767,7 @@ index d96d81f..ce8db7a 100644
  static void xen_crash_shutdown(struct pt_regs *regs)
  {
  	xen_reboot(SHUTDOWN_crash);
- }
- 
-+static int
-+xen_panic_event(struct notifier_block *this, unsigned long event, void *ptr)
-+{
-+	xen_reboot(SHUTDOWN_crash);
-+	return NOTIFY_DONE;
-+}
-+
-+static struct notifier_block xen_panic_block = {
-+	.notifier_call= xen_panic_event,
-+};
-+
-+int xen_panic_handler_init(void)
-+{
-+	atomic_notifier_chain_register(&panic_notifier_list, &xen_panic_block);
-+	return 0;
-+}
-+
+@@ -1028,7 +1097,7 @@
  static const struct machine_ops __initdata xen_machine_ops = {
  	.restart = xen_restart,
  	.halt = xen_machine_halt,
@@ -5207,15 +5190,6 @@ index ad0047f..804815c 100644
  	return "Xen";
  }
  
-@@ -156,6 +267,8 @@ void __init xen_arch_setup(void)
- 	struct physdev_set_iopl set_iopl;
- 	int rc;
- 
-+	xen_panic_handler_init();
-+
- 	HYPERVISOR_vm_assist(VMASST_CMD_enable, VMASST_TYPE_4gb_segments);
- 	HYPERVISOR_vm_assist(VMASST_CMD_enable, VMASST_TYPE_writable_pagetables);
- 
 @@ -182,13 +295,17 @@ void __init xen_arch_setup(void)
  	}
  #endif
@@ -5479,13 +5453,6 @@ index ed77694..3bcdbed 100644
  /* Declare an asm function, along with symbols needed to make it
     inlineable */
  #define DECL_ASM(ret, name, ...)		\
-@@ -102,4 +122,6 @@ void xen_sysret32(void);
- void xen_sysret64(void);
- void xen_adjust_exception_frame(void);
- 
-+extern int xen_panic_handler_init(void);
-+
- #endif /* XEN_OPS_H */
 diff --git a/block/blk-core.c b/block/blk-core.c
 index cffd737..3efdae0 100644
 --- a/block/blk-core.c
