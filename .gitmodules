@@ -1,8 +1,8 @@
 [submodule "source/orig"]
 	path = source/orig
 	url = ../source/linux
-	branch = orig/4.2-rc8
+	branch = orig/4.3
 [submodule "source/none"]
 	path = source/none
 	url = ../source/linux
-	branch = none/4.2-rc8
+	branch = none/4.3
