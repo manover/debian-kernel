@@ -1,0 +1,247 @@
+From: Ben Hutchings <ben@decadent.org.uk>
+Date: Thu, 12 Nov 2015 14:39:28 +0000
+Subject: firmware_class: Add functions to set options directly
+
+--- a/drivers/base/firmware_class.c
++++ b/drivers/base/firmware_class.c
+@@ -97,21 +97,6 @@ static inline long firmware_loading_time
+ 	return loading_timeout > 0 ? loading_timeout * HZ : MAX_JIFFY_OFFSET;
+ }
+ 
+-/* firmware behavior options */
+-#define FW_OPT_UEVENT	(1U << 0)
+-#define FW_OPT_NOWAIT	(1U << 1)
+-#ifdef CONFIG_FW_LOADER_USER_HELPER
+-#define FW_OPT_USERHELPER	(1U << 2)
+-#else
+-#define FW_OPT_USERHELPER	0
+-#endif
+-#ifdef CONFIG_FW_LOADER_USER_HELPER_FALLBACK
+-#define FW_OPT_FALLBACK		FW_OPT_USERHELPER
+-#else
+-#define FW_OPT_FALLBACK		0
+-#endif
+-#define FW_OPT_NO_WARN	(1U << 3)
+-
+ struct firmware_cache {
+ 	/* firmware_buf instance will be added into the below list */
+ 	spinlock_t lock;
+@@ -1177,10 +1162,11 @@ _request_firmware(const struct firmware
+ }
+ 
+ /**
+- * request_firmware: - send firmware request and wait for it
++ * request_firmware_opts: - send firmware request and wait for it
+  * @firmware_p: pointer to firmware image
+  * @name: name of firmware file
+  * @device: device for which firmware is being loaded
++ * @opt_flags: flags for optional behavior
+  *
+  *      @firmware_p will be used to return a firmware image by the name
+  *      of @name for device @device.
+@@ -1197,43 +1183,21 @@ _request_firmware(const struct firmware
+  *	resume callback.
+  **/
+ int
+-request_firmware(const struct firmware **firmware_p, const char *name,
+-		 struct device *device)
++request_firmware_opts(const struct firmware **firmware_p, const char *name,
++		      struct device *device, unsigned int opt_flags)
+ {
+ 	int ret;
+ 
+-	/* Need to pin this module until return */
+-	__module_get(THIS_MODULE);
+-	ret = _request_firmware(firmware_p, name, device,
+-				FW_OPT_UEVENT | FW_OPT_FALLBACK);
+-	module_put(THIS_MODULE);
+-	return ret;
+-}
+-EXPORT_SYMBOL(request_firmware);
+-
+-/**
+- * request_firmware_direct: - load firmware directly without usermode helper
+- * @firmware_p: pointer to firmware image
+- * @name: name of firmware file
+- * @device: device for which firmware is being loaded
+- *
+- * This function works pretty much like request_firmware(), but this doesn't
+- * fall back to usermode helper even if the firmware couldn't be loaded
+- * directly from fs.  Hence it's useful for loading optional firmwares, which
+- * aren't always present, without extra long timeouts of udev.
+- **/
+-int request_firmware_direct(const struct firmware **firmware_p,
+-			    const char *name, struct device *device)
+-{
+-	int ret;
++	if (WARN_ON(opt_flags & FW_OPT_NOWAIT))
++		return -EINVAL;
+ 
++	/* Need to pin this module until return */
+ 	__module_get(THIS_MODULE);
+-	ret = _request_firmware(firmware_p, name, device,
+-				FW_OPT_UEVENT | FW_OPT_NO_WARN);
++	ret = _request_firmware(firmware_p, name, device, opt_flags);
+ 	module_put(THIS_MODULE);
+ 	return ret;
+ }
+-EXPORT_SYMBOL_GPL(request_firmware_direct);
++EXPORT_SYMBOL(request_firmware_opts);
+ 
+ /**
+  * release_firmware: - release the resource associated with a firmware image
+@@ -1278,7 +1242,7 @@ static void request_firmware_work_func(s
+ }
+ 
+ /**
+- * request_firmware_nowait - asynchronous version of request_firmware
++ * request_firmware_nowait_opts - asynchronous version of request_firmware
+  * @module: module requesting the firmware
+  * @uevent: sends uevent to copy the firmware image if this flag
+  *	is non-zero else the firmware copy must be done manually.
+@@ -1289,6 +1253,7 @@ static void request_firmware_work_func(s
+  *	@fw may be %NULL if firmware request fails.
+  * @cont: function will be called asynchronously when the firmware
+  *	request is over.
++ * @opt_flags: flags for optional behavior
+  *
+  *	Caller must hold the reference count of @device.
+  *
+@@ -1301,10 +1266,11 @@ static void request_firmware_work_func(s
+  *		- can't sleep at all if @gfp is GFP_ATOMIC.
+  **/
+ int
+-request_firmware_nowait(
+-	struct module *module, bool uevent,
++request_firmware_nowait_opts(
++	struct module *module,
+ 	const char *name, struct device *device, gfp_t gfp, void *context,
+-	void (*cont)(const struct firmware *fw, void *context))
++	void (*cont)(const struct firmware *fw, void *context),
++	unsigned int opt_flags)
+ {
+ 	struct firmware_work *fw_work;
+ 
+@@ -1321,8 +1287,7 @@ request_firmware_nowait(
+ 	fw_work->device = device;
+ 	fw_work->context = context;
+ 	fw_work->cont = cont;
+-	fw_work->opt_flags = FW_OPT_NOWAIT | FW_OPT_FALLBACK |
+-		(uevent ? FW_OPT_UEVENT : FW_OPT_USERHELPER);
++	fw_work->opt_flags = FW_OPT_NOWAIT | opt_flags;
+ 
+ 	if (!try_module_get(module)) {
+ 		kfree_const(fw_work->name);
+@@ -1335,7 +1300,7 @@ request_firmware_nowait(
+ 	schedule_work(&fw_work->work);
+ 	return 0;
+ }
+-EXPORT_SYMBOL(request_firmware_nowait);
++EXPORT_SYMBOL(request_firmware_nowait_opts);
+ 
+ #ifdef CONFIG_PM_SLEEP
+ static ASYNC_DOMAIN_EXCLUSIVE(fw_cache_domain);
+--- a/include/linux/firmware.h
++++ b/include/linux/firmware.h
+@@ -26,6 +26,21 @@ struct builtin_fw {
+ 	unsigned long size;
+ };
+ 
++-/* firmware behavior options */
++#define FW_OPT_UEVENT	(1U << 0)
++#define FW_OPT_NOWAIT	(1U << 1)
++#ifdef CONFIG_FW_LOADER_USER_HELPER
++#define FW_OPT_USERHELPER	(1U << 2)
++#else
++#define FW_OPT_USERHELPER	0
++#endif
++#ifdef CONFIG_FW_LOADER_USER_HELPER_FALLBACK
++#define FW_OPT_FALLBACK		FW_OPT_USERHELPER
++#else
++#define FW_OPT_FALLBACK		0
++#endif
++#define FW_OPT_NO_WARN	(1U << 3)
++
+ /* We have to play tricks here much like stringify() to get the
+    __COUNTER__ macro to be expanded as we want it */
+ #define __fw_concat1(x, y) x##y
+@@ -39,41 +54,59 @@ struct builtin_fw {
+ 	__used __section(.builtin_fw) = { name, blob, size }
+ 
+ #if defined(CONFIG_FW_LOADER) || (defined(CONFIG_FW_LOADER_MODULE) && defined(MODULE))
+-int request_firmware(const struct firmware **fw, const char *name,
+-		     struct device *device);
+-int request_firmware_nowait(
+-	struct module *module, bool uevent,
++int request_firmware_opts(const struct firmware **fw, const char *name,
++			  struct device *device, unsigned int opt_flags);
++int request_firmware_nowait_opts(
++	struct module *module,
+ 	const char *name, struct device *device, gfp_t gfp, void *context,
+-	void (*cont)(const struct firmware *fw, void *context));
+-int request_firmware_direct(const struct firmware **fw, const char *name,
+-			    struct device *device);
+-
++	void (*cont)(const struct firmware *fw, void *context),
++	unsigned int opt_flags);
+ void release_firmware(const struct firmware *fw);
+ #else
+-static inline int request_firmware(const struct firmware **fw,
+-				   const char *name,
+-				   struct device *device)
++static inline int request_firmware_opts(const struct firmware **fw,
++					const char *name,
++					struct device *device,
++					unsigned int opt_flags)
+ {
+ 	return -EINVAL;
+ }
+-static inline int request_firmware_nowait(
+-	struct module *module, bool uevent,
++static inline int request_firmware_nowait_opts(
++	struct module *module,
+ 	const char *name, struct device *device, gfp_t gfp, void *context,
+-	void (*cont)(const struct firmware *fw, void *context))
++	void (*cont)(const struct firmware *fw, void *context),
++	unsigned int opt_flags);
+ {
+ 	return -EINVAL;
+ }
+-
+ static inline void release_firmware(const struct firmware *fw)
+ {
+ }
+ 
+-static inline int request_firmware_direct(const struct firmware **fw,
+-					  const char *name,
+-					  struct device *device)
++#endif
++
++static inline int request_firmware(const struct firmware **fw, const char *name,
++				   struct device *device)
+ {
+-	return -EINVAL;
++	return request_firmware_opts(fw, name, device,
++				     FW_OPT_UEVENT | FW_OPT_FALLBACK);
++}
++
++static inline int request_firmware_nowait(
++	struct module *module, bool uevent,
++	const char *name, struct device *device, gfp_t gfp, void *context,
++	void (*cont)(const struct firmware *fw, void *context))
++{
++	return request_firmware_nowait_opts(
++		module, name, device, gfp, context, cont,
++		FW_OPT_FALLBACK | (uevent ? FW_OPT_UEVENT : FW_OPT_USERHELPER));
++}
++
++static inline int
++request_firmware_direct(const struct firmware **fw, const char *name,
++			struct device *device)
++{
++	return request_firmware_opts(fw, name, device,
++				     FW_OPT_UEVENT | FW_OPT_NO_WARN);
+ }
+ 
+-#endif
+ #endif
