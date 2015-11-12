@@ -23,7 +23,7 @@ format to detect missing firmware.
 ---
 --- a/drivers/base/firmware_class.c
 +++ b/drivers/base/firmware_class.c
-@@ -340,16 +340,19 @@ static int fw_get_filesystem_firmware(st
+@@ -340,7 +340,7 @@ static int fw_get_filesystem_firmware(st
  		rc = fw_read_file_contents(file, buf);
  		fput(file);
  		if (rc)
@@ -32,22 +32,18 @@ format to detect missing firmware.
  				path, rc);
  		else
  			break;
- 	}
+@@ -348,8 +348,8 @@ static int fw_get_filesystem_firmware(st
  	__putname(path);
  
--	if (!rc) {
+ 	if (!rc) {
 -		dev_dbg(device, "firmware: direct-loading firmware %s\n",
 -			buf->fw_id);
-+	if (rc) {
-+		dev_err(device, "firmware: failed to load %s (%d)\n",
-+			buf->fw_id, rc);
-+	} else {
 +		dev_info(device, "firmware: direct-loading firmware %s\n",
 +			 buf->fw_id);
  		mutex_lock(&fw_lock);
  		set_bit(FW_STATUS_DONE, &buf->status);
  		complete_all(&buf->completion);
-@@ -1026,7 +1029,8 @@ _request_firmware_prepare(struct firmwar
+@@ -1031,7 +1031,8 @@ _request_firmware_prepare(struct firmwar
  	}
  
  	if (fw_get_builtin_firmware(firmware, name)) {
@@ -57,7 +53,7 @@ format to detect missing firmware.
  		return 0; /* assigned */
  	}
  
-@@ -1109,7 +1113,7 @@ _request_firmware(const struct firmware
+@@ -1117,7 +1118,7 @@ _request_firmware(const struct firmware
  	if (opt_flags & FW_OPT_NOWAIT) {
  		timeout = usermodehelper_read_lock_wait(timeout);
  		if (!timeout) {
@@ -66,3 +62,28 @@ format to detect missing firmware.
  				name);
  			ret = -EBUSY;
  			goto out;
+@@ -1132,19 +1133,18 @@ _request_firmware(const struct firmware
+ 	}
+ 
+ 	ret = fw_get_filesystem_firmware(device, fw->priv);
+-#ifdef CONFIG_FW_LOADER_USER_HELPER
+ 	if (ret) {
+-		if (!(opt_flags & FW_OPT_NO_WARN))
+-			dev_warn(device,
+-				 "Direct firmware load for %s failed with error %d\n",
+-				 name, ret);
++#ifdef CONFIG_FW_LOADER_USER_HELPER
+ 		if (opt_flags & FW_OPT_USERHELPER) {
+ 			dev_warn(device, "Falling back to user helper\n");
+ 			ret = fw_load_from_user_helper(fw, name, device,
+ 						       opt_flags, timeout);
+ 		}
+-	}
+ #endif
++		if (ret && !(opt_flags & FW_OPT_NO_WARN))
++			dev_err(device, "firmware: failed to load %s (%d)\n",
++				name, rc);
++	}
+ 
+ 	if (!ret)
+ 		ret = assign_firmware_buf(fw, device, opt_flags);
