@@ -3,6 +3,7 @@ linux (4.6.1-2+udebsig) UNRELEASED; urgency=medium
   * bug script: Put binary package name and version in the info file so
     linux-signed can easily replace them
   * Move merge_packages function from gencontrol.py to gencontrol module
+  * udeb: Drop packages for modules that will later be signed
 
  -- Ben Hutchings <ben@decadent.org.uk>  Tue, 07 Jun 2016 19:37:55 +0100
 
