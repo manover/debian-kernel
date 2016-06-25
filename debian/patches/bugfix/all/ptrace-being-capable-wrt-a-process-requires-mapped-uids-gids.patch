@@ -44,7 +44,7 @@ Signed-off-by: Jann Horn <jann@thejh.net>
  #include <linux/syscalls.h>
  #include <linux/uaccess.h>
  #include <linux/regset.h>
-@@ -207,12 +208,34 @@ static int ptrace_check_attach(struct ta
+@@ -206,12 +207,34 @@ static int ptrace_check_attach(struct ta
  	return ret;
  }
  
@@ -82,7 +82,7 @@ Signed-off-by: Jann Horn <jann@thejh.net>
  }
  
  /* Returns 0 on success, -errno on denial. */
-@@ -264,7 +287,7 @@ static int __ptrace_may_access(struct ta
+@@ -263,7 +286,7 @@ static int __ptrace_may_access(struct ta
  	    gid_eq(caller_gid, tcred->sgid) &&
  	    gid_eq(caller_gid, tcred->gid))
  		goto ok;
@@ -91,7 +91,7 @@ Signed-off-by: Jann Horn <jann@thejh.net>
  		goto ok;
  	rcu_read_unlock();
  	return -EPERM;
-@@ -275,7 +298,7 @@ ok:
+@@ -274,7 +297,7 @@ ok:
  		dumpable = get_dumpable(task->mm);
  	rcu_read_lock();
  	if (dumpable != SUID_DUMP_USER &&

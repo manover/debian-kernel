@@ -1,7 +1,7 @@
 From: Paul Burton <paul.burton@imgtec.com>
 Date: Thu, 21 Apr 2016 12:25:38 +0100
 Subject: MIPS: Allow emulation for unaligned [LS]DXC1 instructions
-Origin: https://git.kernel.org/linus/e70ac023f9515c70cf2b291a294f0f250df29847
+Origin: https://patchwork.linux-mips.org/patch/13143/
 
 If an address error exception occurs for a LDXC1 or SDXC1 instruction,
 within the cop1x opcode space, allow it to be passed through to the FPU
@@ -15,11 +15,9 @@ Cc: Aurelien Jarno <aurelien@aurel32.net>
  arch/mips/kernel/unaligned.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/mips/kernel/unaligned.c b/arch/mips/kernel/unaligned.c
-index 5c62065..28b3af7 100644
 --- a/arch/mips/kernel/unaligned.c
 +++ b/arch/mips/kernel/unaligned.c
-@@ -1191,6 +1191,7 @@ static void emulate_load_store_insn(struct pt_regs *regs,
+@@ -1191,6 +1191,7 @@ static void emulate_load_store_insn(stru
  	case ldc1_op:
  	case swc1_op:
  	case sdc1_op:
@@ -27,7 +25,3 @@ index 5c62065..28b3af7 100644
  		die_if_kernel("Unaligned FP access in kernel code", regs);
  		BUG_ON(!used_math());
  
--- 
-2.8.0
-
-

@@ -14,8 +14,6 @@ Signed-off-by: Gregory CLEMENT <gregory.clement@free-electrons.com>
  arch/arm/boot/dts/Makefile | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 95c1923..67d5368 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
 @@ -177,6 +177,7 @@ dtb-$(CONFIG_MACH_KIRKWOOD) += \

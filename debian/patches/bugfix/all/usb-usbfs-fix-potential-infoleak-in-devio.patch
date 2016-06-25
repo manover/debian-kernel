@@ -18,7 +18,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/usb/core/devio.c
 +++ b/drivers/usb/core/devio.c
-@@ -1186,10 +1186,11 @@ static int proc_getdriver(struct usb_dev
+@@ -1316,10 +1316,11 @@ static int proc_getdriver(struct usb_dev
  
  static int proc_connectinfo(struct usb_dev_state *ps, void __user *arg)
  {

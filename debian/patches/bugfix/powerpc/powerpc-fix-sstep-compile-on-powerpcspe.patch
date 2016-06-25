@@ -18,11 +18,9 @@ Signed-off-by: Len Sorensen <lsorense@csclub.uwaterloo.ca>
  arch/powerpc/lib/sstep.c |    4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/arch/powerpc/lib/sstep.c b/arch/powerpc/lib/sstep.c
-index dc885b3..6d34310 100644
 --- a/arch/powerpc/lib/sstep.c
 +++ b/arch/powerpc/lib/sstep.c
-@@ -1818,9 +1818,11 @@ int __kprobes emulate_step(struct pt_regs *regs, unsigned int instr)
+@@ -1818,9 +1818,11 @@ int __kprobes emulate_step(struct pt_reg
  		case 4:
  			__get_user_asmx(val, op.ea, err, "lwarx");
  			break;
@@ -34,7 +32,7 @@ index dc885b3..6d34310 100644
  		default:
  			return 0;
  		}
-@@ -1841,9 +1843,11 @@ int __kprobes emulate_step(struct pt_regs *regs, unsigned int instr)
+@@ -1841,9 +1843,11 @@ int __kprobes emulate_step(struct pt_reg
  		case 4:
  			__put_user_asmx(op.val, op.ea, err, "stwcx.", cr);
  			break;

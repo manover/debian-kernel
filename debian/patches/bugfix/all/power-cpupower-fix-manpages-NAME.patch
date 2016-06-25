@@ -8,8 +8,6 @@ See man(7) and lexgrog(1).
 
 Signed-off-by: Mattia Dongili <malattia@linux.it>
 ---
-diff --git a/tools/power/cpupower/man/cpupower-frequency-info.1 b/tools/power/cpupower/man/cpupower-frequency-info.1
-index 9c85a38..6aa8d23 100644
 --- a/tools/power/cpupower/man/cpupower-frequency-info.1
 +++ b/tools/power/cpupower/man/cpupower-frequency-info.1
 @@ -1,7 +1,7 @@
@@ -21,8 +19,6 @@ index 9c85a38..6aa8d23 100644
  .SH "SYNTAX"
  .LP 
  cpupower [ \-c cpulist ] frequency\-info [\fIoptions\fP]
-diff --git a/tools/power/cpupower/man/cpupower-frequency-set.1 b/tools/power/cpupower/man/cpupower-frequency-set.1
-index 3eacc8d..b505702 100644
 --- a/tools/power/cpupower/man/cpupower-frequency-set.1
 +++ b/tools/power/cpupower/man/cpupower-frequency-set.1
 @@ -1,7 +1,7 @@
@@ -34,8 +30,6 @@ index 3eacc8d..b505702 100644
  .SH "SYNTAX"
  .LP 
  cpupower [ \-c cpu ] frequency\-set [\fIoptions\fP]
-diff --git a/tools/power/cpupower/man/cpupower-idle-info.1 b/tools/power/cpupower/man/cpupower-idle-info.1
-index 7b3646a..80a1311 100644
 --- a/tools/power/cpupower/man/cpupower-idle-info.1
 +++ b/tools/power/cpupower/man/cpupower-idle-info.1
 @@ -1,7 +1,7 @@
@@ -47,8 +41,6 @@ index 7b3646a..80a1311 100644
  .SH "SYNTAX"
  .LP
  cpupower [ \-c cpulist ] idle\-info [\fIoptions\fP]
-diff --git a/tools/power/cpupower/man/cpupower-idle-set.1 b/tools/power/cpupower/man/cpupower-idle-set.1
-index 580c4e3..21916cf 100644
 --- a/tools/power/cpupower/man/cpupower-idle-set.1
 +++ b/tools/power/cpupower/man/cpupower-idle-set.1
 @@ -1,7 +1,7 @@

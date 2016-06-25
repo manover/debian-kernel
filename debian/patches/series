@@ -21,9 +21,9 @@ bugfix/all/radeon-firmware-is-required-for-drm-and-kms-on-r600-onward.patch
 # Patches from aufs4 repository, imported with
 # debian/patches/features/all/aufs4/gen-patch.  These are only the
 # changes needed to allow aufs to be built out-of-tree.
-features/all/aufs4/aufs4-base.patch
-features/all/aufs4/aufs4-mmap.patch
-features/all/aufs4/aufs4-standalone.patch
+#features/all/aufs4/aufs4-base.patch
+#features/all/aufs4/aufs4-mmap.patch
+#features/all/aufs4/aufs4-standalone.patch
 
 # Change some defaults for security reasons
 debian/af_802154-Disable-auto-loading-as-mitigation-against.patch
@@ -55,7 +55,7 @@ features/mips/MIPS-octeon-Add-support-for-the-UBNT-E200-board.patch
 features/mips/MIPS-Octeon-Add-Octeon-III-CN7xxx-interface-detection.patch
 features/mips/MIPS-Octeon-detect-and-fix-byte-swapped-initramfs.patch
 features/x86/x86-memtest-WARN-if-bad-RAM-found.patch
-features/x86/x86-make-x32-syscall-support-conditional.patch
+#features/x86/x86-make-x32-syscall-support-conditional.patch
 features/arm/device-tree/ARM-dts-kirkwood-add-kirkwood-ds112.dtb-to-Makefile.patch
 features/arm/device-tree/ARM-dts-kirkwood-add-kirkwood-nsa320.dtb-to-Makefile.patch
 features/arm/device-tree/ARM-dts-orion5x-add-device-tree-for-kurobox-pro.patch
@@ -76,67 +76,22 @@ features/all/grsecurity/grsecurity-kconfig.patch
 #features/all/grsecurity/grsecurity-kbuild.patch
 features/all/grsecurity/grkernsec_perf_harden.patch
 
-# Securelevel patchset from mjg59
-features/all/securelevel/add-bsd-style-securelevel-support.patch
-features/all/securelevel/enforce-module-signatures-when-securelevel-is-greate.patch
-features/all/securelevel/pci-lock-down-bar-access-when-securelevel-is-enabled.patch
-features/all/securelevel/x86-lock-down-io-port-access-when-securelevel-is-ena.patch
-features/all/securelevel/restrict-dev-mem-and-dev-kmem-when-securelevel-is-se.patch
-features/all/securelevel/acpi-limit-access-to-custom_method-if-securelevel-is.patch
-features/all/securelevel/acpi-ignore-acpi_rsdp-kernel-parameter-when-securele.patch
-features/all/securelevel/kexec-disable-at-runtime-if-securelevel-has-been-set.patch
-features/all/securelevel/uswsusp-disable-when-securelevel-is-set.patch
-features/all/securelevel/x86-restrict-msr-access-when-securelevel-is-set.patch
-features/all/securelevel/asus-wmi-restrict-debugfs-interface-when-securelevel.patch
-features/all/securelevel/add-option-to-automatically-set-securelevel-when-in-.patch
-features/all/securelevel/efi-disable-secure-boot-if-shim-is-in-insecure-mode.patch
-features/all/securelevel/hibernate-disable-when-securelevel-is-set.patch
-features/all/securelevel/kexec-uefi-copy-secure_boot-flag-in-boot-params-acro.patch
-features/all/securelevel/acpi-disable-acpi-table-override-if-securelevel-is-s.patch
-features/all/securelevel/acpi-disable-apei-error-injection-if-securelevel-is-.patch
-features/all/securelevel/enable-cold-boot-attack-mitigation.patch
-features/all/securelevel/mtd-disable-slram-and-phram-when-securelevel-is-enabled.patch
-
 # Security fixes
 bugfix/all/ptrace-being-capable-wrt-a-process-requires-mapped-uids-gids.patch
 debian/i386-686-pae-pci-set-pci-nobios-by-default.patch
 bugfix/all/media-videobuf2-v4l2-verify-planes-array-in-buffer-d.patch
-bugfix/all/tipc-check-nl-sock-before-parsing-nested-attributes.patch
 bugfix/x86/kvm-vmx-more-complete-state-update-on-apicv-on-off.patch
 bugfix/all/usb-usbfs-fix-potential-infoleak-in-devio.patch
 bugfix/all/alsa-timer-fix-leak-in-sndrv_timer_ioctl_params.patch
 bugfix/all/alsa-timer-fix-leak-in-events-via-snd_timer_user_cca.patch
 bugfix/all/alsa-timer-fix-leak-in-events-via-snd_timer_user_tin.patch
-bugfix/all/proc-prevent-stacking-filesystems-on-top.patch
-bugfix/all/ecryptfs-forbid-opening-files-without-mmap-handler.patch
-bugfix/all/sched-panic-on-corrupted-stack-end.patch
 bugfix/all/tipc-fix-an-infoleak-in-tipc_nl_compat_link_dump.patch
 bugfix/all/rds-fix-an-infoleak-in-rds_inc_info_copy.patch
 bugfix/all/keys-potential-uninitialized-variable.patch
 bugfix/all/percpu-fix-synchronization-between-chunk-map_extend_.patch
 bugfix/all/percpu-fix-synchronization-between-synchronous-map-e.patch
-bugfix/all/netfilter-x_tables-don-t-move-to-non-existent-next-r.patch
-bugfix/all/netfilter-x_tables-validate-targets-of-jumps.patch
-bugfix/all/netfilter-x_tables-add-and-use-xt_check_entry_offset.patch
-bugfix/all/netfilter-x_tables-kill-check_entry-helper.patch
-bugfix/all/netfilter-x_tables-assert-minimum-target-size.patch
-bugfix/all/netfilter-x_tables-add-compat-version-of-xt_check_en.patch
-bugfix/all/netfilter-x_tables-check-standard-target-size-too.patch
-bugfix/all/netfilter-x_tables-check-for-bogus-target-offset.patch
-bugfix/all/netfilter-x_tables-validate-all-offsets-and-sizes-in.patch
-bugfix/all/netfilter-x_tables-don-t-reject-valid-target-size-on.patch
-bugfix/all/netfilter-arp_tables-simplify-translate_compat_table.patch
-bugfix/all/netfilter-ip_tables-simplify-translate_compat_table-.patch
-bugfix/all/netfilter-ip6_tables-simplify-translate_compat_table.patch
-bugfix/all/netfilter-x_tables-xt_compat_match_from_user-doesn-t.patch
-bugfix/all/netfilter-x_tables-do-compat-validation-via-translat.patch
-bugfix/all/netfilter-x_tables-introduce-and-use-xt_copy_counter.patch
 bugfix/all/posix_acl-add-set_posix_acl.patch
 bugfix/all/nfsd-check-permissions-when-setting-acls.patch
-
-# ABI maintenance
-debian/mips-siginfo-fix-abi-change-in-4.6.2.patch
-debian/mips-libgcc-fix-abi-change-in-4.6.2.patch
 
 # Tools bug fixes
 bugfix/all/usbip-document-tcp-wrappers.patch
@@ -163,3 +118,22 @@ bugfix/all/liblockdep-enable-wall-by-default.patch
 bugfix/all/liblockdep-fix-unused-value-warnings.patch
 bugfix/all/liblockdep-fix-set-but-not-used-warnings.patch
 bugfix/all/liblockdep-fix-defined-but-not-used-warning-for-init.patch
+
+# Manover custom patches
+# Thecus N5550
+manover/n5550_leds.patch
+# kdbus
+manover/kdbus.patch
+# AUFS
+manover/aufs.patch
+# Thinkpad specific
+manover/tp_smapi.patch
+manover/iommu-bug-on-fix.patch
+# Realtek 8111/8168 driver
+#manover/realtek-8168.patch
+# Modern Intel CPU support
+manover/modern-intel-cpu.patch
+# Misc minor patches
+manover/misc.patch
+#manover/thecus_it87.patch
+#unifdef-hang.patch

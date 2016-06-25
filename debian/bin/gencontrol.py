@@ -77,6 +77,18 @@ class Gencontrol(Base):
             'SOURCEVERSION': self.version.complete,
         })
 
+        # Prepare to generate template-substituted translations
+        try:
+            os.mkdir('debian/po')
+        except OSError:
+            pass
+        for path in glob.glob('debian/templates/po/*.po'):
+            target = 'debian/po/' + os.path.basename(path)
+            with open(target, 'w') as f:
+                f.write('# THIS IS A GENERATED FILE; DO NOT EDIT IT!\n'
+                        '# Translators should edit %s instead.\n'
+                        '#\n' % path)
+
         # Prepare to generate debian/tests/control
         self.tests_control = None
 
@@ -442,11 +454,8 @@ class Gencontrol(Base):
         kconfig.extend(check_config("%s/%s/config" % (arch, featureset), False, arch, featureset))
         kconfig.extend(check_config("%s/%s/config.%s" % (arch, featureset, flavour), False, arch, featureset, flavour))
         makeflags['KCONFIG'] = ' '.join(kconfig)
-        makeflags['KCONFIG_OPTIONS'] = ''
         if build_debug:
-            makeflags['KCONFIG_OPTIONS'] += ' -o DEBUG_INFO=y'
-        if config_entry_build.get('signed-modules'):
-            makeflags['KCONFIG_OPTIONS'] += ' -o MODULE_SIG=y'
+            makeflags['KCONFIG_OPTIONS'] = '-o DEBUG_INFO=y'
 
         cmds_binary_arch = ["$(MAKE) -f debian/rules.real binary-arch-flavour %s" % makeflags]
         if packages_dummy:
@@ -464,10 +473,14 @@ class Gencontrol(Base):
         self._substitute_file('headers.postinst', vars,
                               'debian/linux-headers-%s%s.postinst' %
                               (vars['abiname'], vars['localversion']))
-        for name in ['postinst', 'postrm', 'preinst', 'prerm']:
+        for name in ['postinst', 'postrm', 'preinst', 'prerm', 'templates']:
             self._substitute_file('image.%s' % name, vars,
                                   'debian/linux-image-%s%s.%s' %
                                   (vars['abiname'], vars['localversion'], name))
+        for path in glob.glob('debian/templates/po/*.po'):
+            self._substitute_file('po/' + os.path.basename(path), vars,
+                                  'debian/po/' + os.path.basename(path),
+                                  append=True)
         if build_debug:
             self._substitute_file('image-dbg.lintian-override', vars,
                                   'debian/linux-image-%s%s-dbg.lintian-overrides' %

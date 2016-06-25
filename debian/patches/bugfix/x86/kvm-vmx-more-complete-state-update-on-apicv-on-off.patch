@@ -30,7 +30,7 @@ Cc: Yang Zhang <yang.zhang.wz@gmail.com>
 
 --- a/arch/x86/kvm/vmx.c
 +++ b/arch/x86/kvm/vmx.c
-@@ -2397,7 +2397,9 @@ static void vmx_set_msr_bitmap(struct kv
+@@ -2418,7 +2418,9 @@ static void vmx_set_msr_bitmap(struct kv
  
  	if (is_guest_mode(vcpu))
  		msr_bitmap = vmx_msr_bitmap_nested;
@@ -41,7 +41,7 @@ Cc: Yang Zhang <yang.zhang.wz@gmail.com>
  		if (is_long_mode(vcpu))
  			msr_bitmap = vmx_msr_bitmap_longmode_x2apic;
  		else
-@@ -4758,6 +4760,19 @@ static void vmx_refresh_apicv_exec_ctrl(
+@@ -4787,6 +4789,19 @@ static void vmx_refresh_apicv_exec_ctrl(
  	struct vcpu_vmx *vmx = to_vmx(vcpu);
  
  	vmcs_write32(PIN_BASED_VM_EXEC_CONTROL, vmx_pin_based_exec_ctrl(vmx));
@@ -61,7 +61,7 @@ Cc: Yang Zhang <yang.zhang.wz@gmail.com>
  }
  
  static u32 vmx_exec_control(struct vcpu_vmx *vmx)
-@@ -6313,23 +6328,20 @@ static __init int hardware_setup(void)
+@@ -6333,23 +6348,20 @@ static __init int hardware_setup(void)
  
  	set_bit(0, vmx_vpid_bitmap); /* 0 is reserved for host */
  
