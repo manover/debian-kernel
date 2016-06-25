@@ -120,6 +120,7 @@ bugfix/all/liblockdep-fix-set-but-not-used-warnings.patch
 bugfix/all/liblockdep-fix-defined-but-not-used-warning-for-init.patch
 
 # Manover custom patches
+manover/x32-support.patch
 # Thecus N5550
 manover/n5550_leds.patch
 # kdbus
