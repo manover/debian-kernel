@@ -1,0 +1,782 @@
+--- a/drivers/platform/x86/Kconfig
++++ b/drivers/platform/x86/Kconfig
+@@ -918,6 +918,21 @@ config MXM_WMI
+           MXM is a standard for laptop graphics cards, the WMI interface
+	  is required for switchable nvidia graphics machines
+
++config THECUS_N5550
++	tristate "Support Thecus N5550 NAS LEDs"
++	depends on X86
++	depends on SATA_AHCI && m
++	select CONFIG_I2C
++	select CONFIG_I2C_I801
++	select LEDS_PCA9532
++	select LEDS_PCA9532_GPIO
++	default n
++	---help---
++	  Select this option to enable Thecus N5550 NAS LED support.
++	  The driver includes 2 modules: one defines LED sets controlled
++	  by pca9532 dimmer chip and the second one registers LED trigger
++	  with the libahci hook.
++
+ config INTEL_OAKTRAIL
+	tristate "Intel Oaktrail Platform Extras"
+	depends on ACPI
+--- a/drivers/platform/x86/Makefile
++++ b/drivers/platform/x86/Makefile
+@@ -70,3 +70,4 @@ obj-$(CONFIG_INTEL_TELEMETRY)	+= intel_t
+				   intel_telemetry_pltdrv.o \
+				   intel_telemetry_debugfs.o
+ obj-$(CONFIG_INTEL_PMC_CORE)    += intel_pmc_core.o
++obj-$(CONFIG_THECUS_N5550) += n5550_ahci_leds.o n5550_board.o
+--- /dev/null
++++ b/drivers/platform/x86/n5550_ahci_leds.c
+@@ -0,0 +1,291 @@
++/*
++ * Copyright 2013 Ian Pilcher <arequipeno@gmail.com>
++ *
++ * This program is free software.  You can redistribute it or modify it under
++ * the terms of version 2 of the GNU General Public License (GPL), as published
++ * by the Free Software Foundation.
++ *
++ * This program is distributed in the hope that it will be useful, but WITHOUT
++ * ANY WARRANTY -- without even the implied warranty of MERCHANTIBILITY or
++ * FITNESS FOR A PARTICULAR PURPOSE.  See the text of the GPL for more details.
++ *
++ * Version 2 of the GNU General Public License is available at:
++ *
++ *   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
++ */
++
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/libata.h>
++#include <linux/mutex.h>
++#include <linux/sysfs.h>
++#include <linux/leds.h>
++
++/*
++ * Exported by libahci, but declared only in drivers/ata/libahci.h.  Contains
++ * pointers to low-level functions used by libahci "client" drivers -- ahci,
++ * acard_ahci, ahci_platform, sata_highbank, and possibly others.
++ */
++extern struct ata_port_operations ahci_ops;
++
++/*
++ * Each "blink" of an LED will turn it on for blink_on_ms and then turn it
++ * off for blink_off_ms.
++ */
++static unsigned long blink_on_ms = 75;
++module_param(blink_on_ms, ulong, 0644);
++MODULE_PARM_DESC(blink_on_ms, "LED blink on ms (default 75, max 1000)");
++static unsigned long blink_off_ms = 25;
++module_param(blink_off_ms, ulong, 0644);
++MODULE_PARM_DESC(blink_off_ms, "LED blink off ms (default 25, max 1000)");
++
++/*
++ * Everything related to "hooking" (or unhooking) libahci's qc_issue function
++ * and registering/unregistering the LED triggers is protected by this mutex.
++ */
++DEFINE_MUTEX(n5550_ahci_leds_hook_mutex);
++static int n5550_ahci_leds_hook_active = 0;
++/* Original value of ahci_ops.qc_issue */
++static unsigned int (*libahci_qc_issue)(struct ata_queued_cmd *);
++
++static struct led_trigger n5550_ahci_led_triggers[5] = {
++	{ .name = "n5550-ahci-0" },
++	{ .name = "n5550-ahci-1" },
++	{ .name = "n5550-ahci-2" },
++	{ .name = "n5550-ahci-3" },
++	{ .name = "n5550-ahci-4" },
++};
++
++static struct class *n5550_ahci_leds_sysfs_class;
++
++static ssize_t n5550_ahci_leds_enabled_show(struct class *class,
++					    struct class_attribute *attr,
++                                            char *buf)
++{
++	int i;
++
++	i = mutex_lock_interruptible(&n5550_ahci_leds_hook_mutex);
++	if (i != 0) {
++		pr_warn("n5550_ahci_leds: "
++			"Couldn't lock n5550_ahci_leds_hook_mutex\n");
++		return i;
++	}
++
++	i = n5550_ahci_leds_hook_active;
++	mutex_unlock(&n5550_ahci_leds_hook_mutex);
++	return sprintf(buf, "%d\n", i);
++}
++
++static ssize_t n5550_ahci_leds_enabled_store(struct class *class,
++					     struct class_attribute *attr,
++                                             const char *buf, size_t count)
++{
++	struct module *libahci;
++	int ret, i;
++
++	ret = kstrtoint(buf, 0, &i);
++	if (ret != 0) {
++		pr_warn("n5550_ahci_leds: "
++			"Couldn't parse write to 'enabled' attribute\n");
++		return ret;
++	}
++	if (i != 0) {
++		pr_warn("n5550_ahci_leds: "
++			"Non-zero value written to 'enabled' attribute\n");
++		return -EINVAL;
++	}
++
++	ret = mutex_lock_interruptible(&n5550_ahci_leds_hook_mutex);
++	if (ret != 0) {
++		pr_warn("n5550_ahci_leds: "
++			"Couldn't lock n5550_ahci_leds_hook_mutex\n");
++		return ret;
++	}
++
++	if (!n5550_ahci_leds_hook_active) {
++		pr_info("n5550_ahci_leds: LED hook already disabled\n");
++		mutex_unlock(&n5550_ahci_leds_hook_mutex);
++		return (ssize_t)count;
++	}
++
++	ret = mutex_lock_interruptible(&module_mutex);
++	if (ret != 0) {
++		pr_warn("n5550_ahci_leds: Couldn't lock module_mutex\n");
++		mutex_unlock(&n5550_ahci_leds_hook_mutex);
++		return ret;
++	}
++
++	libahci = find_module("libahci");
++	if (libahci == NULL) {
++		/* Should never happen; this module depends on libahci */
++		pr_warn("n5550_ahci_leds: "
++			"Couldn't get reference to libahci module\n");
++		mutex_unlock(&module_mutex);
++		mutex_unlock(&n5550_ahci_leds_hook_mutex);
++		return ret;
++	}
++
++	if (module_refcount(libahci) > 1) {
++		pr_warn("n5550_ahci_leds: "
++			"libahci module in use; cannot disable LED hook\n");
++		mutex_unlock(&module_mutex);
++		mutex_unlock(&n5550_ahci_leds_hook_mutex);
++		return -EBUSY;
++	}
++
++	ahci_ops.qc_issue = libahci_qc_issue;
++	for (i = 0; i < 5; ++i)
++		led_trigger_unregister(&n5550_ahci_led_triggers[i]);
++	n5550_ahci_leds_hook_active = 0;
++	module_put(THIS_MODULE);
++	mutex_unlock(&module_mutex);
++	mutex_unlock(&n5550_ahci_leds_hook_mutex);
++	pr_info("n5550_ahci_leds: Successfully disabled LED hook\n");
++
++	return (ssize_t)count;
++}
++
++static CLASS_ATTR(enabled, 0644,
++		  n5550_ahci_leds_enabled_show,
++                  n5550_ahci_leds_enabled_store);
++
++static int n5550_create_sysfs_file(void)
++{
++	int ret;
++
++	n5550_ahci_leds_sysfs_class = class_create(THIS_MODULE,
++						   "n5550_ahci_leds");
++	if (IS_ERR(n5550_ahci_leds_sysfs_class))
++		return PTR_ERR(n5550_ahci_leds_sysfs_class);
++
++	ret = class_create_file(n5550_ahci_leds_sysfs_class,
++				&class_attr_enabled);
++	if (ret != 0) {
++		class_destroy(n5550_ahci_leds_sysfs_class);
++		return ret;
++	}
++
++	return 0;
++}
++
++static void n5550_destroy_sysfs_file(void)
++{
++	class_remove_file(n5550_ahci_leds_sysfs_class, &class_attr_enabled);
++	class_destroy(n5550_ahci_leds_sysfs_class);
++}
++
++static unsigned int n5550_ahci_leds_qc_issue(struct ata_queued_cmd *qc)
++{
++	unsigned long delay_on, delay_off;
++	int port = qc->ap->port_no;
++	int ret;
++
++	/*
++	 * No locking around blink_{on,off}_ms.  Waiting on a lock in the disk
++	 * I/O path would be "bad", and it isn't critical that every CPU pick up
++	 * a change immediately.  Limiting each to 1000 ms ensures that even
++	 * garbage from an incomplete non-atomic change to one of the parameters
++	 * won't have any long-term effect.
++	 */
++
++	delay_on = blink_on_ms;
++	if (delay_on > 1000)
++		delay_on = 1000;
++
++	delay_off = blink_off_ms;
++	if (delay_off > 1000)
++		delay_off = 1000;
++
++	if ((ret = libahci_qc_issue(qc)) == 0 && port >= 1 && port <= 5) {
++		led_trigger_blink_oneshot(&n5550_ahci_led_triggers[port - 1],
++					  &delay_on, &delay_off, 0);
++	}
++
++	return ret;
++}
++
++static int __init n5550_ahci_leds_init(void)
++{
++	struct module *libahci;
++	int i, ret;
++
++	ret = mutex_lock_interruptible(&n5550_ahci_leds_hook_mutex);
++	if (ret != 0) {
++		pr_warn("n5550_ahci_leds: "
++			"Couldn't lock n5550_ahci_leds_hook_mutex\n");
++		return ret;
++	}
++
++	ret = n5550_create_sysfs_file();
++	if (ret != 0) {
++		mutex_unlock(&n5550_ahci_leds_hook_mutex);
++		return ret;
++	}
++
++	/*
++	 * Lock module_mutex while checking that no other libahci clients are
++   	 * already loaded and then doing our dirty work.
++	 */
++	ret = mutex_lock_interruptible(&module_mutex);
++	if (ret != 0) {
++		pr_warn("n5550_ahci_leds: Couldn't lock module_mutex\n");
++		n5550_destroy_sysfs_file();
++		mutex_unlock(&n5550_ahci_leds_hook_mutex);
++		return ret;
++	}
++
++	libahci = find_module("libahci");
++	if (libahci == NULL) {
++		/* Should never happen; this module depends on libahci */
++		pr_warn("n5550_ahci_leds: "
++			"Couldn't get reference to libahci module\n");
++		mutex_unlock(&module_mutex);
++		n5550_destroy_sysfs_file();
++		mutex_unlock(&n5550_ahci_leds_hook_mutex);
++		return -ENOENT;
++	}
++
++	/*
++	 * If we get this far, we're definitely going to load the module, even
++	 * if we don't actually hook the qc_issue function.
++	 */
++
++	if (module_refcount(libahci) > 1) {
++		pr_warn("n5550_ahci_leds: "
++			"libahci module already in use; LED hook disabled\n");
++		n5550_ahci_leds_hook_active = 0;
++		goto done;
++	}
++
++	if (!try_module_get(THIS_MODULE)) {
++		pr_warn("n5550_ahci_leds: Couldn't increment module use count; "
++			"LED hook disabled\n");
++		n5550_ahci_leds_hook_active = 0;
++		goto done;
++	}
++
++        libahci_qc_issue = ahci_ops.qc_issue;
++        ahci_ops.qc_issue = n5550_ahci_leds_qc_issue;
++	n5550_ahci_leds_hook_active = 1;
++
++	for (i = 0; i < 5; ++i) {
++		led_trigger_register(&n5550_ahci_led_triggers[i]);
++	}
++
++done:
++	mutex_unlock(&module_mutex);
++	mutex_unlock(&n5550_ahci_leds_hook_mutex);
++	return ret;
++}
++
++static void __exit n5550_ahci_leds_exit(void)
++{
++	n5550_destroy_sysfs_file();
++}
++
++MODULE_AUTHOR("Ian Pilcher <arequipeno@gmail.com>");
++MODULE_DESCRIPTION("AHCI driver \"hook\" for Thecus N5550 drive LEDs");
++MODULE_LICENSE("GPL v2");
++
++module_init(n5550_ahci_leds_init);
++module_exit(n5550_ahci_leds_exit);
+--- /dev/null
++++ b/drivers/platform/x86/n5550_board.c
+@@ -0,0 +1,454 @@
++/*
++ * Copyright 2013 Ian Pilcher <arequipeno@gmail.com>
++ *
++ * This program is free software.  You can redistribute it or modify it under
++ * the terms of version 2 of the GNU General Public License (GPL), as published
++ * by the Free Software Foundation.
++ *
++ * This program is distributed in the hope that it will be useful, but WITHOUT
++ * ANY WARRANTY -- without even the implied warranty of MERCHANTIBILITY or
++ * FITNESS FOR A PARTICULAR PURPOSE.  See the text of the GPL for more details.
++ *
++ * Version 2 of the GNU General Public License is available at:
++ *
++ *   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
++ */
++
++#include <linux/platform_device.h>
++#include <linux/module.h>
++#include <linux/leds.h>
++#include <linux/leds-pca9532.h>
++#include <linux/i2c.h>
++#include <linux/pci.h>
++#include <linux/gpio.h>
++
++#define N5550_ICH_GPIO_BASE_DEFAULT	195
++#define N5550_PCA9532_1_GPIO_BASE	16
++#define N5550_BOARD_ID			2
++
++static unsigned ich_gpio_base = N5550_ICH_GPIO_BASE_DEFAULT;
++module_param(ich_gpio_base, uint, 0444);
++MODULE_PARM_DESC(ich_gpio_base, "GPIO number base of ICH10R (default "
++		 __stringify(N5550_ICH_GPIO_BASE_DEFAULT) ")");
++
++/*
++ * Disk activity LEDs are controlled by GPIO pins on the ICH10R chipset
++ */
++
++static struct gpio_led n5550_ich_gpio_leds[5] = {
++	{
++		.name			= "n5550:green:disk-act-0",
++		.default_trigger	= "n5550-ahci-0",
++		.active_low		= 1,
++		.default_state		= LEDS_GPIO_DEFSTATE_OFF,
++	},
++	{
++		.name			= "n5550:green:disk-act-1",
++		.default_trigger	= "n5550-ahci-1",
++		.active_low		= 1,
++		.default_state		= LEDS_GPIO_DEFSTATE_OFF,
++	},
++	{
++		.name			= "n5550:green:disk-act-2",
++		.default_trigger	= "n5550-ahci-2",
++		.active_low		= 1,
++		.default_state		= LEDS_GPIO_DEFSTATE_OFF,
++	},
++	{
++		.name			= "n5550:green:disk-act-3",
++		.default_trigger	= "n5550-ahci-3",
++		.active_low		= 1,
++		.default_state		= LEDS_GPIO_DEFSTATE_OFF,
++	},
++	{
++		.name			= "n5550:green:disk-act-4",
++		.default_trigger	= "n5550-ahci-4",
++		.active_low		= 1,
++		.default_state		= LEDS_GPIO_DEFSTATE_OFF,
++	},
++};
++
++static struct gpio_led_platform_data n5550_ich_gpio_led_data = {
++	.num_leds			= ARRAY_SIZE(n5550_ich_gpio_leds),
++	.leds				= n5550_ich_gpio_leds,
++};
++
++static struct platform_device n5550_ich_gpio_led_pdev = {
++	.name				= "leds-gpio",
++	.id				= -1,
++	.dev.platform_data		= &n5550_ich_gpio_led_data,
++};
++
++/* GPIO numbers of LEDS are not contiguous */
++static const unsigned __initdata n5550_ich_gpio_led_offsets[5] = {
++	0, 2, 3, 4, 5,
++};
++
++static int __init n5550_ich_gpio_led_setup(void)
++{
++	unsigned i;
++
++	for (i = 0; i < ARRAY_SIZE(n5550_ich_gpio_leds); ++i) {
++		n5550_ich_gpio_leds[i].gpio = ich_gpio_base +
++					      n5550_ich_gpio_led_offsets[i];
++	}
++
++	return platform_device_register(&n5550_ich_gpio_led_pdev);
++}
++
++static void n5550_ich_gpio_led_cleanup(void)
++{
++	platform_device_unregister(&n5550_ich_gpio_led_pdev);
++}
++
++/*
++ * The N5550 BIOS does not correctly mark the GPIO pins as usable
++ */
++
++/* PCI ID of the ICH10R LPC controller */
++#define N5550_ICH_PCI_VENDOR		PCI_VENDOR_ID_INTEL
++#define N5550_ICH_LPC_PCI_DEV		0x3a16
++#define N5550_ICH_I2C_PCI_DEV		0x3a30
++
++/* PCI configuration registers - from drivers/mfd/lpc_ich.c */
++#define N5550_ICH_PCI_GPIO_BASE        	0x48
++#define N5550_ICH_PCI_GPIO_CTRL        	0x4c
++
++/* I/O port offsets - from drivers/gpio/gpio-ich.c */
++#define N5550_ICH_GPIO_USE_SEL_0     	0x00
++#define N5550_ICH_GPIO_USE_SEL_1     	0x30
++#define N5550_ICH_GPIO_USE_SEL_2	0x40
++
++/* Enable GPIO pins 0, 2, 3, 4, 5, 9, 28, and 34 */
++#define N5550_ICH_GPIO_PINS_0	(			\
++					(1 << 0) |	\
++					(1 << 2) |	\
++					(1 << 3) |	\
++					(1 << 4) |	\
++					(1 << 5) |	\
++					(1 << 9) |	\
++					(1<< 28)	\
++				)
++#define N5550_ICH_GPIO_PINS_1		(1 << (34 - 32))
++
++static int __init n5550_ich_gpio_setup(void)
++{
++	struct pci_dev *dev;
++	u32 gpio_io_base, gpio_pins;
++
++	dev = pci_get_device(N5550_ICH_PCI_VENDOR, N5550_ICH_LPC_PCI_DEV, NULL);
++	if (dev == NULL)
++		return -ENODEV;
++
++	pci_read_config_dword(dev, N5550_ICH_PCI_GPIO_BASE, &gpio_io_base);
++	gpio_io_base &= 0x0000ff80;
++
++	/* Ensure ICH GPIO function is on */
++	pci_write_config_byte(dev, N5550_ICH_PCI_GPIO_CTRL, 0x10);
++
++	gpio_pins = inl(gpio_io_base + N5550_ICH_GPIO_USE_SEL_0);
++	gpio_pins |= N5550_ICH_GPIO_PINS_0;
++	outl(gpio_pins, gpio_io_base + N5550_ICH_GPIO_USE_SEL_0);
++
++	gpio_pins = inl(gpio_io_base + N5550_ICH_GPIO_USE_SEL_1);
++	gpio_pins |= N5550_ICH_GPIO_PINS_1;
++	outl(gpio_pins, gpio_io_base + N5550_ICH_GPIO_USE_SEL_1);
++
++	pci_dev_put(dev);
++	return 0;
++}
++
++/*
++ * Other LEDs are controlled by 2 NXP PCA9532 dimmers
++ */
++
++#define N5550_BOARD_ID_GPIO_0		N5550_PCA9532_1_GPIO_BASE
++#define N5550_BOARD_ID_GPIO_1		(N5550_PCA9532_1_GPIO_BASE + 1)
++#define N5550_BOARD_ID_GPIO_2		(N5550_PCA9532_1_GPIO_BASE + 2)
++#define N5550_BOARD_ID_GPIO_3		(N5550_PCA9532_1_GPIO_BASE + 3)
++#define N5550_BOARD_PIC_GPIO		(N5550_PCA9532_1_GPIO_BASE + 15)
++
++static struct pca9532_platform_data n5550_pca9532_0_pdata = {
++	.leds 	= {
++			{
++				.name 	= "n5550:red:disk-stat-0",
++				.type 	= PCA9532_TYPE_LED,
++				.state 	= PCA9532_OFF,
++			},
++			{
++				.name	= "n5550:red:disk-stat-1",
++				.type	= PCA9532_TYPE_LED,
++				.state	= PCA9532_OFF,
++			},
++			{
++				.name	= "n5550:red:disk-stat-2",
++				.type	= PCA9532_TYPE_LED,
++				.state	= PCA9532_OFF,
++			},
++			{
++				.name	= "n5550:red:disk-stat-3",
++				.type	= PCA9532_TYPE_LED,
++				.state	= PCA9532_OFF,
++			},
++			{
++				.name	= "n5550:red:disk-stat-4",
++				.type	= PCA9532_TYPE_LED,
++				.state	= PCA9532_OFF,
++			},
++			{
++				.type	= PCA9532_TYPE_NONE,
++			},
++                        {
++                                .type   = PCA9532_TYPE_NONE,
++                        },
++                        {
++                                .type   = PCA9532_TYPE_NONE,
++                        },
++                        {
++                                .type   = PCA9532_TYPE_NONE,
++                        },
++                	{
++                                .type   = PCA9532_TYPE_NONE,
++                        },
++                        {
++                                .type   = PCA9532_TYPE_NONE,
++                        },
++                        {
++                                .type   = PCA9532_TYPE_NONE,
++                        },
++                        {
++                                .type   = PCA9532_TYPE_NONE,
++                        },
++                        {
++                                .type   = PCA9532_TYPE_NONE,
++                        },
++                        {
++                                .type   = PCA9532_TYPE_NONE,
++                        },
++                        {
++                                .type   = PCA9532_TYPE_NONE,
++                        },
++		},
++	.pwm	= { 0, 0 },
++	.psc	= { 0, 0 },
++};
++
++static struct i2c_board_info n5550_pca9532_0_info = {
++	I2C_BOARD_INFO("pca9532", 0x64),
++	.platform_data		= &n5550_pca9532_0_pdata,
++};
++
++static struct pca9532_platform_data n5550_pca9532_1_pdata = {
++        .leds   = {
++                        {
++                                .type   = PCA9532_TYPE_GPIO,
++				.state	= PCA9532_OFF,
++                        },
++                        {
++                                .type   = PCA9532_TYPE_GPIO,
++				.state	= PCA9532_OFF,
++                        },
++                        {
++                                .type   = PCA9532_TYPE_GPIO,
++				.state	= PCA9532_OFF,
++                        },
++                        {
++                                .type   = PCA9532_TYPE_GPIO,
++				.state	= PCA9532_OFF,
++                        },
++                        {
++                                .type   = PCA9532_TYPE_NONE,
++                        },
++                        {
++                                .type   = PCA9532_TYPE_NONE,
++                        },
++                        {
++                                .type   = PCA9532_TYPE_NONE,
++                        },
++                        {
++                                .type   = PCA9532_TYPE_NONE,
++                        },
++                        {
++                                .type   = PCA9532_TYPE_NONE,
++                        },
++                        {
++                                .name   = "n5550:orange:busy",
++                                .type   = PCA9532_TYPE_LED,
++                                .state  = PCA9532_OFF,
++                        },
++			{
++				.name	= "n5550:blue:usb",
++				.type	= PCA9532_TYPE_LED,
++				.state	= PCA9532_OFF,
++			},
++                        {
++                                .type   = PCA9532_TYPE_NONE,
++                        },
++			{
++				.name	= "n5550:red:fail",
++				.type	= PCA9532_TYPE_LED,
++				.state	= PCA9532_OFF,
++			},
++                        {
++                                .type   = PCA9532_TYPE_NONE,
++                        },
++                        {
++                                .type   = PCA9532_TYPE_NONE,
++                        },
++                        {
++                                .type   = PCA9532_TYPE_GPIO,
++				.state	= PCA9532_OFF,
++                        },
++		},
++        .pwm    	= { 0, 0 },
++        .psc    	= { 0, 0 },
++	.gpio_base	= N5550_PCA9532_1_GPIO_BASE,
++};
++
++static struct i2c_board_info n5550_pca9532_1_info = {
++        I2C_BOARD_INFO("pca9532", 0x62),
++        .platform_data          = &n5550_pca9532_1_pdata,
++};
++
++#if 0
++static struct gpio n5550_board_id_gpios[] = {
++	{
++		.gpio	= N5550_BOARD_ID_GPIO_0,
++		.flags	= GPIOF_IN,
++	},
++	{
++		.gpio	= N5550_BOARD_ID_GPIO_1,
++		.flags	= GPIOF_IN,
++	},
++	{
++		.gpio	= N5550_BOARD_ID_GPIO_2,
++		.flags	= GPIOF_IN,
++	},
++	{
++		.gpio	= N5550_BOARD_ID_GPIO_3,
++		.flags	= GPIOF_IN,
++	},
++};
++#endif
++
++static struct i2c_client *n5550_pca9532_0_client, *n5550_pca9532_1_client;
++
++static int __init n5550_pca9532_setup(void)
++{
++	struct i2c_adapter *adapter;
++	struct pci_dev *dev;
++
++	dev = pci_get_device(N5550_ICH_PCI_VENDOR, N5550_ICH_I2C_PCI_DEV, NULL);
++	if (dev == NULL)
++	    return -ENODEV;
++
++	adapter = pci_get_drvdata(dev);
++	if (adapter == NULL) {
++		pci_dev_put(dev);
++		return -ENODEV;
++	}
++
++	if (!try_module_get(adapter->owner)) {
++		pci_dev_put(dev);
++		return -EBUSY;
++	}
++
++	n5550_pca9532_0_client = i2c_new_device(adapter, &n5550_pca9532_0_info);
++	if (n5550_pca9532_0_client == NULL) {
++		module_put(adapter->owner);
++		pci_dev_put(dev);
++		return -ENODEV;
++	}
++
++	n5550_pca9532_1_client = i2c_new_device(adapter, &n5550_pca9532_1_info);
++	if (n5550_pca9532_1_client == NULL) {
++		i2c_unregister_device(n5550_pca9532_0_client);
++		module_put(adapter->owner);
++		pci_dev_put(dev);
++		return -ENODEV;
++	}
++
++	module_put(adapter->owner);
++	pci_dev_put(dev);
++	return 0;
++}
++
++static void n5550_pca9532_cleanup(void)
++{
++	i2c_unregister_device(n5550_pca9532_0_client);
++	i2c_unregister_device(n5550_pca9532_1_client);
++}
++
++#if 0
++static int __init n5550_check_board_id(void)
++{
++	int id, ret;
++
++	ret = gpio_request_array(n5550_board_id_gpios,
++				 ARRAY_SIZE(n5550_board_id_gpios));
++	if (ret != 0)
++		return ret;
++
++	id = (gpio_get_value_cansleep(N5550_BOARD_ID_GPIO_0) != 0);
++	id |= (gpio_get_value_cansleep(N5550_BOARD_ID_GPIO_1) != 0) << 1;
++	id |= (gpio_get_value_cansleep(N5550_BOARD_ID_GPIO_2) != 0) << 2;
++	id |= (gpio_get_value_cansleep(N5550_BOARD_ID_GPIO_3) != 0) << 3;
++
++	gpio_free_array(n5550_board_id_gpios, ARRAY_SIZE(n5550_board_id_gpios));
++
++	if (id != N5550_BOARD_ID) {
++		pr_warn("Incorrect Thecus board ID (%d)\n", id);
++		return -ENODEV;
++	}
++
++	return 0;
++}
++#endif
++
++static int __init n5550_board_init(void)
++{
++	int ret;
++
++	ret = n5550_pca9532_setup();
++	if (ret != 0) {
++		pr_warn("n5550_pca9532_setup failed (%d)\n", ret);
++		return ret;
++	}
++#if 0
++	ret = n5550_check_board_id();
++	if (ret != 0) {
++		pr_warn("n5550_check_board_id failed (%d)\n", ret);
++		goto error;
++	}
++#endif
++	ret = n5550_ich_gpio_setup();
++	if (ret != 0) {
++		pr_warn("n5550_ich_gpio_setup failed (%d)\n", ret);
++		goto error;
++	}
++
++	ret = n5550_ich_gpio_led_setup();
++	if (ret != 0) {
++		pr_warn("n5550_ich_gpio_led_setup failed (%d)\n", ret);
++		goto error;
++	}
++
++	return 0;
++
++error:
++	n5550_pca9532_cleanup();
++	return ret;
++}
++
++static void __exit n5550_board_exit(void)
++{
++	n5550_pca9532_cleanup();
++	n5550_ich_gpio_led_cleanup();
++}
++
++module_init(n5550_board_init);
++module_exit(n5550_board_exit);
++
++MODULE_AUTHOR("Ian Pilcher <arequipeno@gmail.com>");
++MODULE_DESCRIPTION("Thecus N5550 GPIO and LED support");
++MODULE_LICENSE("GPL v2");
