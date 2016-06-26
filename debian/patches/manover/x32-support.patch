@@ -1,0 +1,160 @@
+--- a/tools/perf/bench/sched-messaging.c
++++ b/tools/perf/bench/sched-messaging.c
+@@ -310,12 +310,12 @@ int bench_sched_messaging(int argc, cons
+ 		printf("# %d groups == %d %s run\n\n",
+ 		       num_groups, num_groups * 2 * num_fds,
+ 		       thread_mode ? "threads" : "processes");
+-		printf(" %14s: %lu.%03lu [sec]\n", "Total time",
++		printf(" %14s: %"TTIME_FMT".%03lu [sec]\n", "Total time",
+ 		       diff.tv_sec,
+ 		       (unsigned long) (diff.tv_usec/1000));
+ 		break;
+ 	case BENCH_FORMAT_SIMPLE:
+-		printf("%lu.%03lu\n", diff.tv_sec,
++		printf("%"TTIME_FMT".%03lu\n", diff.tv_sec,
+ 		       (unsigned long) (diff.tv_usec/1000));
+ 		break;
+ 	default:
+--- a/tools/perf/bench/sched-pipe.c
++++ b/tools/perf/bench/sched-pipe.c
+@@ -156,7 +156,7 @@ int bench_sched_pipe(int argc, const cha
+ 		result_usec = diff.tv_sec * 1000000;
+ 		result_usec += diff.tv_usec;
+ 
+-		printf(" %14s: %lu.%03lu [sec]\n\n", "Total time",
++		printf(" %14s: %"TTIME_FMT".%03lu [sec]\n\n", "Total time",
+ 		       diff.tv_sec,
+ 		       (unsigned long) (diff.tv_usec/1000));
+ 
+@@ -168,7 +168,7 @@ int bench_sched_pipe(int argc, const cha
+ 		break;
+ 
+ 	case BENCH_FORMAT_SIMPLE:
+-		printf("%lu.%03lu\n",
++		printf("%"TTIME_FMT".%03lu\n",
+ 		       diff.tv_sec,
+ 		       (unsigned long) (diff.tv_usec / 1000));
+ 		break;
+--- a/tools/perf/builtin-kvm.c
++++ b/tools/perf/builtin-kvm.c
+@@ -565,7 +565,7 @@ static void show_timeofday(void)
+ 	gettimeofday(&tv, NULL);
+ 	if (localtime_r(&tv.tv_sec, &ltime)) {
+ 		strftime(date, sizeof(date), "%H:%M:%S", &ltime);
+-		pr_info("%s.%06ld", date, tv.tv_usec);
++		pr_info("%s.%06"TTIME_FMT, date, tv.tv_usec);
+ 	} else
+ 		pr_info("00:00:00.000000");
+ 
+--- a/tools/perf/builtin-stat.c
++++ b/tools/perf/builtin-stat.c
+@@ -1336,7 +1336,7 @@ static void print_interval(char *prefix,
+ 	FILE *output = stat_config.output;
+ 	static int num_print_interval;
+ 
+-	sprintf(prefix, "%6lu.%09lu%s", ts->tv_sec, ts->tv_nsec, csv_sep);
++	sprintf(prefix, "%6"TTIME_FMT".%09"TTIME_FMT"%s", ts->tv_sec, ts->tv_nsec, csv_sep);
+ 
+ 	if (num_print_interval == 0 && !csv_output && !metric_only) {
+ 		switch (stat_config.aggr_mode) {
+--- a/tools/perf/config/Makefile
++++ b/tools/perf/config/Makefile
+@@ -725,11 +725,7 @@ sysconfdir = $(prefix)/etc
+ ETC_PERFCONFIG = etc/perfconfig
+ endif
+ ifndef lib
+-ifeq ($(ARCH)$(IS_64_BIT), x861)
+-lib = lib64
+-else
+ lib = lib
+-endif
+ endif # lib
+ libdir = $(prefix)/$(lib)
+ 
+--- a/tools/perf/perf.h
++++ b/tools/perf/perf.h
+@@ -6,6 +6,17 @@
+ #include <linux/types.h>
+ #include <linux/perf_event.h>
+ 
++#if defined(__x86_64__) && defined(__ILP32__)
++#	define TTIME_FMT	"llu"
++#	define PTR_FMT		PRIx64
++#elif defined(__LP64__)
++#	define TTIME_FMT	"lu"
++#	define PTR_FMT		PRIx64
++#else
++#	define TTIME_FMT	"lu"
++#	define PTR_FMT		"x"
++#endif
++
+ extern bool test_attr__enabled;
+ void test_attr__init(void);
+ void test_attr__open(struct perf_event_attr *attr, pid_t pid, int cpu,
+--- a/tools/perf/tests/make
++++ b/tools/perf/tests/make
+@@ -49,13 +49,8 @@ endif
+ 
+ include $(srctree)/tools/scripts/Makefile.arch
+ 
+-# FIXME looks like x86 is the only arch running tests ;-)
+-# we need some IS_(32/64) flag to make this generic
+-ifeq ($(ARCH)$(IS_64_BIT), x861)
+-lib = lib64
+-else
++# should never use lib64 on Debian
+ lib = lib
+-endif
+ 
+ has = $(shell which $1 2>/dev/null)
+ 
+--- a/tools/perf/util/unwind-libunwind.c
++++ b/tools/perf/util/unwind-libunwind.c
+@@ -473,9 +473,9 @@ static int access_mem(unw_addr_space_t _
+ 	if (addr < start || addr + sizeof(unw_word_t) >= end) {
+ 		ret = access_dso_mem(ui, addr, valp);
+ 		if (ret) {
+-			pr_debug("unwind: access_mem %p not inside range"
+-				 " 0x%" PRIx64 "-0x%" PRIx64 "\n",
+-				 (void *) (uintptr_t) addr, start, end);
++			pr_debug("unwind: access_mem 0x%"PTR_FMT" not inside range"
++				" 0x%" PRIx64 "-0x%" PRIx64 "\n",
++				addr, start, end);
+ 			*valp = 0;
+ 			return ret;
+ 		}
+@@ -484,8 +484,8 @@ static int access_mem(unw_addr_space_t _
+ 
+ 	offset = addr - start;
+ 	*valp  = *(unw_word_t *)&stack->data[offset];
+-	pr_debug("unwind: access_mem addr %p val %lx, offset %d\n",
+-		 (void *) (uintptr_t) addr, (unsigned long)*valp, offset);
++	pr_debug("unwind: access_mem addr 0x%"PTR_FMT" val %lx, offset %d\n",
++		addr, (unsigned long)*valp, offset);
+ 	return 0;
+ }
+ 
+--- a/tools/scripts/Makefile.arch
++++ b/tools/scripts/Makefile.arch
+@@ -10,9 +10,17 @@ ARCH := $(shell echo $(ARCH) | sed -e s/
+                                   -e s/sh[234].*/sh/ -e s/aarch64.*/arm64/ \
+                                   -e s/tile.*/tile/ )
+ 
+-LP64 := $(shell echo __LP64__ | ${CC} ${CFLAGS} -E -x c - | tail -n 1)
+-ifeq ($(LP64), 1)
+-  IS_64_BIT := 1
++ifeq ($(ARCH),x86)
++	ifneq (,$(filter amd64 x32,$(shell dpkg-architecture -qDEB_HOST_ARCH)))
++		IS_64_BIT := 1
++	else
++		IS_64_BIT := 0
++	endif
+ else
+-  IS_64_BIT := 0
++	LP64 := $(shell echo __LP64__ | ${CC} ${CFLAGS} -E -x c - | tail -n 1)
++	ifeq ($(LP64), 1)
++	  IS_64_BIT := 1
++	else
++	  IS_64_BIT := 0
++	endif
+ endif

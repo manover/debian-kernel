@@ -1,0 +1,48 @@
+From b32297fac99d69841b5f1827f93399f1173ff140 Mon Sep 17 00:00:00 2001
+From: Nicholas Krause <xerofoify@gmail.com>
+Date: Sat, 19 Mar 2016 14:59:23 -0400
+Subject: [PATCH] iommu-BUG_ON fix test
+
+Signed-off-by: Nicholas Krause <xerofoify@gmail.com>
+---
+ drivers/iommu/intel-iommu.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+--- a/drivers/iommu/Kconfig
++++ b/drivers/iommu/Kconfig
+@@ -168,6 +168,20 @@ config INTEL_IOMMU_DEFAULT_ON
+ 	  one is found. If this option is not selected, DMAR support can
+ 	  be enabled by passing intel_iommu=on to the kernel.
+ 
++config IOMMU_BUG_OFF_WORKAROUND
++	def_bool n
++    prompt "Disable BUG_ON() causing panic in certain Thinkpads when using MMC"
++	depends on INTEL_IOMMU
++	depends on X86_PLATFORM_DEVICES
++	depends on MMC_SDHCI_PCI
++	---help---
++	  Certain combination on thinkpads, IOMMU and MMC card readers
++	  may cause kernel panic. This workaround does not fix the root
++	  cause, but merely hides the symptom which is a kernel panic on
++	  MMC card insertion. That BUG_ON() is put there for a reason, so
++	  this workaround may, in fact mask a bigger problem.
++	  !!!USE AT YOUR OWN RISK!!!
++
+ config INTEL_IOMMU_BROKEN_GFX_WA
+ 	bool "Workaround broken graphics drivers (going away soon)"
+ 	depends on INTEL_IOMMU && BROKEN && X86
+--- a/drivers/iommu/intel-iommu.c
++++ b/drivers/iommu/intel-iommu.c
+@@ -3679,7 +3679,12 @@ static void intel_unmap(struct device *d
+ 		return;
+ 
+ 	domain = find_domain(dev);
++#ifdef CONFIG_IOMMU_BUG_OFF_WORKAROUND
++	if (!domain)
++		return;
++#else
+ 	BUG_ON(!domain);
++#endif
+ 
+ 	iommu = domain_get_iommu(domain);
+ 

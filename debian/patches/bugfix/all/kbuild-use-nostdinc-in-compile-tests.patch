@@ -13,6 +13,26 @@ The -nostdinc option disables this, though it isn't explicitly
 documented.  This option is already used when actually building
 the kernel.
 
+--- a/Makefile
++++ b/Makefile
+@@ -630,6 +630,8 @@ KBUILD_CFLAGS   += -O2
+ endif
+ endif
+ 
++NOSTDINC_FLAGS += -nostdinc
++
+ # Tell gcc to never replace conditional load with a non-conditional one
+ KBUILD_CFLAGS	+= $(call cc-option,--param=allow-store-data-races=0)
+ 
+@@ -769,7 +771,7 @@ KBUILD_CFLAGS += $(call cc-option, -fno-
+ endif
+ 
+ # arch Makefile may override CC so keep this after arch Makefile is included
+-NOSTDINC_FLAGS += -nostdinc -isystem $(shell $(CC) -print-file-name=include)
++NOSTDINC_FLAGS += -isystem $(shell $(CC) -print-file-name=include)
+ CHECKFLAGS     += $(NOSTDINC_FLAGS)
+ 
+ # warn about C99 declaration after statement
 --- a/scripts/Kbuild.include
 +++ b/scripts/Kbuild.include
 @@ -112,12 +112,12 @@ as-instr = $(call try-run,\
@@ -62,23 +82,3 @@ the kernel.
  
  # ar-option
  # Usage: KBUILD_ARFLAGS := $(call ar-option,D)
---- a/Makefile
-+++ b/Makefile
-@@ -630,6 +630,8 @@ KBUILD_CFLAGS   += -O2
- endif
- endif
- 
-+NOSTDINC_FLAGS += -nostdinc
-+
- # Tell gcc to never replace conditional load with a non-conditional one
- KBUILD_CFLAGS	+= $(call cc-option,--param=allow-store-data-races=0)
- 
-@@ -769,7 +771,7 @@ KBUILD_CFLAGS += $(call cc-option, -fno-
- endif
- 
- # arch Makefile may override CC so keep this after arch Makefile is included
--NOSTDINC_FLAGS += -nostdinc -isystem $(shell $(CC) -print-file-name=include)
-+NOSTDINC_FLAGS += -isystem $(shell $(CC) -print-file-name=include)
- CHECKFLAGS     += $(NOSTDINC_FLAGS)
- 
- # warn about C99 declaration after statement
