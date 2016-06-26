@@ -10,8 +10,6 @@ We really don't want to add -Werror anywhere.
  arch/mips/Kbuild |    5 -----
  1 files changed, 0 insertions(+), 5 deletions(-)
 
-diff --git a/arch/mips/Kbuild b/arch/mips/Kbuild
-index e322d65..2e6b28f 100644
 --- a/arch/mips/Kbuild
 +++ b/arch/mips/Kbuild
 @@ -1,8 +1,3 @@
@@ -23,6 +21,3 @@ index e322d65..2e6b28f 100644
  # platform specific definitions
  include arch/mips/Kbuild.platforms
  obj-y := $(platform-y)
--- 
-1.7.1
-
