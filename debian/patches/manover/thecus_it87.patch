@@ -1,0 +1,333 @@
+--- a/drivers/hwmon/it87.c
++++ b/drivers/hwmon/it87.c
+@@ -67,9 +67,25 @@
+ #include <linux/dmi.h>
+ #include <linux/acpi.h>
+ #include <linux/io.h>
++#include <linux/uaccess.h>
+
+ #define DRVNAME "it87"
+
++#define THECUS_ITE 1
++#if THECUS_ITE
++
++#include <linux/proc_fs.h>
++#include <linux/seq_file.h>
++#define THECUS_ITE_VER "0.1"
++#define ITE_DRIVER_NAME "ITE8728 Hardware Monitor, v" THECUS_ITE_VER
++
++#endif
++
++extern int f75387sg1_rw(u8 reg_num, u8 * val, int wr);
++extern int f75387sg2_rw(u8 reg_num, u8 * val, int wr);
++
++static int fan_type;
++
+ enum chips { it87, it8712, it8716, it8718, it8720, it8721, it8728, it8732,
+	     it8771, it8772, it8781, it8782, it8783, it8786, it8790, it8603,
+	     it8620 };
+@@ -2817,33 +2833,280 @@ exit:
+	return err;
+ }
+
++#if THECUS_ITE
++#define ITE_CPU_FAN 0
++#define ITE_SYS_FAN1 1
++#define ITE_HDD_FAN1 2
++
++static void thecus_it87_set_init(void)
++{
++    struct it87_data *data = it87_update_device(&pdev->dev);
++
++    mutex_lock(&data->update_lock);
++    /*
++    // Set all FAN Reference to CPU TEMP
++    it87_write_value(data, IT87_REG_PWM(ITE_CPU_FAN), 0x80);
++    it87_write_value(data, IT87_REG_PWM(ITE_SYS_FAN1), 0x80);
++    //it87_write_value(data, IT87_REG_PWM(ITE_HDD_FAN1), 0x80);
++
++    it87_write_value(data, 0x60, 0xFF); //Always Enable at SmartMode Fan0(CPU)
++    it87_write_value(data, 0x68, 0xFF); //Always Enable at SmartMode Fan1(SYS Fan1)
++    //it87_write_value(data, 0x70, 0xFF); //Always Enable at SmartMode Fan2(HDD Fan1)
++
++    it87_write_value(data, 0x61, 0x19); //Set Fan0(CPU) Start Temp 60C
++    it87_write_value(data, 0x69, 0x19); //Set Fan1(SYS Fan1) Start Temp
++    //it87_write_value(data, 0x71, 0x19); //Set Fan2(HDD Fan1) Start Temp
++
++    it87_write_value(data, 0x63, 0xC0); //Set Fan0(CPU) Start PWM 50%
++    it87_write_value(data, 0x6B, 0xE0); //Set Fan1(SYS Fan1) Start PWM 75%
++    //it87_write_value(data, 0x73, 0xC0); //Set Fan2(HDD Fan2) Start PWM 75%
++
++    it87_write_value(data, 0x64, 0xA0); //Set Fan0(CPU) Enable Smooth & Slope PWM 32
++    it87_write_value(data, 0x6C, 0xA0); //Set Fan1(SYS Fan1)
++    //it87_write_value(data, 0x74, 0xA0); //Set Fan1(HDD Fan1)
++
++    it87_write_value(data, 0x62, 0x37); //Set Fan0(CPU) Full Speed Temp ,default 0x3C(70 C)
++    it87_write_value(data, 0x6A, 0x37); //Set Fan1(SYS Fan1) Full Speed Temp
++    //it87_write_value(data, 0x72, 0x37); //Set Fan2(HDD Fan1) Full Speed Temp
++    */
++    mutex_unlock(&data->update_lock);
++}
++
++static int thecus_proc_it87_show(struct seq_file *m, void *v)
++{
++    int i;
++    u8 val1, val2;
++    int pulse = 1;
++
++    struct it87_data *data = it87_update_device(&pdev->dev);
++    seq_printf(m,"Display ITE8728 Info Ver.%s\n", THECUS_ITE_VER);
++    //seq_printf(m,"CPU_FAN RPM: %d\n", FAN16_FROM_REG(data->fan[0]));
++    //seq_printf(m,"SYS_FAN1 RPM: %d\n", FAN16_FROM_REG(data->fan[1]));
++    if (fan_type == 0) {
++        seq_printf(m,"HDD_FAN1 RPM: %d\n", FAN16_FROM_REG(data->fan[2]));
++    } else if (fan_type == 2) {
++        seq_printf(m,"HDD_FAN1 RPM: %d\n", FAN16_FROM_REG(data->fan[2]));
++        seq_printf(m,"HDD_FAN2 RPM: %d\n", FAN16_FROM_REG(data->fan[0]));
++    } else if (fan_type == 1) {
++        if ((!f75387sg1_rw(0x16, &val1, 0))
++            && (!f75387sg1_rw(0x17, &val2, 0))) {
++            i = val1;
++            i = ((i << 8) & 0xff00) | val2;
++            i *= pulse;
++            if (i == 0) i = 1;              // avoid divide by zero
++            if (i == 0x0FFF || i == 0x0FFE)
++                seq_printf(m, "HDD_FAN1 RPM: %d\n", 0);
++            else
++                seq_printf(m, "HDD_FAN1 RPM: %d\n", 1500000/i);
++        }
++        if (!f75387sg1_rw(0x18, &val1, 0) && !f75387sg1_rw(0x19, &val2, 0)) {
++            i = val1;
++            i = ((i << 8) & 0xff00) | val2;
++            i *= pulse;
++            if (i == 0) i = 1;              // avoid divide by zero
++            if (i == 0x0FFF || i == 0x0FFE)
++                seq_printf(m, "HDD_FAN2 RPM: %d\n", 0);
++            else
++                seq_printf(m, "HDD_FAN2 RPM: %d\n", 1500000/i);
++        }
++        if (!f75387sg2_rw(0x16, &val1, 0) && !f75387sg2_rw(0x17, &val2, 0)) {
++            i = val1;
++            i = ((i << 8) & 0xff00) | val2;
++            i *= pulse;
++            if (i == 0) i = 1;              // avoid divide by zero
++            if (i == 0x0FFF || i == 0x0FFE)
++                seq_printf(m, "HDD_FAN3 RPM: %d\n", 0);
++            else
++                seq_printf(m, "HDD_FAN3 RPM: %d\n", 1500000/i);
++        }
++        if (!f75387sg2_rw(0x18, &val1, 0) && !f75387sg2_rw(0x19, &val2, 0)) {
++            i = val1;
++            i = ((i << 8) & 0xff00) | val2;
++            i *= pulse;
++            if (i == 0) i = 1;              // avoid divide by zero
++            if (i == 0x0FFF || i == 0x0FFE)
++                seq_printf(m, "HDD_FAN4 RPM: %d\n", 0);
++            else
++                seq_printf(m, "HDD_FAN4 RPM: %d\n", 1500000/i);
++        }
++    }
++    seq_printf(m,"CPU_TEMP: %d\n",TEMP_FROM_REG(data->temp[0])/1000);
++    seq_printf(m,"SAS_TEMP: %d\n",TEMP_FROM_REG(data->temp[1])/1000);
++    seq_printf(m,"SYS_TEMP: %d\n",TEMP_FROM_REG(data->temp[2])/1000);
++    return 0;
++}
++
++static int thecus_proc_it87_open(struct inode *inode, struct file *file)
++{
++	return single_open(file, thecus_proc_it87_show, NULL);
++}
++
++static ssize_t thecus_proc_it87_write(struct file *file, const char __user *buf,
++                   size_t length, loff_t *ppos)
++{
++    int err;
++    char *buffer;
++    int i, ret, v0, v1, v2;
++    u32 val1, val2;
++    u8 reg = 0;
++    struct it87_data *data = it87_update_device(&pdev->dev);
++
++    if (!buf || length > PAGE_SIZE)
++        return -EINVAL;
++
++    buffer = (char *) __get_free_page(GFP_KERNEL);
++    if (!buffer)
++        return -ENOMEM;
++
++    ret = -EFAULT;
++    if (copy_from_user(buffer, buf, length))
++        goto out;
++
++    ret = -EINVAL;
++    if (length < PAGE_SIZE)
++        buffer[length] = '\0';
++    else if (buffer[PAGE_SIZE-1])
++        goto out;
++
++    if (!strncmp(buffer, "REG", strlen("REG"))) {
++        i = sscanf(buffer + strlen("REG"), "%d %x %x\n", &v0, &v1, &v2);
++        /*
++            R/W: 0/1 : v0
++            Reg addr: v1
++            Reg Value: v2
++        */
++
++        if (i == 3)  /* 3 input */
++        {
++            val1 = v1;
++            val2 = v2;
++            mutex_lock(&data->update_lock);
++
++            if (v0 == 1) {
++                printk("Write reg 0x%02X=0x%02X(%d)\n", val1, val2, val2);
++		        it87_write_value(data, v1, v2);
++            } else {
++                reg = it87_read_value(data, v1);
++                printk("Read reg 0x%02X=0x%02X(%d)\n", v1, reg, reg);
++            }
++	        mutex_unlock(&data->update_lock);
++        }
++    } else if (!strncmp(buffer, "DUMP", strlen("DUMP"))) {
++        i = sscanf(buffer + strlen("DUMP"), "%x %x\n", &v0, &v1);
++
++	    printk("Dumping Registers from 0x%+02X to 0x%+02X...\n", v0, v1);
++        if(i == 2) {
++	        mutex_lock(&data->update_lock);
++	        for (i = v0; i <= v1; i++) {
++	            reg = it87_read_value(data, i);
++	            printk("REG 0x%02X=0x%+02X\n", i, reg);
++	        }
++	        mutex_unlock(&data->update_lock);
++	    }
++        printk("\n");
++    } else if (!strncmp(buffer, "ACPWR", strlen("ACPWR"))) {
++        i = sscanf(buffer + strlen("ACPWR"), "%d\n", &v0);
++        if (i == 1) {
++            val1 = v0;
++	        mutex_lock(&data->update_lock);
++            err = superio_enter();
++            if (err) {
++	            printk("Error ACPWR=%d\n", val1);
++                return err;
++            }
++            superio_select(PME);
++            if (val1==0) {
++	            printk("ACPWR=%d,Off\n", val1);
++                superio_outb(0xf2, 0x00);
++                superio_outb(0xf4, 0x00);
++            } else if (val1==1) {
++	            printk("ACPWR=%d,On\n", val1);
++                superio_outb(0xf2, 0x00);
++                superio_outb(0xf4, 0x20);
++            } else {
++	            printk("ACPWR=%d,Keep last state\n", val1);
++                superio_outb(0xf2, 0x20);
++                superio_outb(0xf4, 0x00);
++            }
++            superio_exit();
++	        mutex_unlock(&data->update_lock);
++        }
++    }
++    ret = 0;
++
++out:
++    free_page((unsigned long)buffer);
++    if (ret>=0)
++        return length;
++    else
++        return -EINVAL;
++    return 0;
++}
++
++static struct file_operations thecus_proc_it87_operations = {
++   .open           = thecus_proc_it87_open,
++   .read           = seq_read,
++   .write          = thecus_proc_it87_write,
++   .llseek         = seq_lseek,
++   .release        = single_release,
++};
++
++static int thecus_it87_init_procfs(void)
++{
++    struct proc_dir_entry *pde;
++
++    pde = proc_create("hwm", 0, NULL, &thecus_proc_it87_operations);
++    if (pde == NULL)
++        return -ENOMEM;
++
++    return 0;
++}
++
++static void thecus_it87_exit_procfs(void)
++{
++    remove_proc_entry("hwm", NULL);
++}
++#endif
++
+ static int __init sm_it87_init(void)
+ {
+-	int err;
+-	unsigned short isa_address = 0;
+-	struct it87_sio_data sio_data;
++    int err;
++    unsigned short isa_address = 0;
++    struct it87_sio_data sio_data;
+
+-	memset(&sio_data, 0, sizeof(struct it87_sio_data));
+-	err = it87_find(&isa_address, &sio_data);
++    memset(&sio_data, 0, sizeof(struct it87_sio_data));
++    err = it87_find(&isa_address, &sio_data);
+	if (err)
+		return err;
+	err = platform_driver_register(&it87_driver);
+-	if (err)
+-		return err;
++    if (err)
++        return err;
+
+-	err = it87_device_add(isa_address, &sio_data);
+-	if (err) {
+-		platform_driver_unregister(&it87_driver);
+-		return err;
+-	}
+-
+-	return 0;
++    err = it87_device_add(isa_address, &sio_data);
++    if (err) {
++   	    platform_driver_unregister(&it87_driver);
++        return err;
++    }
++#if THECUS_ITE
++    /* Create Proc file */
++    if (thecus_it87_init_procfs()) {
++        printk(KERN_ERR "ITE8728: cannot create /proc/hwm\n");
++        return -ENOENT;
++    } else {
++        printk(KERN_INFO "%s Loaded on /proc/hwm\n", ITE_DRIVER_NAME);
++        thecus_it87_set_init();
++    }
++#endif
++    return 0;
+ }
+
+ static void __exit sm_it87_exit(void)
+ {
+-	platform_device_unregister(pdev);
+-	platform_driver_unregister(&it87_driver);
++#if THECUS_ITE
++    thecus_it87_exit_procfs();
++#endif
++    platform_device_unregister(pdev);
++    platform_driver_unregister(&it87_driver);
+ }
+
+
+@@ -2852,6 +3115,7 @@ MODULE_DESCRIPTION("IT8705F/IT871xF/IT87
+ module_param(update_vbat, bool, 0);
+ MODULE_PARM_DESC(update_vbat, "Update vbat if set else return powerup value");
+ module_param(fix_pwm_polarity, bool, 0);
++module_param(fan_type, int, 0);
+ MODULE_PARM_DESC(fix_pwm_polarity,
+		 "Force PWM polarity to active high (DANGEROUS)");
+ MODULE_LICENSE("GPL");

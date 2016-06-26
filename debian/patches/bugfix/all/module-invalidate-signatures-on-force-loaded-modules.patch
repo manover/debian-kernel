@@ -17,7 +17,7 @@ Cc: stable@vger.kernel.org
 
 --- a/kernel/module.c
 +++ b/kernel/module.c
-@@ -2597,13 +2597,18 @@ static inline void kmemleak_load_module(
+@@ -2687,13 +2687,18 @@ static inline void kmemleak_load_module(
  #endif
  
  #ifdef CONFIG_MODULE_SIG
@@ -38,7 +38,7 @@ Cc: stable@vger.kernel.org
  	    memcmp(mod + info->len - markerlen, MODULE_SIG_STRING, markerlen) == 0) {
  		/* We truncate the module to discard the signature */
  		info->len -= markerlen;
-@@ -2622,7 +2627,7 @@ static int module_sig_check(struct load_
+@@ -2712,7 +2717,7 @@ static int module_sig_check(struct load_
  	return err;
  }
  #else /* !CONFIG_MODULE_SIG */
@@ -47,7 +47,7 @@ Cc: stable@vger.kernel.org
  {
  	return 0;
  }
-@@ -3429,7 +3434,7 @@ static int load_module(struct load_info
+@@ -3498,7 +3503,7 @@ static int load_module(struct load_info
  	long err;
  	char *after_dashes;
  

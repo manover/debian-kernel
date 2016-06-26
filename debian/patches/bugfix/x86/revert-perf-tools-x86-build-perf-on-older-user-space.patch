@@ -1,8 +1,8 @@
+From d9ea89d8408f647c05c720bf35a1fba4992dd4a8 Mon Sep 17 00:00:00 2001
 From: Ben Hutchings <ben@decadent.org.uk>
 Date: Thu, 18 Feb 2016 23:37:19 +0000
 Subject: [PATCH] Revert "perf tools, x86: Build perf on older user-space as
  well"
-Forwarded: no
 
 This reverts commit eae7a755ee81129370c8f555b0d5672e6673735d.
 The empty unistd_{32,64}.h headers prevent building on sh, which also
@@ -17,8 +17,6 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
  delete mode 100644 tools/perf/util/include/asm/unistd_32.h
  delete mode 100644 tools/perf/util/include/asm/unistd_64.h
 
-diff --git a/tools/perf/perf-sys.h b/tools/perf/perf-sys.h
-index 83a25cef82fd..182a84eb5bd6 100644
 --- a/tools/perf/perf-sys.h
 +++ b/tools/perf/perf-sys.h
 @@ -11,9 +11,6 @@
@@ -41,16 +39,10 @@ index 83a25cef82fd..182a84eb5bd6 100644
  #ifndef __NR_futex
  # define __NR_futex 202
  #endif
-diff --git a/tools/perf/util/include/asm/unistd_32.h b/tools/perf/util/include/asm/unistd_32.h
-deleted file mode 100644
-index 8b137891791f..000000000000
 --- a/tools/perf/util/include/asm/unistd_32.h
 +++ /dev/null
 @@ -1 +0,0 @@
 -
-diff --git a/tools/perf/util/include/asm/unistd_64.h b/tools/perf/util/include/asm/unistd_64.h
-deleted file mode 100644
-index 8b137891791f..000000000000
 --- a/tools/perf/util/include/asm/unistd_64.h
 +++ /dev/null
 @@ -1 +0,0 @@

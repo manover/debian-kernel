@@ -9,8 +9,6 @@ Loongson-3, define it conditionally.
 
 Note: this should be replace by upstream fix when available.
 
-diff --git a/arch/mips/include/asm/sparsemem.h b/arch/mips/include/asm/sparsemem.h
-index b1071c1..778dca7 100644
 --- a/arch/mips/include/asm/sparsemem.h
 +++ b/arch/mips/include/asm/sparsemem.h
 @@ -11,7 +11,12 @@

@@ -26,11 +26,9 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@osg.samsung.com>
  drivers/media/v4l2-core/videobuf2-v4l2.c | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/drivers/media/v4l2-core/videobuf2-v4l2.c b/drivers/media/v4l2-core/videobuf2-v4l2.c
-index 91f552124050..8da7470ca364 100644
 --- a/drivers/media/v4l2-core/videobuf2-v4l2.c
 +++ b/drivers/media/v4l2-core/videobuf2-v4l2.c
-@@ -74,6 +74,11 @@ static int __verify_planes_array(struct vb2_buffer *vb, const struct v4l2_buffer
+@@ -74,6 +74,11 @@ static int __verify_planes_array(struct
  	return 0;
  }
  
@@ -42,7 +40,7 @@ index 91f552124050..8da7470ca364 100644
  /**
   * __verify_length() - Verify that the bytesused value for each plane fits in
   * the plane length and that the data offset doesn't exceed the bytesused value.
-@@ -437,6 +442,7 @@ static int __fill_vb2_buffer(struct vb2_buffer *vb,
+@@ -437,6 +442,7 @@ static int __fill_vb2_buffer(struct vb2_
  }
  
  static const struct vb2_buf_ops v4l2_buf_ops = {
