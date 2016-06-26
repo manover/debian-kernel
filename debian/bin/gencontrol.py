@@ -192,56 +192,6 @@ class Gencontrol(Base):
                      ["$(MAKE) -f debian/rules.real install-libc-dev_%s %s" %
                       (arch, makeflags)])
 
-        if os.getenv('DEBIAN_KERNEL_DISABLE_INSTALLER'):
-            if self.changelog[0].distribution == 'UNRELEASED':
-                import warnings
-                warnings.warn('Disable installer modules on request (DEBIAN_KERNEL_DISABLE_INSTALLER set)')
-            else:
-                raise RuntimeError('Unable to disable installer modules in release build (DEBIAN_KERNEL_DISABLE_INSTALLER set)')
-        elif self.config.merge('packages').get('installer', True):
-            # Add udebs using kernel-wedge
-            installer_def_dir = 'debian/installer'
-            installer_arch_dir = os.path.join(installer_def_dir, arch)
-            if os.path.isdir(installer_arch_dir):
-                # If we're going to build signed udebs later, don't actually
-                # generate udebs.  Just test that we *can* build, so we find
-                # configuration errors before building linux-signed.
-                test_build = self.config.merge('build', arch).get('signed-modules', False)
-
-                kw_env = os.environ.copy()
-                kw_env['KW_DEFCONFIG_DIR'] = installer_def_dir
-                kw_env['KW_CONFIG_DIR'] = installer_arch_dir
-                kw_proc = subprocess.Popen(
-                    ['kernel-wedge', 'gen-control', vars['abiname']],
-                    stdout=subprocess.PIPE,
-                    env=kw_env)
-                if not isinstance(kw_proc.stdout, io.IOBase):
-                    udeb_packages = read_control(io.open(kw_proc.stdout.fileno(), encoding='utf-8', closefd=False))
-                else:
-                    udeb_packages = read_control(io.TextIOWrapper(kw_proc.stdout, 'utf-8'))
-                kw_proc.wait()
-                if kw_proc.returncode != 0:
-                    raise RuntimeError('kernel-wedge exited with code %d' %
-                                       kw_proc.returncode)
-
-                # kernel-wedge currently chokes on Build-Profiles so add it now
-                for package in udeb_packages:
-                    package['Build-Profiles'] = '<!stage1>'
-
-                if not test_build:
-                    merge_packages(packages, udeb_packages, arch)
-
-                # These packages must be built after the per-flavour/
-                # per-featureset packages.  Also, this won't work
-                # correctly with an empty package list.
-                if udeb_packages:
-                    makefile.add(
-                        'binary-arch_%s' % arch,
-                        cmds=["$(MAKE) -f debian/rules.real install-udeb_%s %s "
-                              "PACKAGE_NAMES='%s' UDEB_UNSIGNED_TEST_BUILD=%s" %
-                              (arch, makeflags,
-                               ' '.join(p['Package'] for p in udeb_packages),
-                               test_build)])
 
     def do_featureset_setup(self, vars, makeflags, arch, featureset, extra):
         config_base = self.config.merge('base', arch, featureset)
