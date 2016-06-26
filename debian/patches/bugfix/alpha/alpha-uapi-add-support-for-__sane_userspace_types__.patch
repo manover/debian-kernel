@@ -30,8 +30,6 @@ Cc: stable@vger.kernel.org
 # +#include <uapi/asm/types.h>
 #  
 #  #endif /* _ALPHA_TYPES_H */
-diff --git a/arch/alpha/include/uapi/asm/types.h b/arch/alpha/include/uapi/asm/types.h
-index 9fd3cd4..8d1024d 100644
 --- a/arch/alpha/include/uapi/asm/types.h
 +++ b/arch/alpha/include/uapi/asm/types.h
 @@ -9,8 +9,18 @@

@@ -14,7 +14,7 @@ it can still be enabled using "pci=bios".
 ---
 --- a/arch/x86/pci/common.c
 +++ b/arch/x86/pci/common.c
-@@ -20,8 +20,8 @@
+@@ -19,8 +19,8 @@
  #include <asm/pci_x86.h>
  #include <asm/setup.h>
  
