@@ -22,11 +22,8 @@ else ifeq ($(DEB_HOST_ARCH_CPU),sh4)
   KERNEL_ARCH_PERF = sh
 else ifneq ($(filter sparc%,$(DEB_HOST_ARCH_CPU)),)
   KERNEL_ARCH_PERF = sparc
-else ifneq ($(filter amd64 i386,$(DEB_HOST_ARCH_CPU)),)
-  # But x32 isn't supported yet
-  ifneq ($(shell dpkg-architecture -qDEB_HOST_ARCH),x32)
-    KERNEL_ARCH_PERF = x86
-  endif
+else ifneq ($(filter x32 amd64 i386,$(DEB_HOST_ARCH_CPU)),)
+  KERNEL_ARCH_PERF = x86
 endif
 
 MAKE_PERF := $(MAKE) O=$(CURDIR) prefix=/usr V=1 ARCH=$(KERNEL_ARCH_PERF) EXTRA_WARNINGS=-Wno-error EXTRA_CFLAGS='$(CFLAGS) $(CPPFLAGS)' LDFLAGS='$(LDFLAGS)'
