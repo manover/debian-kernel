@@ -242,6 +242,10 @@ class Gencontrol(Base):
                               (arch, makeflags,
                                ' '.join(p['Package'] for p in udeb_packages),
                                test_build)])
+                makefile.add(
+                    'binary-arch_%s' % arch,
+                    cmds=["$(MAKE) -f debian/rules.real install-code-sign_%s %s" %
+                          (arch, makeflags)])
 
     def do_featureset_setup(self, vars, makeflags, arch, featureset, extra):
         config_base = self.config.merge('base', arch, featureset)

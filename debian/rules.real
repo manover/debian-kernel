@@ -460,6 +460,19 @@ endif
 	ln -s ../../../boot/vmlinux-$(REAL_VERSION) $(DEBUG_DIR)/lib/modules/$(REAL_VERSION)/vmlinux
 	+$(MAKE_SELF) install-base
 
+install-code-sign_$(ARCH): TARBALL=linux-code-sign_$(SOURCEVERSION)_$(ARCH).tar.xz
+install-code-sign_$(ARCH):
+ifneq ($(wildcard debian/linux-image-*-unsigned),)
+	{ cd debian; \
+	  for dir in linux-image-*-unsigned; do \
+		grep -l '^CONFIG_EFI_STUB=y' $$dir/boot/config-* | sed 's|/config-|/vmlinuz-|'; \
+		find $$dir/lib/modules -name '*.ko'; \
+	  done \
+	  | tar --no-recursion -T - -c --xz -f -; } \
+	> ../$(TARBALL)
+	dpkg-distaddfile $(TARBALL) byhand extra
+endif
+
 install-udeb_$(ARCH): export KW_DEFCONFIG_DIR=debian/installer
 install-udeb_$(ARCH): export KW_CONFIG_DIR=debian/installer/$(ARCH)
 install-udeb_$(ARCH): DH_OPTIONS=$(PACKAGE_NAMES:%=-p%)
