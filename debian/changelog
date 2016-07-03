@@ -1,3 +1,10 @@
+linux (4.6.3-3) unstable; urgency=medium
+
+  * New aufs version
+  * Build aufs as a module (stand-alone aufs)
+
+ -- Denis Bychkov <manover@gmail.com>  Sun, 26 Jun 2016 17:15:36 -0400
+
 linux (4.6.3-2) unstable; urgency=medium
 
   * Allow perftools build on x32
