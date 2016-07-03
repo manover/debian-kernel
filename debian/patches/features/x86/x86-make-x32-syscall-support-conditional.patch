@@ -28,7 +28,7 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 
 --- a/Documentation/kernel-parameters.txt
 +++ b/Documentation/kernel-parameters.txt
-@@ -3793,6 +3793,10 @@ bytes respectively. Such letter suffixes
+@@ -3877,6 +3877,10 @@ bytes respectively. Such letter suffixes
  
  	switches=	[HW,M68k]
  
@@ -41,7 +41,7 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
  			on older distributions. When this option is enabled
 --- a/arch/x86/Kconfig
 +++ b/arch/x86/Kconfig
-@@ -2690,6 +2690,14 @@ config X86_X32
+@@ -2665,6 +2665,14 @@ config X86_X32
  	  elf32_x86_64 support enabled to compile a kernel with this
  	  option set.
  
@@ -54,40 +54,27 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 +	  kernel paramter "syscall.x32=y".
 +
  config COMPAT
- 	def_bool y
- 	depends on IA32_EMULATION || X86_X32
---- a/arch/x86/entry/common.c
-+++ b/arch/x86/entry/common.c
-@@ -334,6 +334,7 @@ __visible void do_syscall_64(struct pt_r
- {
-	struct thread_info *ti = pt_regs_to_thread_info(regs);
-	unsigned long nr = regs->orig_ax;
-+	unsigned int syscall_mask, nr_syscalls_enabled;
- 
-	enter_from_user_mode();
-	local_irq_enable();
-@@ -346,8 +347,19 @@ __visible void do_syscall_64(struct pt_r
-	 * table.  The only functional difference is the x32 bit in
-	 * regs->orig_ax, which changes the behavior of some syscalls.
-	 */
--	if (likely((nr & __SYSCALL_MASK) < NR_syscalls)) {
--		regs->ax = sys_call_table[nr & __SYSCALL_MASK](
-+	if (__SYSCALL_MASK == ~0U || x32_enabled) {
-+		syscall_mask = __SYSCALL_MASK;
-+		nr_syscalls_enabled = NR_syscalls;
-+	} else {
-+		/*
-+		 * x32 syscalls present but not enabled.  Don't mask out
-+		 * the x32 flag and don't enable any x32-specific calls.
-+		 */
-+		syscall_mask = ~0U;
-+		nr_syscalls_enabled = 512;
-+	}
-+	if (likely((nr & syscall_mask) < nr_syscalls_enabled)) {
-+		regs->ax = sys_call_table[nr & syscall_mask](
-			regs->di, regs->si, regs->dx,
-			regs->r10, regs->r8, regs->r9);
-	}
+	def_bool y
+	depends on IA32_EMULATION || X86_X32
+--- a/arch/x86/include/asm/elf.h
++++ b/arch/x86/include/asm/elf.h
+@@ -9,6 +9,7 @@
+ #include <asm/ptrace.h>
+ #include <asm/user.h>
+ #include <asm/auxvec.h>
++#include <asm/syscall.h>
+
+ typedef unsigned long elf_greg_t;
+
+@@ -162,7 +163,7 @@ do {						\
+
+ #define compat_elf_check_arch(x)					\
+	(elf_check_arch_ia32(x) ||					\
+-	 (IS_ENABLED(CONFIG_X86_X32_ABI) && (x)->e_machine == EM_X86_64))
++	 (x32_enabled && (x)->e_machine == EM_X86_64))
+
+ #if __USER32_DS != __USER_DS
+ # error "The following code assumes __USER32_DS == __USER_DS"
 --- a/arch/x86/entry/entry_64.S
 +++ b/arch/x86/entry/entry_64.S
 @@ -193,8 +193,12 @@ entry_SYSCALL_64_fastpath:
@@ -135,7 +122,7 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 +#include <linux/init.h>
  #include <asm/asm-offsets.h>
  #include <asm/syscall.h>
-+#include <asm/alternative.h>
++#include <asm/text-patching.h>
  
  #define __SYSCALL_64_QUAL_(sym) sym
  #define __SYSCALL_64_QUAL_ptregs(sym) ptregs_##sym
@@ -176,25 +163,38 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 +late_initcall(x32_enable);
 +
 +#endif
---- a/arch/x86/include/asm/elf.h
-+++ b/arch/x86/include/asm/elf.h
-@@ -9,6 +9,7 @@
- #include <asm/ptrace.h>
- #include <asm/user.h>
- #include <asm/auxvec.h>
-+#include <asm/syscall.h>
- 
- typedef unsigned long elf_greg_t;
+--- a/arch/x86/entry/common.c
++++ b/arch/x86/entry/common.c
+@@ -334,6 +334,7 @@ __visible void do_syscall_64(struct pt_r
+ {
+	struct thread_info *ti = pt_regs_to_thread_info(regs);
+	unsigned long nr = regs->orig_ax;
++	unsigned int syscall_mask, nr_syscalls_enabled;
 
-@@ -162,7 +163,7 @@ do {						\
-
- #define compat_elf_check_arch(x)					\
-	(elf_check_arch_ia32(x) ||					\
--	 (IS_ENABLED(CONFIG_X86_X32_ABI) && (x)->e_machine == EM_X86_64))
-+	 (x32_enabled && (x)->e_machine == EM_X86_64))
-
- #if __USER32_DS != __USER_DS
- # error "The following code assumes __USER32_DS == __USER_DS"
+	enter_from_user_mode();
+	local_irq_enable();
+@@ -346,8 +347,19 @@ __visible void do_syscall_64(struct pt_r
+	 * table.  The only functional difference is the x32 bit in
+	 * regs->orig_ax, which changes the behavior of some syscalls.
+	 */
+-	if (likely((nr & __SYSCALL_MASK) < NR_syscalls)) {
+-		regs->ax = sys_call_table[nr & __SYSCALL_MASK](
++	if (__SYSCALL_MASK == ~0U || x32_enabled) {
++		syscall_mask = __SYSCALL_MASK;
++		nr_syscalls_enabled = NR_syscalls;
++	} else {
++		/*
++		 * x32 syscalls present but not enabled.  Don't mask out
++		 * the x32 flag and don't enable any x32-specific calls.
++		 */
++		syscall_mask = ~0U;
++		nr_syscalls_enabled = 512;
++	}
++	if (likely((nr & syscall_mask) < nr_syscalls_enabled)) {
++		regs->ax = sys_call_table[nr & syscall_mask](
+			regs->di, regs->si, regs->dx,
+			regs->r10, regs->r8, regs->r9);
+	}
 --- a/arch/x86/include/asm/syscall.h
 +++ b/arch/x86/include/asm/syscall.h
 @@ -35,6 +35,12 @@ extern const sys_call_ptr_t sys_call_tab

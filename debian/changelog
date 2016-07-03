@@ -1,3 +1,17 @@
+linux (4.7~rc5-1~exp3) experimental; urgency=medium
+
+  * Import/refresh debian patches
+
+ -- Denis Bychkov <manover@gmail.com>  Sun, 03 Jul 2016 00:13:49 -0400
+
+linux (4.7~rc5-1~exp1) experimental; urgency=medium
+
+  * Linux 4.7 RC5
+  * Stand-alone aufs (module)
+  * New aufs version
+
+ -- Denis Bychkov <manover@gmail.com>  Sun, 26 Jun 2016 23:42:35 -0400
+
 linux (4.7~rc4-1~exp3) experimental; urgency=medium
 
   * Allow perftools build on x32
