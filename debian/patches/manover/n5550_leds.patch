@@ -1,6 +1,6 @@
 --- a/drivers/platform/x86/Kconfig
 +++ b/drivers/platform/x86/Kconfig
-@@ -918,6 +918,21 @@ config MXM_WMI
+@@ -916,6 +916,21 @@ config MXM_WMI
            MXM is a standard for laptop graphics cards, the WMI interface
  	  is required for switchable nvidia graphics machines
  

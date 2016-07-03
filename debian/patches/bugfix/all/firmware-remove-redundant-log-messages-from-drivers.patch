@@ -351,7 +351,7 @@ upstream submission.
  	rc = request_firmware(&fw, fw_filename, coredev->device);
 -	if (rc < 0) {
 -		pr_err("failed to open firmware file '%s'\n", fw_filename);
-+	if (rc)
++	if (rc < 0)
  		return rc;
 -	}
  	pr_debug("read fw %s, buffer size=0x%zx\n", fw_filename, fw->size);
@@ -885,25 +885,18 @@ upstream submission.
  	cmd.direction = TRANSFER_WRITE;
 --- a/drivers/media/usb/cx231xx/cx231xx-417.c
 +++ b/drivers/media/usb/cx231xx/cx231xx-417.c
-@@ -998,16 +998,8 @@ static int cx231xx_load_firmware(struct
- 	retval = request_firmware(&firmware, CX231xx_FIRM_IMAGE_NAME,
+@@ -999,11 +999,6 @@ static int cx231xx_load_firmware(struct
  				  dev->dev);
  
--	if (retval != 0) {
+ 	if (retval != 0) {
 -		dev_err(dev->dev,
 -			"ERROR: Hotplug firmware request failed (%s).\n",
 -			CX231xx_FIRM_IMAGE_NAME);
 -		dev_err(dev->dev,
 -			"Please fix your hotplug setup, the board will not work without firmware loaded!\n");
--		vfree(p_current_fw);
--		vfree(p_buffer);
--		return retval;
--	}
-+	if (retval != 0)
-+		return -1;
- 
- 	if (firmware->size != CX231xx_FIRM_IMAGE_SIZE) {
- 		dev_err(dev->dev,
+ 		vfree(p_current_fw);
+ 		vfree(p_buffer);
+ 		return retval;
 --- a/drivers/media/usb/dvb-usb/dib0700_devices.c
 +++ b/drivers/media/usb/dvb-usb/dib0700_devices.c
 @@ -2410,12 +2410,9 @@ static int stk9090m_frontend_attach(stru
@@ -1596,6 +1589,20 @@ upstream submission.
  			if (ret == -ENOENT)
  				continue;
  			else
+--- a/drivers/net/wireless/intel/iwlwifi/iwl-drv.c
++++ b/drivers/net/wireless/intel/iwlwifi/iwl-drv.c
+@@ -224,10 +224,8 @@ static int iwl_request_firmware(struct i
+ 		sprintf(tag, "%d", drv->fw_index);
+ 	}
+ 
+-	if (drv->fw_index < drv->cfg->ucode_api_min) {
+-		IWL_ERR(drv, "no suitable firmware found!\n");
++	if (drv->fw_index < drv->cfg->ucode_api_min)
+ 		return -ENOENT;
+-	}
+ 
+ 	snprintf(drv->firmware_name, sizeof(drv->firmware_name), "%s%s.ucode",
+ 		 name_pre, tag);
 --- a/drivers/net/wireless/intersil/orinoco/fw.c
 +++ b/drivers/net/wireless/intersil/orinoco/fw.c
 @@ -132,7 +132,6 @@ orinoco_dl_firmware(struct orinoco_priva
