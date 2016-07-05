@@ -9,7 +9,7 @@ are set.
 
 --- a/Makefile
 +++ b/Makefile
-@@ -1019,7 +1019,7 @@ endif
+@@ -1021,7 +1021,7 @@ endif
  prepare2: prepare3 outputmakefile asm-generic
  
  prepare1: prepare2 $(version_h) include/generated/utsrelease.h \
@@ -18,7 +18,7 @@ are set.
  	$(cmd_crmodverdir)
  	$(Q)test -e include/generated/autoksyms.h || \
  	    touch   include/generated/autoksyms.h
-@@ -1068,6 +1068,16 @@ define filechk_version.h
+@@ -1070,6 +1070,16 @@ define filechk_version.h
  	echo '#define KERNEL_VERSION(a,b,c) (((a) << 16) + ((b) << 8) + (c))';)
  endef
  
@@ -35,7 +35,7 @@ are set.
  $(version_h): $(srctree)/Makefile FORCE
  	$(call filechk,version.h)
  	$(Q)rm -f $(old_version_h)
-@@ -1075,6 +1085,9 @@ $(version_h): $(srctree)/Makefile FORCE
+@@ -1077,6 +1087,9 @@ $(version_h): $(srctree)/Makefile FORCE
  include/generated/utsrelease.h: include/config/kernel.release FORCE
  	$(call filechk,utsrelease.h)
  
@@ -44,29 +44,7 @@ are set.
 +
  PHONY += headerdep
  headerdep:
- 	$(Q)find $(srctree)/include/ -name '*.h' | xargs --max-args 1 \
---- a/arch/x86/um/sysrq_64.c
-+++ b/arch/x86/um/sysrq_64.c
-@@ -8,6 +8,7 @@
- #include <linux/module.h>
- #include <linux/sched.h>
- #include <linux/utsname.h>
-+#include <generated/package.h>
- #include <asm/current.h>
- #include <asm/ptrace.h>
- #include <asm/sysrq.h>
-@@ -16,8 +17,9 @@ void show_regs(struct pt_regs *regs)
- {
-	printk("\n");
-	print_modules();
--	printk(KERN_INFO "Pid: %d, comm: %.20s %s %s\n", task_pid_nr(current),
--		current->comm, print_tainted(), init_utsname()->release);
-+	printk(KERN_INFO "Pid: %d, comm: %.20s %s %s%s\n", task_pid_nr(current),
-+		current->comm, print_tainted(), init_utsname()->release,
-+		LINUX_PACKAGE_ID);
-	printk(KERN_INFO "RIP: %04lx:[<%016lx>]\n", PT_REGS_CS(regs) & 0xffff,
-	       PT_REGS_IP(regs));
-	printk(KERN_INFO "RSP: %016lx  EFLAGS: %08lx\n", PT_REGS_SP(regs),
+	$(Q)find $(srctree)/include/ -name '*.h' | xargs --max-args 1 \
 --- a/arch/ia64/kernel/process.c
 +++ b/arch/ia64/kernel/process.c
 @@ -30,6 +30,7 @@
@@ -111,6 +89,28 @@ are set.
 	printk("MSR: "REG" ", regs->msr);
 	print_msr_bits(regs->msr);
 	printk("  CR: %08lx  XER: %08lx\n", regs->ccr, regs->xer);
+--- a/arch/x86/um/sysrq_64.c
++++ b/arch/x86/um/sysrq_64.c
+@@ -8,6 +8,7 @@
+ #include <linux/module.h>
+ #include <linux/sched.h>
+ #include <linux/utsname.h>
++#include <generated/package.h>
+ #include <asm/current.h>
+ #include <asm/ptrace.h>
+ #include <asm/sysrq.h>
+@@ -16,8 +17,9 @@ void show_regs(struct pt_regs *regs)
+ {
+	printk("\n");
+	print_modules();
+-	printk(KERN_INFO "Pid: %d, comm: %.20s %s %s\n", task_pid_nr(current),
+-		current->comm, print_tainted(), init_utsname()->release);
++	printk(KERN_INFO "Pid: %d, comm: %.20s %s %s%s\n", task_pid_nr(current),
++		current->comm, print_tainted(), init_utsname()->release,
++		LINUX_PACKAGE_ID);
+	printk(KERN_INFO "RIP: %04lx:[<%016lx>]\n", PT_REGS_CS(regs) & 0xffff,
+	       PT_REGS_IP(regs));
+	printk(KERN_INFO "RSP: %016lx  EFLAGS: %08lx\n", PT_REGS_SP(regs),
 --- a/kernel/printk/printk.c
 +++ b/kernel/printk/printk.c
 @@ -46,6 +46,7 @@
