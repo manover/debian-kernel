@@ -1,3 +1,11 @@
+linux (4.7~rc6-1~exp1) experimental; urgency=medium
+
+  * Linux 4.7 RC6
+  * AUFS 4.7-20160704
+  * Refresh patches
+
+ -- Denis Bychkov <manover@gmail.com>  Mon, 04 Jul 2016 21:29:27 -0400
+
 linux (4.7~rc5-1~exp3) experimental; urgency=medium
 
   * Import/refresh debian patches
