@@ -24450,7 +24450,8 @@
 +		},
 +	};
 +
-+	inode_lock(inode);
++	IMustLock(inode);
++
 +	if (inode->i_ino == AUFS_ROOT_INO)
 +		dentry = dget(inode->i_sb->s_root);
 +	else {
@@ -24472,7 +24473,6 @@
 +		err = 0;
 +
 +out:
-+	inode_unlock(inode);
 +	return err;
 +}
 --- /dev/null
@@ -34177,7 +34177,7 @@
 +
 +#include <linux/limits.h>
 +
-+#define AUFS_VERSION	"4.7-20160627"
++#define AUFS_VERSION	"4.7-20160704"
 +
 +/* todo? move this to linux-2.6.19/include/magic.h */
 +#define AUFS_SUPER_MAGIC	('a' << 24 | 'u' << 16 | 'f' << 8 | 's')
