@@ -18,7 +18,7 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 +MODULE_SOFTDEP("pre: crypto-crc32c");
 --- a/fs/cifs/cifsfs.c
 +++ b/fs/cifs/cifsfs.c
-@@ -1364,5 +1364,13 @@ MODULE_DESCRIPTION
+@@ -1367,5 +1367,13 @@ MODULE_DESCRIPTION
      ("VFS to access servers complying with the SNIA CIFS Specification "
       "e.g. Samba and Windows");
  MODULE_VERSION(CIFS_VERSION);
