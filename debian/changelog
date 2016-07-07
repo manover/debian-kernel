@@ -1,3 +1,9 @@
+linux (4.6.3-4) unstable; urgency=medium
+
+  Merge debian/4.6.3-1 patches and changelog
+
+ -- Denis Bychkov <manover@gmail.com>  Thu, 07 Jul 2016 01:39:54 -0400
+
 linux (4.6.3-3) unstable; urgency=medium
 
   * New aufs version
@@ -10,6 +16,84 @@ linux (4.6.3-2) unstable; urgency=medium
   * Allow perftools build on x32
 
  -- Denis Bychkov <manover@gmail.com>  Sat, 25 Jun 2016 18:24:12 -0400
+
+linux (4.6.3-1) unstable; urgency=medium
+
+  [ Ben Hutchings ]
+  * New upstream stable update:
+    https://www.kernel.org/pub/linux/kernel/v4.x/ChangeLog-4.6.3
+    - scsi_lib: correctly retry failed zero length REQ_TYPE_FS commands
+    - scsi: Add QEMU CD-ROM to VPD Inquiry Blacklist
+    - netlink: Fix dump skb leak/double free
+    - tipc: fix nametable publication field in nl compat
+    - switchdev: pass pointer to fib_info instead of copy
+    - tuntap: correctly wake up process during uninit
+    - bpf: Use mount_nodev not mount_ns to mount the bpf filesystem
+    - udp: prevent skbs lingering in tunnel socket queues
+    - uapi glibc compat: fix compilation when !__USE_MISC in glibc
+    - bpf, inode: disallow userns mounts
+    - [armhf] net: mvneta: Fix lacking spinlock initialization
+    - net: hwbm: Fix unbalanced spinlock in error case
+    - sfc: on MC reset, clear PIO buffer linkage in TXQs
+    - team: don't call netdev_change_features under team->lock
+    - net: alx: use custom skb allocator
+    - net: stmmac: Fix incorrect memcpy source memory
+    - vxlan: Accept user specified MTU value when create new vxlan link
+    - net: nps_enet: Disable interrupts before napi reschedule
+    - bpf, trace: use READ_ONCE for retrieving file ptr
+    - tcp: record TLP and ER timer stats in v6 stats
+    - bridge: Don't insert unnecessary local fdb entry on changing mac address
+    - l2tp: fix configuration passed to setup_udp_tunnel_sock()
+    - ipv6: Skip XFRM lookup if dst_entry in socket cache is valid
+    - [armhf,arm64] KVM: vgic-v2: Clear all dirty LRs
+    - [armhf,arm64] KVM: vgic-v3: Clear all dirty LRs
+    - [x86] KVM: fix OOPS after invalid KVM_SET_DEBUGREGS
+    - KVM: irqfd: fix NULL pointer dereference in kvm_irq_map_gsi
+    - [arm*] drivers/perf: arm_pmu: Defer the setting of __oprofile_cpu_pmu
+    - [x86] ALSA: hda - Add PCI ID for Kabylake
+    - [x86] ALSA: hda - Fix headset mic detection problem for Dell machine
+    - ALSA: hda/realtek - ALC256 speaker noise issue
+    - ALSA: hda/realtek - Add support for new codecs ALC700/ALC701/ALC703
+    - [x86] ALSA: hda/realtek: Add T560 docking unit fixup
+    - [armhf] fix PTRACE_SETVFPREGS on SMP systems
+    - gpio: bail out silently on NULL descriptors
+    - gpiolib: Fix NULL pointer deference
+    - gpiolib: Fix unaligned used of reference counters
+    - [s390x] bpf: fix recache skb->data/hlen for skb_vlan_push/pop
+    - [s390x] bpf: reduce maximum program size to 64 KB
+    - [armhf,arm64] irqchip/gic-v3: Fix ICC_SGI1R_EL1.INTID decoding mask
+    - [x86] crypto: ccp - Fix AES XTS error for request sizes above 4096
+    - [arm64] Provide "model name" in /proc/cpuinfo for PER_LINUX32 tasks
+    - [arm64] mm: always take dirty state from new pte in ptep_set_access_flags
+    - [powerpc*] pseries/eeh: Handle RTAS delay requests in configure_bridge
+    - [powerpc*] Fix definition of SIAR and SDAR registers
+    - [powerpc*] Use privileged SPR number for MMCR2
+    - [powerpc*] pseries: Add POWER8NVL support to
+      ibm,client-architecture-support call
+    - [powerpc*] mm/hash: Fix the reference bit update when handling hash fault
+    - [hppa] Fix pagefault crash in unaligned __get_user() call
+    - memcg: add RCU locking around css_for_each_descendant_pre() in
+      memcg_offline_kmem()
+    - wext: Fix 32 bit iwpriv compatibility issue with 64 bit Kernel
+    - mm: thp: broken page count after commit aa88b68c3b1d
+    - [x86] entry/traps: Don't force in_interrupt() to return true in IST
+      handlers
+    - fix d_walk()/non-delayed __d_free() race
+    - [sparc64] Reduce TLB flushes during hugepte changes
+    - [sparc64] Take ctx_alloc_lock properly in hugetlb_setup().
+    - [sparc64] Harden signal return frame checks.
+    - [sparc64] Fix return from trap window fill crashes.
+    - drm/core: Do not preserve framebuffer on rmfb, v4.
+    - [x86] Revert "drm/i915: Exit cherryview_irq_handler() after one pass"
+    - gpio: make sure gpiod_to_irq() returns negative on NULL desc
+  * [powerpc*] tm: Always reclaim in start_thread() for exec() class syscalls
+    (CVE-2016-5828)
+
+  [ Salvatore Bonaccorso ]
+  * HID: hiddev: validate num_values for HIDIOCGUSAGES, HIDIOCSUSAGES commands
+    (CVE-2016-5829)
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Mon, 04 Jul 2016 20:10:24 +0200
 
 linux (4.6.3-1) unstable; urgency=medium
 
@@ -33,15 +117,221 @@ linux (4.6.2-3) unstable; urgency=medium
 
 linux (4.6.2-2) unstable; urgency=medium
 
+  * [mips*] Fix ABI changes in 4.6.2
+  * [rt] Update to 4.6.2-rt5:
+    - mm/memcontrol: mem_cgroup_migrate() - replace another local_irq_disable()
+      w. local_lock_irq()
+  * KEYS: potential uninitialized variable (CVE-2016-4470)
+  * percpu: fix synchronization between chunk->map_extend_work and chunk
+    destruction (CVE-2016-4794)
+  * percpu: fix synchronization between synchronous map extension and
+    chunk destruction (CVE-2016-4794)
+  * netfilter: x_tables: Fix parsing of IPT_SO_SET_REPLACE blobs
+    (CVE-2016-4997, CVE-2016-4998)
+    - don't move to non-existent next rule
+    - validate targets of jumps
+    - add and use xt_check_entry_offsets
+    - kill check_entry helper
+    - assert minimum target size
+    - add compat version of xt_check_entry_offsets
+    - check standard target size too
+    - check for bogus target offset
+    - validate all offsets and sizes in a rule
+    - don't reject valid target size on some
+    - arp_tables: simplify translate_compat_table args
+    - ip_tables: simplify translate_compat_table args
+    - ip6_tables: simplify translate_compat_table args
+    - xt_compat_match_from_user doesn't need a retval
+    - do compat validation via translate_table
+    - introduce and use xt_copy_counters_from_user
+  * Ignore ABI change in x_tables
+  * nfsd: check permissions when setting ACLs (CVE-2016-1237)
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Sat, 25 Jun 2016 11:22:27 +0200
+
+linux (4.6.2-2) unstable; urgency=medium
+
   * Got recent debian patches
 
  -- Denis Bychkov <manover@gmail.com>  Sat, 11 Jun 2016 18:48:55 -0400
 
 linux (4.6.2-1) unstable; urgency=medium
 
+  * Team upload.
+  * New upstream stable update:
+    https://www.kernel.org/pub/linux/kernel/v4.x/ChangeLog-4.6.2
+    - f2fs: fix deadlock when flush inline data
+    - [mips*] math-emu: Fix jalr emulation when rd == $0
+    - [mips*] Avoid using unwind_stack() with usermode
+    - [mips*] Fix siginfo.h to use strict posix types
+    - [mips*] Fix uapi include in exported asm/siginfo.h
+    - [mips*] Fix watchpoint restoration
+    - [mips*] Flush highmem pages in __flush_dcache_page
+    - [mips*] Handle highmem pages in __update_cache
+    - [mips*] Sync icache & dcache in set_pte_at
+    - [mips*] Reserve nosave data for hibernation
+    - [mips*el/loongson-3] Reserve 32MB for RS780E integrated GPU
+    - [mips*] Use copy_s.fmt rather than copy_u.fmt
+    - [mips*] Prevent "restoration" of MSA context in non-MSA kernels
+    - [mips*] ptrace: Fix FP context restoration FCSR regression
+    - [mips*] ptrace: Prevent writes to read-only FCSR bits
+    - [mips*] lib: Mark intrinsics notrace
+    - [mips*] VDSO: Build with `-fno-strict-aliasing'
+    - affs: fix remount failure when there are no options changed
+    - ASoC: ak4642: Enable cache usage to fix crashes on resume
+    - Input: uinput - handle compat ioctl for UI_SET_PHYS
+    - Input: xpad - move pending clear to the correct location
+    - Input: xpad - prevent spurious input from wired Xbox 360 controllers
+    - [armhf] sun4i: dt: Enable dram gate 5 (tve0 clock) for simplefb TV output
+    - [armhf] sun7i: dt: Enable dram gate 5 (tve0 clock) for simplefb TV output
+    - [armhf] mvebu: fix GPIO config on the Linksys boards
+    - [armhf] dts: exynos: Add interrupt line to MAX8997 PMIC on
+      exynos4210-trats
+    - ath9k: Fix LED polarity for some Mini PCI AR9220 MB92 cards.
+    - ath10k: fix firmware assert in monitor mode
+    - ath10k: fix rx_channel during hw reconfigure
+    - ath10k: fix kernel panic, move arvifs list head init before htt init
+    - ath5k: Change led pin configuration for compaq c700 laptop
+    - [armhf] hwrng: exynos - Fix unbalanced PM runtime put on timeout
+      error path
+    - rtlwifi: Fix logic error in enter/exit power-save mode
+    - rtlwifi: pci: use dev_kfree_skb_irq instead of kfree_skb in
+      rtl_pci_reset_trx_ring
+    - Revert "lpfc: Delete unnecessary checks before the function call
+      mempool_destroy"
+    - aacraid: Start adapter after updating number of MSIX vectors
+    - aacraid: Relinquish CPU during timeout wait
+    - aacraid: Fix for aac_command_thread hang
+    - aacraid: Fix for KDUMP driver hang
+    - regulator: Try to resolve regulators supplies on registration
+    - hwmon: (ads7828) Enable internal reference
+    - [x86] mfd: intel_quark_i2c_gpio: Remove clock tree on error path
+    - [x86] mfd: intel-lpss: Save register context on suspend
+    - [x86] mfd: intel_soc_pmic_core: Terminate panel control GPIO lookup
+      table correctly
+    - PM / Runtime: Fix error path in pm_runtime_force_resume()
+    - cpuidle: Indicate when a device has been unregistered
+    - cpuidle: Fix cpuidle_state_is_coupled() argument in cpuidle_enter()
+    - [armhf] clk: bcm2835: Fix PLL poweron
+    - [armhf] clk: bcm2835: pll_off should only update CM_PLL_ANARST
+    - [armhf] clk: bcm2835: divider value has to be 1 or more
+    - [armhf] clk: bcm2835: correctly enable fractional clock support
+    - [armhf] pinctrl: exynos5440: Use off-stack memory for pinctrl_gpio_range
+    - PCI: Disable all BAR sizing for devices with non-compliant BARs
+    - media: v4l2-compat-ioctl32: fix missing reserved field copy in
+      put_v4l2_create32
+    - PKCS#7: fix missing break on OID_sha224 case
+    - mm: use phys_addr_t for reserve_bootmem_region() arguments
+    - mm/compaction.c: fix zoneindex in kcompactd()
+    - wait/ptrace: assume __WALL if the child is traced
+    - batman-adv: Fix double neigh_node_put in batadv_v_ogm_route_update
+    - [powerpc*] book3s64: Fix branching to OOL handlers in relocatable kernel
+    - [powerpc*] eeh: Don't report error in eeh_pe_reset_and_recover()
+    - [powerpc*] Revert "powerpc/eeh: Fix crash in eeh_add_device_early()
+      on Cell"
+    - [powerpc*] eeh: Restore initial state in eeh_pe_reset_and_recover()
+    - xen/events: Don't move disabled irqs
+    - xen: use same main loop for counting and remapping pages
+    - sunrpc: fix stripping of padded MIC tokens
+    - [x86] drm/gma500: Fix possible out of bounds read
+    - [x86] drm/vmwgfx: Kill some lockdep warnings
+    - [x86] drm/amdgpu: use drm_mode_vrefresh() rather than mode->vrefresh
+    - [x86] drm/amdgpu: Fix hdmi deep color support.
+    - [x86] drm/i915/fbdev: Fix num_connector references in
+      intel_fb_initial_config()
+    - drm/fb_helper: Fix references to dev->mode_config.num_connector
+    - [x86] drm/i915: Discard previous atomic state on resume if connectors
+      change
+    - drm/atomic: Verify connector->funcs != NULL when clearing states
+    - Bluetooth: 6lowpan: Fix memory corruption of ipv6 destination address
+    - [x86] drm/i915/psr: Try to program link training times correctly
+    - [x86] drm/i915: Respect DP++ adaptor TMDS clock limit
+    - [x86] drm/i915: Enable/disable TMDS output buffers in DP++ adaptor
+      as needed
+    - [x86] drm/i915: Don't leave old junk in ilk active watermarks on readout
+    - [x86] drm/i915: Fix watermarks for VLV/CHV
+    - [armhf] drm/imx: Match imx-ipuv3-crtc components using device node in
+      platform data
+    - [x86] drm/i915: Pass the correct crtc state to .update_plane()
+    - ext4: fix data exposure after a crash
+    - ext4: fix hang when processing corrupted orphaned inode list
+    - ext4: clean up error handling when orphan list is corrupted
+    - ext4: fix check of dqget() return value in ext4_ioctl_setproject()
+    - ext4: fix oops on corrupted filesystem
+    - ext4: address UBSAN warning in mb_find_order_for_block()
+    - nfs: avoid race that crashes nfs_init_commit
+    - PM / sleep: Handle failures in device_suspend_late() consistently
+    - mm: thp: avoid false positive VM_BUG_ON_PAGE in page_move_anon_rmap()
+    - xfs: disallow rw remount on fs with unknown ro-compat features
+    - xfs: Don't wrap growfs AGFL indexes
+    - xfs: remove xfs_fs_evict_inode()
+    - xfs: xfs_iflush_cluster fails to abort on error
+    - xfs: fix inode validity check in xfs_iflush_cluster
+    - xfs: skip stale inodes in xfs_iflush_cluster
+    - [armhf] drm: msm: remove unused variable
+    - IB/hfi1: Fix hard lockup due to not using save/restore spin lock
+    - regulator: Fix deadlock during regulator registration
+
+  [ Ben Hutchings ]
+  * [armel,armhf,sh4] linux-image: Do not suggest fdutils
+  * liblockdep: Reduce MAX_LOCK_DEPTH to avoid overflowing lock_chain::depth
+  * liblockdep: Fix 'unused value' warnings
+  * liblockdep: Fix 'set but not used' warnings
+  * liblockdep: Fix 'defined but not used' warning for init_utsname()
+
+  [ Salvatore Bonaccorso ]
+  * Stack overflow via ecryptfs and /proc/$pid/environ (CVE-2016-1583)
+    - proc: prevent stacking filesystems on top
+    - ecryptfs: forbid opening files without mmap handler
+    - sched: panic on corrupted stack end
+  * tipc: fix an infoleak in tipc_nl_compat_link_dump (CVE-2016-5243)
+  * rds: fix an infoleak in rds_inc_info_copy (CVE-2016-5244)
+
+ -- Salvatore Bonaccorso <carnil@debian.org>  Wed, 15 Jun 2016 21:32:54 +0200
+
+linux (4.6.2-1) unstable; urgency=medium
+
   * Linux 4.6.2
 
  -- Denis Bychkov <manover@gmail.com>  Wed, 08 Jun 2016 14:54:51 -0400
+
+linux (4.6.1-1) unstable; urgency=medium
+
+  * New upstream stable update:
+    https://www.kernel.org/pub/linux/kernel/v4.x/ChangeLog-4.6.1
+
+  [ Ben Hutchings ]
+  * [mips*r6*] Disable these architectures until dak recognises them as valid
+    in the control file
+  * linux-image: Rewrite maintainer scripts in shell, using the new
+    linux-update-symlinks and linux-check-removal commands
+    (Closes: #692333, #815850).  Drop support for minimal_swap, no_symlinks,
+    use_hard_links and *_hook parameters in  /etc/kernel-img.conf
+    (Closes: #730073).  Remove now-redundant debconf templates.
+  * linux-image: postrm: Update default symlinks before running hook scripts
+  * linux-image: Make a newly installed kernel the default if the package
+    was previously removed
+  * mtd: Disable slram and phram when securelevel is enabled
+  * debian/patches/features/all/rt/genpatch.py: Use Python 3
+  * debian/patches/features/all/rt/genpatch.py: Fix mapping of -rt version to
+    upstream version
+  * debian/patches/features/all/rt/genpatch.py: Use upstream tarball directly
+  * debian/patches/features/all/rt/genpatch.py: Use stable URLs in patch Origin
+    headers
+  * [rt] Update to 4.6.1-rt3:
+    - trace: correct off by one while recording the trace-event
+    - sched,preempt: Fix preempt_count manipulations
+    - kernel/rtmutex: only warn once on a try lock from bad
+    - locallock: add local_lock_on()
+    - kernel/printk: Don't try to print from IRQ/NMI region
+    - mm: perform lru_add_drain_all() remotely
+  * debian/control: Drop obsolete versioned Depends and Breaks
+  * linux-libc-dev: Drop obsolete Replaces/Conflicts with linux-kernel-headers
+  * debian/control: Update policy version to 3.9.8; no changes required
+  * Disable MODULE_SIG for architectures not supported by linux-signed
+  * Set ABI to 1
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Mon, 06 Jun 2016 18:13:57 +0100
 
 linux (4.6.1-1) unstable; urgency=medium
 
