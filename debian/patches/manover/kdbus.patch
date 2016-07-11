@@ -5,9 +5,9 @@
  source "fs/kernfs/Kconfig"
  source "fs/sysfs/Kconfig"
 +source "ipc/kdbus/Kconfig"
-
+ 
  config TMPFS
-	bool "Tmpfs virtual memory file system support (former shm fs)"
+ 	bool "Tmpfs virtual memory file system support (former shm fs)"
 --- /dev/null
 +++ b/include/uapi/linux/kdbus.h
 @@ -0,0 +1,984 @@
@@ -1000,7 +1000,7 @@
 @@ -10,3 +10,4 @@ obj-$(CONFIG_POSIX_MQUEUE) += mqueue.o m
  obj-$(CONFIG_IPC_NS) += namespace.o
  obj-$(CONFIG_POSIX_MQUEUE_SYSCTL) += mq_sysctl.o
-
+ 
 +obj-$(CONFIG_KDBUS) += kdbus/
 --- /dev/null
 +++ b/ipc/kdbus/Kconfig

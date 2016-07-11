@@ -62,7 +62,7 @@ This standalone version doesn't include making the variable read-only
  
  /* Minimum for 512 kiB + 1 user control page */
  int sysctl_perf_event_mlock __read_mostly = 512 + (PAGE_SIZE / 1024); /* 'free' kiB per user */
-@@ -9179,6 +9184,11 @@ SYSCALL_DEFINE5(perf_event_open,
+@@ -9200,6 +9205,11 @@ SYSCALL_DEFINE5(perf_event_open,
  	if (flags & ~PERF_FLAG_ALL)
  		return -EINVAL;
  
