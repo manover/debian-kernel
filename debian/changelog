@@ -685,6 +685,47 @@ linux (4.7.2-1) unstable; urgency=medium
 
  -- Ben Hutchings <ben@decadent.org.uk>  Sun, 28 Aug 2016 15:56:10 +0100
 
+linux (4.7~rc7-1~exp2) experimental; urgency=medium
+
+  * Rebase on debian/4.7~rc7-1
+  * Merge debian changelog
+
+ -- Denis Bychkov <manover@gmail.com>  Thu, 14 Jul 2016 13:21:42 -0400
+
+linux (4.7~rc7-1~exp1) experimental; urgency=medium
+
+  * New upstream release candidate
+
+  [ Aurelien Jarno ]
+  * [mipsel] Remove loongson-2e and loongson-2f flavours (Closes: #827790).
+  * [mipsel/4kc-malta, mipsel/5kc-malta] Build for R2 ISA.
+
+  [ Martin Michlmayr ]
+  * [armhf, arm64] Enable DRM_TEGRA_STAGING.
+
+  [ Ben Hutchings ]
+  * [x86] KASLR, power: Remove x86 hibernation restrictions
+  * fanotify: Enable FANOTIFY_ACCESS_PERMISSIONS (Closes: #690737)
+    - Warn and taint kernel if this feature is actually used
+  * Define Auto-Built-Package field when running dpkg-gencontrol, as dpkg-source
+    doesn't like to see it in debian/control
+  * debian/lib/python/debian_linux/debian.py: Handle packages with only short
+    descriptions
+  * Change names and descriptions of linux-image debug symbol packages to match
+    debhelper
+
+  [ Bastian Blank ]
+  * Mark debug symbols packages to move them into the debug archive.
+  * Build debug symbols for all images.
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Tue, 21 Jun 2016 20:43:50 +0100
+
+linux (4.7~rc7-1~exp1) experimental; urgency=medium
+
+  * Linux 4.7 RC7
+
+ -- Denis Bychkov <manover@gmail.com>  Mon, 11 Jul 2016 00:45:37 -0400
+
 linux (4.7~rc6-1~exp1) experimental; urgency=medium
 
   * Linux 4.7 RC6
@@ -721,6 +762,15 @@ linux (4.7~rc4-1~exp2) experimental; urgency=medium
 
 linux (4.7~rc4-1~exp1) experimental; urgency=medium
 
+  * New upstream release candidate
+
+  [ Ben Hutchings ]
+  * [armel] Disable module signing for all flavours (fixes FTBFS)
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Tue, 21 Jun 2016 00:41:23 +0100
+
+linux (4.7~rc4-1~exp1) experimental; urgency=medium
+
   * Linux 4.7 RC4
   * Applied few bcache patches found in linux-bcache mailing list
     - cleanup after cache_alloc() fail
@@ -748,6 +798,45 @@ linux (4.7~rc3-1~exp2) experimental; urgency=medium
   * Few other thinkpad-related settings
 
  -- Denis Bychkov <manover@gmail.com>  Sun, 12 Jun 2016 20:49:41 -0400
+
+linux (4.7~rc3-1~exp1) experimental; urgency=medium
+
+  * New upstream release candidate
+
+  [ Ben Hutchings ]
+  * bug script: Put binary package name and version in the info file so
+    linux-signed can easily replace them
+  * Move merge_packages function from debian/bin/gencontrol.py to
+    gencontrol module
+  * udeb: Drop packages for modules that will later be signed
+  * linux-image: Add '-unsigned' suffix to packages with modules that will
+    later be signed
+    - Add Conflicts and Replaces relations to signed packages (Closes: #827618)
+  * [rt] Disable until it is updated for 4.7 or later
+  * cpupower: Bump soname version and rename library package accordingly
+  * debian/rules.d/Makefile: Override architecture detection when building
+    userland headers
+  * linux-cpupower: Define PACKAGE_BUGREPORT to refer to reportbug, not upstream
+  * debian/README.source: Document the supported build profiles
+  * debian/control: Fix build-dependencies for cross-building
+    - Add workaround for libdpkg-perl bugs #827628, #827633
+  * Add support for the nopython build profile, disabling the linux-perf package
+  * Fix build rules for userland tools to support cross-building
+
+  [ Martin Michlmayr ]
+  * [armhf, arm64] Enable PHY_TEGRA_XUSB and USB_XHCI_TEGRA.
+  * [arm64] Enable MAX77620 and PCA9539 which are required by Jetson TX1.
+  * [arm64] Enable TEGRA210_ADMA.
+  * [arm64] Enable THERMAL.
+  * [armhf] Enable TEGRA_SOCTHERM.
+  * [armhf] Enable SPI_TEGRA114.
+  * [arm64] Enable more QCOM options (QCOM_SMP2P, QCOM_SMSM, QCOM_WCNSS_CTRL,
+    PHY_QCOM_UFS, QCOM_QFPROM).
+
+  [ Aurelien Jarno ]
+  * [ppc64*] Enable SPAPR_TCE_IOMMU, VFIO and VFIO_PCI (Closes: #826367).
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Sat, 18 Jun 2016 23:50:39 +0100
 
 linux (4.7~rc3-1~exp1) experimental; urgency=medium
 

@@ -2547,7 +2547,7 @@ upstream submission.
  			   filename, emu->firmware->size);
 --- a/sound/pci/hda/hda_intel.c
 +++ b/sound/pci/hda/hda_intel.c
-@@ -1784,10 +1784,8 @@ static void azx_firmware_cb(const struct
+@@ -1785,10 +1785,8 @@ static void azx_firmware_cb(const struct
  	struct azx *chip = card->private_data;
  	struct pci_dev *pci = chip->pci;
  
