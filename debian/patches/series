@@ -47,7 +47,6 @@ bugfix/x86/viafb-autoload-on-olpc-xo1.5-only.patch
 debian/fanotify-taint-on-use-of-fanotify_access_permissions.patch
 
 # Arch bug fixes
-bugfix/x86/x86-power-64-fix-crash-when-the-hibernation-code-pas.patch
 
 # Arch features
 features/mips/MIPS-increase-MAX-PHYSMEM-BITS-on-Loongson-3-only.patch
@@ -105,12 +104,14 @@ bugfix/all/liblockdep-fix-defined-but-not-used-warning-for-init.patch
 
 # Manover custom patches
 manover/x32-support.patch
-#
+# Bcache
 manover/bcache-cleanup-after-register-cache-fail.patch
 manover/bcache-remove-redundant-cache_sb.patch
 manover/bcache-alloc_workqueue-replaces-deprecated-create_workqueue.patch
+# Docs
 manover/bcache-doc-1.patch
 manover/bcache-doc-2.patch
+#
 # Thecus N5550
 manover/n5550_leds.patch
 # kdbus

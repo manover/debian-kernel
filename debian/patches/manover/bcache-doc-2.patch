@@ -16,11 +16,11 @@ Cc: stable@vger.kernel.org
 @@ -137,48 +137,60 @@ the backing devices to passthrough mode.
  HOWTO/COOKBOOK
  --------------
-
+ 
 -A) Your bcache doesn't start.
 -   Starting and starting a bcache with a missing caching device
 +A) Starting a bcache with a missing caching device
-
+ 
 -Registering the backing device doesn't help, it's already there, you just need
 +If registering the backing device doesn't help, it's already there, you just need
  to force it to run without the cache:
@@ -28,7 +28,7 @@ Cc: stable@vger.kernel.org
 -[  119.844831] bcache: register_bcache() error opening /dev/sdb1: device already registered
 +	host:~# echo /dev/sdb1 > /sys/fs/bcache/register
 +	[  119.844831] bcache: register_bcache() error opening /dev/sdb1: device already registered
-
+ 
 -Next, you try to register your caching device if it's present. However if it's
 -absent, or registration fails for some reason, you can still start your bcache
 -without its cache, like so:
@@ -107,30 +107,30 @@ Cc: stable@vger.kernel.org
 +
 +
 +E) Wiping a cache device
-
+ 
 -This is how you wipe the caching device:
  host:~# wipefs -a /dev/sdh2
  16 bytes were erased at offset 0x1018 (bcache)
  they were: c6 85 73 f6 4e 1a 45 ca 82 65 f5 7f 48 ba 6d 81
 @@ -205,56 +217,60 @@ host:/sys/block/md5/bcache# echo 5bc072a
  [  865.276616] bcache: bch_cached_dev_attach() Caching md5 as bcache0 on set 5bc072a8-ab17-446d-9744-e247949913c1
-
-
+ 
+ 
 -D) Remove or replace a caching device
 +F) Remove or replace a caching device
-
+ 
 -host:/sys/block/sda/sda7/bcache# echo 1 > detach
 -[  695.872542] bcache: cached_dev_detach_finish() Caching disabled for sda7
 +	host:/sys/block/sda/sda7/bcache# echo 1 > detach
 +	[  695.872542] bcache: cached_dev_detach_finish() Caching disabled for sda7
-
+ 
 -host:~# wipefs -a /dev/nvme0n1p4
 -wipefs: error: /dev/nvme0n1p4: probing initialization failed: Device or resource busy
 -Ooops, it's disabled, but not unregistered, so it's still protected
 +	host:~# wipefs -a /dev/nvme0n1p4
 +	wipefs: error: /dev/nvme0n1p4: probing initialization failed: Device or resource busy
 +	Ooops, it's disabled, but not unregistered, so it's still protected
-
+ 
  We need to go and unregister it:
 -host:/sys/fs/bcache/b7ba27a1-2398-4649-8ae3-0959f57ba128# ls -l cache0
 -lrwxrwxrwx 1 root root 0 Feb 25 18:33 cache0 -> ../../../devices/pci0000:00/0000:00:1d.0/0000:70:00.0/nvme/nvme0/nvme0n1/nvme0n1p4/bcache/
@@ -140,27 +140,27 @@ Cc: stable@vger.kernel.org
 +	lrwxrwxrwx 1 root root 0 Feb 25 18:33 cache0 -> ../../../devices/pci0000:00/0000:00:1d.0/0000:70:00.0/nvme/nvme0/nvme0n1/nvme0n1p4/bcache/
 +	host:/sys/fs/bcache/b7ba27a1-2398-4649-8ae3-0959f57ba128# echo 1 > stop
 +	kernel: [  917.041908] bcache: cache_set_free() Cache set b7ba27a1-2398-4649-8ae3-0959f57ba128 unregistered
-
+ 
  Now we can wipe it:
 -host:~# wipefs -a /dev/nvme0n1p4
 -/dev/nvme0n1p4: 16 bytes were erased at offset 0x00001018 (bcache): c6 85 73 f6 4e 1a 45 ca 82 65 f5 7f 48 ba 6d 81
 +	host:~# wipefs -a /dev/nvme0n1p4
 +	/dev/nvme0n1p4: 16 bytes were erased at offset 0x00001018 (bcache): c6 85 73 f6 4e 1a 45 ca 82 65 f5 7f 48 ba 6d 81
 +
-
+ 
 +G) dm-crypt and bcache
-
+ 
 -E) dmcrypt and bcache
 +First setup bcache unencrypted and then install dmcrypt on top of
 +/dev/bcache<N> This will work faster than if you dmcrypt both the backing
 +and caching devices and then install bcache on top. [benchmarks?]
-
+ 
 -First setup bcache unencrypted and then install dmcrypt on top of /dev/bcache<N>
 -This will work faster than if you dmcrypt both the backing and caching
 -devices and then install bcache on top.
-
+ 
 +H) Stop/free a registered bcache to wipe and/or recreate it
-
+ 
 -F) Stop/free a registered bcache to wipe and/or recreate it
 -(or maybe you need to free up all bcache references so that you can have fdisk
 -run and re-register a changed partition table, which won't work if there are any
@@ -168,19 +168,19 @@ Cc: stable@vger.kernel.org
 +Suppose that you need to free up all bcache references so that you can
 +fdisk run and re-register a changed partition table, which won't work
 +if there are any active backing or caching devices left on it:
-
+ 
  1) Is it present in /dev/bcache* ? (there are times where it won't be)
 +
  If so, it's easy:
 -host:/sys/block/bcache0/bcache# echo 1 > stop
 +	host:/sys/block/bcache0/bcache# echo 1 > stop
-
+ 
  2) But if your backing device is gone, this won't work:
 -host:/sys/block/bcache0# cd bcache
 -bash: cd: bcache: No such file or directory
 +	host:/sys/block/bcache0# cd bcache
 +	bash: cd: bcache: No such file or directory
-
+ 
  In this case, you may have to unregister the dmcrypt block device that
  references this bcache to free it up:
 -host:~# dmsetup remove oldds1
@@ -196,14 +196,14 @@ Cc: stable@vger.kernel.org
 +This causes the backing bcache to be removed from /sys/fs/bcache and
 +then it can be reused.  This would be true of any block device stacking
 +where bcache is a lower device.
-
+ 
  3) In other cases, you can also look in /sys/fs/bcache/:
 +
  host:/sys/fs/bcache# ls -l */{cache?,bdev?}
  lrwxrwxrwx 1 root root 0 Mar  5 09:39 0226553a-37cf-41d5-b3ce-8b1e944543a8/bdev1 -> ../../../devices/virtual/block/dm-1/bcache/
  lrwxrwxrwx 1 root root 0 Mar  5 09:39 0226553a-37cf-41d5-b3ce-8b1e944543a8/cache0 -> ../../../devices/virtual/block/dm-4/bcache/
 @@ -262,9 +278,10 @@ lrwxrwxrwx 1 root root 0 Mar  5 09:39 5b
-
+ 
  The device names will show which UUID is relevant, cd in that directory
  and stop the cache:
 -host:/sys/fs/bcache/5bc072a8-ab17-446d-9744-e247949913c1# echo 1 > stop
@@ -213,13 +213,13 @@ Cc: stable@vger.kernel.org
 +
 +This will free up bcache references and let you reuse the partition for
 +other purposes.
-
-
-
+ 
+ 
+ 
 @@ -275,6 +292,23 @@ Bcache has a bunch of config options and
  be reasonable for typical desktop and server workloads, but they're not what you
  want for getting the best possible numbers when benchmarking.
-
+ 
 + - Backing device alignment
 +
 +   The default metadata size in bcache is 8k.  If your backing device
@@ -238,23 +238,23 @@ Cc: stable@vger.kernel.org
 +	3,4,5,6,7,8,9,10,12,14,15,18,20,21 ...
 +
   - Bad write performance
-
+ 
     If write performance is not what you expected, you probably wanted to be
 @@ -382,7 +416,7 @@ sequential_merge
    against all new requests to determine which new requests are sequential
    continuations of previous requests for the purpose of determining sequential
    cutoff. This is necessary if the sequential cutoff value is greater than the
--  maximum acceptable sequential size for any single request.
+-  maximum acceptable sequential size for any single request. 
 +  maximum acceptable sequential size for any single request.
-
+ 
  state
    The backing device can be in one of four different states:
 @@ -469,7 +503,7 @@ bucket_size
    Size of buckets
-
+ 
  cache<0..n>
--  Symlink to each of the cache devices comprising this cache set.
+-  Symlink to each of the cache devices comprising this cache set. 
 +  Symlink to each of the cache devices comprising this cache set.
-
+ 
  cache_available_percent
    Percentage of cache device which doesn't contain dirty data, and could
