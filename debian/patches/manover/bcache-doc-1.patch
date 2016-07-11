@@ -20,17 +20,17 @@ Cc: stable@vger.kernel.org
 -Say you've got a big slow raid 6, and an X-25E or three. Wouldn't it be
 +Say you've got a big slow raid 6, and an ssd or three. Wouldn't it be
  nice if you could use them as cache... Hence bcache.
-
+ 
  Wiki and git repositories are at:
 @@ -8,7 +8,7 @@ Wiki and git repositories are at:
-
+ 
  It's designed around the performance characteristics of SSDs - it only allocates
  in erase block sized buckets, and it uses a hybrid btree/log to track cached
 -extants (which can be anywhere from a single sector to the bucket size). It's
 +extents (which can be anywhere from a single sector to the bucket size). It's
  designed to avoid random writes at all costs; it fills up an erase block
  sequentially, then issues a discard before reusing it.
-
+ 
 @@ -55,7 +55,10 @@ immediately.  Without udev, you can manu
  Registering the backing device makes the bcache device show up in /dev; you can
  now format it and use it as normal. But the first time using a new bcache
@@ -40,39 +40,39 @@ Cc: stable@vger.kernel.org
 +slow devices as bcache backing devices without a cache, and you can choose to add
 +a caching device later.
 +See 'ATTACHING' section below.
-
+ 
  The devices show up as:
-
+ 
 @@ -72,12 +75,14 @@ To get started:
    mount /dev/bcache0 /mnt
-
+ 
  You can control bcache devices through sysfs at /sys/block/bcache<N>/bcache .
 +You can also control them through /sys/fs//bcache/<cset-uuid>/ .
-
+ 
  Cache devices are managed as sets; multiple caches per set isn't supported yet
  but will allow for mirroring of metadata and dirty data in the future. Your new
  cache set shows up as /sys/fs/bcache/<UUID>
-
+ 
 -ATTACHING:
 +ATTACHING
 +---------
-
+ 
  After your cache device and backing device are registered, the backing device
  must be attached to your cache set to enable caching. Attaching a backing
 @@ -105,7 +110,8 @@ but all the cached data will be invalida
  cache, don't expect the filesystem to be recoverable - you will have massive
  filesystem corruption, though ext4's fsck does work miracles.
-
+ 
 -ERROR HANDLING:
 +ERROR HANDLING
 +--------------
-
+ 
  Bcache tries to transparently handle IO errors to/from the cache device without
  affecting normal operation; if it sees too many errors (the threshold is
 @@ -127,7 +133,143 @@ the backing devices to passthrough mode.
     writeback mode). It currently doesn't do anything intelligent if it fails to
     read some of the dirty data, though.
-
+ 
 -TROUBLESHOOTING PERFORMANCE:
 +
 +HOWTO/COOKBOOK
@@ -211,26 +211,26 @@ Cc: stable@vger.kernel.org
 +
 +TROUBLESHOOTING PERFORMANCE
 +---------------------------
-
+ 
  Bcache has a bunch of config options and tunables. The defaults are intended to
  be reasonable for typical desktop and server workloads, but they're not what you
 @@ -140,7 +282,7 @@ want for getting the best possible numbe
     maturity, but simply because in writeback mode you'll lose data if something
     happens to your SSD)
-
+ 
 -   # echo writeback > /sys/block/bcache0/cache_mode
 +   # echo writeback > /sys/block/bcache0/bcache/cache_mode
-
+ 
   - Bad performance, or traffic not going to the SSD that you'd expect
-
+ 
 @@ -193,7 +335,9 @@ want for getting the best possible numbe
     Solution: warm the cache by doing writes, or use the testing branch (there's
     a fix for the issue there).
-
+ 
 -SYSFS - BACKING DEVICE:
 +
 +SYSFS - BACKING DEVICE
 +----------------------
-
+ 
  Available at /sys/block/<bdev>/bcache, /sys/block/bcache*/bcache and
  (if attached) /sys/fs/bcache/<cset-uuid>/bdev*

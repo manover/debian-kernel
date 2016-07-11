@@ -127,12 +127,14 @@ bugfix/all/rtc-s35390a-improve-irq-handling.patch
 
 # Manover custom patches
 manover/x32-support.patch
-#
+# Bcache
 manover/bcache-cleanup-after-register-cache-fail.patch
 manover/bcache-remove-redundant-cache_sb.patch
 manover/bcache-alloc_workqueue-replaces-deprecated-create_workqueue.patch
+# Docs
 manover/bcache-doc-1.patch
 manover/bcache-doc-2.patch
+#
 # Thecus N5550
 manover/n5550_leds.patch
 # kdbus

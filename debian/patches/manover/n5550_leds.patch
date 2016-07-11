@@ -2,8 +2,8 @@
 +++ b/drivers/platform/x86/Kconfig
 @@ -916,6 +916,21 @@ config MXM_WMI
            MXM is a standard for laptop graphics cards, the WMI interface
-	  is required for switchable nvidia graphics machines
-
+ 	  is required for switchable nvidia graphics machines
+ 
 +config THECUS_N5550
 +	tristate "Support Thecus N5550 NAS LEDs"
 +	depends on X86
@@ -20,13 +20,13 @@
 +	  with the libahci hook.
 +
  config INTEL_OAKTRAIL
-	tristate "Intel Oaktrail Platform Extras"
-	depends on ACPI
+ 	tristate "Intel Oaktrail Platform Extras"
+ 	depends on ACPI
 --- a/drivers/platform/x86/Makefile
 +++ b/drivers/platform/x86/Makefile
 @@ -70,3 +70,4 @@ obj-$(CONFIG_INTEL_TELEMETRY)	+= intel_t
-				   intel_telemetry_pltdrv.o \
-				   intel_telemetry_debugfs.o
+ 				   intel_telemetry_pltdrv.o \
+ 				   intel_telemetry_debugfs.o
  obj-$(CONFIG_INTEL_PMC_CORE)    += intel_pmc_core.o
 +obj-$(CONFIG_THECUS_N5550) += n5550_ahci_leds.o n5550_board.o
 --- /dev/null

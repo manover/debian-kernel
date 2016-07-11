@@ -11,20 +11,20 @@ Signed-off-by: Yijing Wang <wangyijing@huawei.com>
 --- a/drivers/md/bcache/super.c
 +++ b/drivers/md/bcache/super.c
 @@ -1803,7 +1803,7 @@ void bch_cache_release(struct kobject *k
-	module_put(THIS_MODULE);
+ 	module_put(THIS_MODULE);
  }
-
+ 
 -static int cache_alloc(struct cache_sb *sb, struct cache *ca)
 +static int cache_alloc(struct cache *ca)
  {
-	size_t free;
-	struct bucket *b;
+ 	size_t free;
+ 	struct bucket *b;
 @@ -1858,7 +1858,7 @@ static int register_cache(struct cache_s
-	if (blk_queue_discard(bdev_get_queue(ca->bdev)))
-		ca->discard = CACHE_DISCARD(&ca->sb);
-
+ 	if (blk_queue_discard(bdev_get_queue(ca->bdev)))
+ 		ca->discard = CACHE_DISCARD(&ca->sb);
+ 
 -	ret = cache_alloc(sb, ca);
 +	ret = cache_alloc(ca);
-	if (ret != 0) {
-		if (ret == -ENOMEM)
-			err = "cache_alloc(): -ENOMEM";
+ 	if (ret != 0) {
+ 		if (ret == -ENOMEM)
+ 			err = "cache_alloc(): -ENOMEM";

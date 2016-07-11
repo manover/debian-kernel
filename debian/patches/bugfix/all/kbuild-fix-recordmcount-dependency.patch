@@ -10,9 +10,9 @@ sources.
 --- a/scripts/Makefile.build
 +++ b/scripts/Makefile.build
 @@ -241,6 +241,11 @@ cmd_record_mcount =						\
-	fi;
+ 	fi;
  endif
-
+ 
 +# Don't require recordmcount source for an OOT build.
 +ifdef KBUILD_EXTMOD
 +recordmcount_source :=
@@ -20,3 +20,4 @@ sources.
 +
  ifdef CONFIG_STACK_VALIDATION
  ifneq ($(SKIP_STACK_VALIDATION),1)
+ 
