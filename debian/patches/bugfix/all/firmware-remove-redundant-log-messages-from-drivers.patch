@@ -233,7 +233,7 @@ upstream submission.
  	where = 0;
 --- a/drivers/gpu/drm/nouveau/nvkm/engine/gr/gf100.c
 +++ b/drivers/gpu/drm/nouveau/nvkm/engine/gr/gf100.c
-@@ -1755,10 +1755,8 @@ gf100_gr_ctor_fw(struct gf100_gr *gr, co
+@@ -1774,10 +1774,8 @@ gf100_gr_ctor_fw(struct gf100_gr *gr, co
  	int ret;
  
  	ret = nvkm_firmware_get(device, fwname, &fw);
@@ -2548,7 +2548,7 @@ upstream submission.
  			   filename, emu->firmware->size);
 --- a/sound/pci/hda/hda_intel.c
 +++ b/sound/pci/hda/hda_intel.c
-@@ -1784,10 +1784,8 @@ static void azx_firmware_cb(const struct
+@@ -1787,10 +1787,8 @@ static void azx_firmware_cb(const struct
  	struct azx *chip = card->private_data;
  	struct pci_dev *pci = chip->pci;
  
