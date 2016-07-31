@@ -1,0 +1,55 @@
+--- a/drivers/md/bcache/super.c
++++ b/drivers/md/bcache/super.c
+@@ -27,6 +27,11 @@
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("Kent Overstreet <kent.overstreet@gmail.com>");
+
++static bool name_device_by_label = false;
++module_param(name_device_by_label, bool, 0444);
++MODULE_PARM_DESC(name_device_by_label,
++				         "Set to Y if you want to name bcache device according to its label in superblock (only if label is set)");
++
+ static const char bcache_magic[] = {
+	0xc6, 0x85, 0x73, 0xf6, 0x4e, 0x1a, 0x45, 0xca,
+	0x82, 0x65, 0xf5, 0x7f, 0x48, 0xba, 0x6d, 0x81
+@@ -745,7 +750,7 @@ static void bcache_device_free(struct bc
+ }
+
+ static int bcache_device_init(struct bcache_device *d, unsigned block_size,
+-			      sector_t sectors)
++			      sector_t sectors, const __u8 *label)
+ {
+	struct request_queue *q;
+	size_t n;
+@@ -788,7 +793,11 @@ static int bcache_device_init(struct bca
+	}
+
+	set_capacity(d->disk, sectors);
+-	snprintf(d->disk->disk_name, DISK_NAME_LEN, "bcache%i", minor);
++
++	if (name_device_by_label && label[0] && label[1])
++		memcpy(d->disk->disk_name, label, min(DISK_NAME_LEN, SB_LABEL_SIZE));
++	else
++		snprintf(d->disk->disk_name, DISK_NAME_LEN, "bcache%i", minor);
+
+	d->disk->major		= bcache_major;
+	d->disk->first_minor	= minor;
+@@ -1120,7 +1129,8 @@ static int cached_dev_init(struct cached
+			q->limits.raid_partial_stripes_expensive;
+
+	ret = bcache_device_init(&dc->disk, block_size,
+-			 dc->bdev->bd_part->nr_sects - dc->sb.data_offset);
++			 dc->bdev->bd_part->nr_sects - dc->sb.data_offset,
++			 dc->sb.label);
+	if (ret)
+		return ret;
+
+@@ -1223,7 +1233,7 @@ static int flash_dev_run(struct cache_se
+
+	kobject_init(&d->kobj, &bch_flash_dev_ktype);
+
+-	if (bcache_device_init(d, block_bytes(c), u->sectors))
++	if (bcache_device_init(d, block_bytes(c), u->sectors, u->label))
+		goto err;
+
+	bcache_device_attach(d, c, u - c->uuids);
