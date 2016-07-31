@@ -124,6 +124,7 @@ manover/bcache-alloc_workqueue-replaces-deprecated-create_workqueue.patch
 manover/bcache-doc-1.patch
 manover/bcache-doc-2.patch
 #
+manover/bcache-name-device-by-label.patch
 # Thecus N5550
 manover/n5550_leds.patch
 # kdbus
