@@ -685,6 +685,18 @@ linux (4.7.2-1) unstable; urgency=medium
 
  -- Ben Hutchings <ben@decadent.org.uk>  Sun, 28 Aug 2016 15:56:10 +0100
 
+linux (4.7.0-3) unstable; urgency=medium
+
+  * aufs 4.7-20160801
+
+ -- Denis Bychkov <manover@gmail.com>  Mon, 01 Aug 2016 15:22:33 -0400
+
+linux (4.7.0-2) unstable; urgency=medium
+
+  * Enable build of smcs47m1 and smsc47m192 modules for m kernel
+
+ -- Denis Bychkov <manover@gmail.com>  Sun, 31 Jul 2016 02:15:27 -0400
+
 linux (4.7.0-1) unstable; urgency=medium
 
   * Linux 4.7 release
