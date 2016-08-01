@@ -1,4 +1,4 @@
-aufs4.x-rcN standalone patch
+aufs4.7 standalone patch
 
 --- a/fs/dcache.c
 +++ b/fs/dcache.c

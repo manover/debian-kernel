@@ -1,4 +1,4 @@
-aufs4.x-rcN kbuild patch
+aufs4.7 kbuild patch
 
 --- a/fs/Kconfig
 +++ b/fs/Kconfig
