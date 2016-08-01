@@ -87,6 +87,11 @@ bugfix/all/alsa-timer-fix-leak-in-events-via-snd_timer_user_tin.patch
 bugfix/all/tipc-fix-an-infoleak-in-tipc_nl_compat_link_dump.patch
 bugfix/all/rds-fix-an-infoleak-in-rds_inc_info_copy.patch
 
+# ABI maintenance
+debian/mips-siginfo-fix-abi-change-in-4.6.2.patch
+debian/mips-libgcc-fix-abi-change-in-4.6.2.patch
+debian/bridge-fix-abi-change-in-4.6.4.patch
+
 # Tools bug fixes
 bugfix/all/usbip-document-tcp-wrappers.patch
 bugfix/all/kbuild-fix-recordmcount-dependency.patch
@@ -112,6 +117,13 @@ bugfix/all/liblockdep-enable-wall-by-default.patch
 bugfix/all/liblockdep-fix-unused-value-warnings.patch
 bugfix/all/liblockdep-fix-set-but-not-used-warnings.patch
 bugfix/all/liblockdep-fix-defined-but-not-used-warning-for-init.patch
+bugfix/all/perf-symbols-Use-proper-dso-name-for-is_regular_file.patch
+
+# Debian bug #794266
+bugfix/all/rtc-initialize-output-parameter-for-read-alarm-to-un.patch
+bugfix/all/rtc-s35390a-fix-reading-out-alarm.patch
+bugfix/all/rtc-s35390a-implement-reset-routine-as-suggested-by-.patch
+bugfix/all/rtc-s35390a-improve-irq-handling.patch
 
 # Manover custom patches
 manover/x32-support.patch
