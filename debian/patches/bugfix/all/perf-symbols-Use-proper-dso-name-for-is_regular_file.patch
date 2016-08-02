@@ -70,11 +70,17 @@ Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
  tools/perf/util/symbol.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
+<<<<<<< HEAD
 diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
 index b044f1a32d16..37e8d20ae03e 100644
 --- a/tools/perf/util/symbol.c
 +++ b/tools/perf/util/symbol.c
 @@ -1430,7 +1430,7 @@ int dso__load(struct dso *dso, struct map *map, symbol_filter_t filter)
+=======
+--- a/tools/perf/util/symbol.c
++++ b/tools/perf/util/symbol.c
+@@ -1430,7 +1430,7 @@ int dso__load(struct dso *dso, struct ma
+>>>>>>> bb173ce... Import debian patches from 4.6.y tree:
  	 * Read the build id if possible. This is required for
  	 * DSO_BINARY_TYPE__BUILDID_DEBUGINFO to work
  	 */
@@ -83,6 +89,9 @@ index b044f1a32d16..37e8d20ae03e 100644
  	    filename__read_build_id(dso->long_name, build_id, BUILD_ID_SIZE) > 0)
  		dso__set_build_id(dso, build_id);
  
+<<<<<<< HEAD
 -- 
 2.8.1
 
+=======
+>>>>>>> bb173ce... Import debian patches from 4.6.y tree:
