@@ -75,6 +75,7 @@ features/all/grsecurity/grkernsec_perf_harden.patch
 bugfix/all/ptrace-being-capable-wrt-a-process-requires-mapped-uids-gids.patch
 debian/i386-686-pae-pci-set-pci-nobios-by-default.patch
 bugfix/all/media-videobuf2-v4l2-verify-planes-array-in-buffer-d.patch
+bugfix/all/vfs-ioctl-prevent-double-fetch-in-dedupe-ioctl.patch
 
 # Tools bug fixes
 bugfix/all/usbip-document-tcp-wrappers.patch
@@ -101,6 +102,7 @@ bugfix/all/liblockdep-enable-wall-by-default.patch
 bugfix/all/liblockdep-fix-unused-value-warnings.patch
 bugfix/all/liblockdep-fix-set-but-not-used-warnings.patch
 bugfix/all/liblockdep-fix-defined-but-not-used-warning-for-init.patch
+bugfix/all/perf-symbols-Use-proper-dso-name-for-is_regular_file.patch
 
 # Manover custom patches
 manover/x32-support.patch
