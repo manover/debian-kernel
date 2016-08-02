@@ -92,6 +92,9 @@ bugfix/all/tcp-fix-use-after-free-in-tcp_xmit_retransmit_queue.patch
 bugfix/all/aacraid-check-size-values-after-double-fetch-from-us.patch
 
 # ABI maintenance
+=======
+bugfix/all/media-videobuf2-v4l2-verify-planes-array-in-buffer-d.patch
+bugfix/all/vfs-ioctl-prevent-double-fetch-in-dedupe-ioctl.patch
 
 # Tools bug fixes
 bugfix/all/usbip-document-tcp-wrappers.patch
@@ -118,12 +121,15 @@ bugfix/all/liblockdep-fix-unused-value-warnings.patch
 bugfix/all/liblockdep-fix-set-but-not-used-warnings.patch
 bugfix/all/liblockdep-fix-defined-but-not-used-warning-for-init.patch
 bugfix/all/perf-symbols-Use-proper-dso-name-for-is_regular_file.patch
+<<<<<<< HEAD
 
 # Debian bug #794266
 bugfix/all/rtc-initialize-output-parameter-for-read-alarm-to-un.patch
 bugfix/all/rtc-s35390a-fix-reading-out-alarm.patch
 bugfix/all/rtc-s35390a-implement-reset-routine-as-suggested-by-.patch
 bugfix/all/rtc-s35390a-improve-irq-handling.patch
+=======
+>>>>>>> bb173ce... Import debian patches from 4.6.y tree:
 
 # Manover custom patches
 manover/x32-support.patch
