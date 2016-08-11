@@ -473,7 +473,7 @@ class Gencontrol(Base):
         self._substitute_file('headers.postinst', vars,
                               'debian/linux-headers-%s%s.postinst' %
                               (vars['abiname'], vars['localversion']))
-        for name in ['postinst', 'postrm', 'preinst', 'prerm', 'templates']:
+        for name in ['postinst', 'postrm', 'preinst', 'prerm']:
             self._substitute_file('image.%s' % name, vars,
                                   'debian/linux-image-%s%s.%s' %
                                   (vars['abiname'], vars['localversion'], name))
