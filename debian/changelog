@@ -1,3 +1,11 @@
+linux (4.7.0-4) unstable; urgency=medium
+
+  * Rebase on debian/master
+  * AUFS 4.7-20160808
+  * Obtain kernel build parameters by parsing changes file
+
+ -- Denis Bychkov <manover@gmail.com>  Fri, 12 Aug 2016 05:32:07 -0400
+
 linux (4.7.0-3) unstable; urgency=medium
 
   * aufs 4.7-20160801
