@@ -8,7 +8,7 @@ with a similar issue to powerpcspe-omit-uimage.patch]
 
 --- a/arch/sh/Makefile
 +++ b/arch/sh/Makefile
-@@ -82,7 +82,6 @@ OBJCOPYFLAGS	:= -O binary -R .note -R .n
+@@ -83,7 +83,6 @@ OBJCOPYFLAGS	:= -O binary -R .note -R .n
  
  # Give the various platforms the opportunity to set default image types
  defaultimage-$(CONFIG_SUPERH32)			:= zImage

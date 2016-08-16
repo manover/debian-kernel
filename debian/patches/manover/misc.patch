@@ -17,7 +17,7 @@
  HOSTCFLAGS  += -Wno-unused-value -Wno-unused-parameter \
 --- a/arch/x86/Kconfig
 +++ b/arch/x86/Kconfig
-@@ -2710,19 +2710,6 @@ config PMC_ATOM
+@@ -2746,19 +2746,6 @@ config PMC_ATOM
  	def_bool y
          depends on PCI
  
@@ -96,14 +96,15 @@
  create_package() {
  	local pname="$1" pdir="$2"
  
-@@ -235,47 +251,6 @@ else
+@@ -237,48 +253,6 @@ else
  fi
  maintainer="$name <$email>"
  
 -# Try to determine distribution
 -if [ -n "$KDEB_CHANGELOG_DIST" ]; then
 -        distribution=$KDEB_CHANGELOG_DIST
--elif distribution=$(lsb_release -cs 2>/dev/null) && [ -n "$distribution" ]; then
+-# In some cases lsb_release returns the codename as n/a, which breaks dpkg-parsechangelog
+-elif distribution=$(lsb_release -cs 2>/dev/null) && [ -n "$distribution" ] && [ "$distribution" != "n/a" ]; then
 -        : # nothing to do in this case
 -else
 -        distribution="unstable"
@@ -144,7 +145,7 @@
  build_depends="bc, kmod, cpio "
  
  # Generate a control file
-@@ -364,20 +339,8 @@ EOF
+@@ -368,20 +342,8 @@ EOF
  	create_package "$fwpackagename" "$fwdir"
  fi
  
@@ -165,7 +166,7 @@
  fi
  
  create_package "$packagename" "$tmpdir"
-@@ -434,7 +397,7 @@ EOF
+@@ -438,7 +400,7 @@ EOF
  	mv ${sourcename}_${packageversion}*dsc ..
  	dpkg-genchanges > ../${sourcename}_${packageversion}_${debarch}.changes
  else

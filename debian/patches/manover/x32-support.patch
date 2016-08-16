@@ -1,3 +1,17 @@
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -790,11 +790,7 @@ sysconfdir = $(prefix)/etc
+ ETC_PERFCONFIG = etc/perfconfig
+ endif
+ ifndef lib
+-ifeq ($(ARCH)$(IS_64_BIT), x861)
+-lib = lib64
+-else
+ lib = lib
+-endif
+ endif # lib
+ libdir = $(prefix)/$(lib)
+ 
 --- a/tools/perf/bench/sched-messaging.c
 +++ b/tools/perf/bench/sched-messaging.c
 @@ -310,12 +310,12 @@ int bench_sched_messaging(int argc, cons
@@ -48,29 +62,15 @@
  
 --- a/tools/perf/builtin-stat.c
 +++ b/tools/perf/builtin-stat.c
-@@ -1336,7 +1336,7 @@ static void print_interval(char *prefix,
+@@ -1383,7 +1383,7 @@ static void print_interval(char *prefix,
  	FILE *output = stat_config.output;
  	static int num_print_interval;
  
 -	sprintf(prefix, "%6lu.%09lu%s", ts->tv_sec, ts->tv_nsec, csv_sep);
 +	sprintf(prefix, "%6"TTIME_FMT".%09"TTIME_FMT"%s", ts->tv_sec, ts->tv_nsec, csv_sep);
  
- 	if (num_print_interval == 0 && !csv_output && !metric_only) {
+ 	if (num_print_interval == 0 && !csv_output) {
  		switch (stat_config.aggr_mode) {
---- a/tools/perf/config/Makefile
-+++ b/tools/perf/config/Makefile
-@@ -725,11 +725,7 @@ sysconfdir = $(prefix)/etc
- ETC_PERFCONFIG = etc/perfconfig
- endif
- ifndef lib
--ifeq ($(ARCH)$(IS_64_BIT), x861)
--lib = lib64
--else
- lib = lib
--endif
- endif # lib
- libdir = $(prefix)/$(lib)
- 
 --- a/tools/perf/perf.h
 +++ b/tools/perf/perf.h
 @@ -6,6 +6,17 @@
@@ -108,9 +108,9 @@
  
  has = $(shell which $1 2>/dev/null)
  
---- a/tools/perf/util/unwind-libunwind.c
-+++ b/tools/perf/util/unwind-libunwind.c
-@@ -473,9 +473,9 @@ static int access_mem(unw_addr_space_t _
+--- a/tools/perf/util/unwind-libunwind-local.c
++++ b/tools/perf/util/unwind-libunwind-local.c
+@@ -476,9 +476,9 @@ static int access_mem(unw_addr_space_t _
  	if (addr < start || addr + sizeof(unw_word_t) >= end) {
  		ret = access_dso_mem(ui, addr, valp);
  		if (ret) {
@@ -123,7 +123,7 @@
  			*valp = 0;
  			return ret;
  		}
-@@ -484,8 +484,8 @@ static int access_mem(unw_addr_space_t _
+@@ -487,8 +487,8 @@ static int access_mem(unw_addr_space_t _
  
  	offset = addr - start;
  	*valp  = *(unw_word_t *)&stack->data[offset];
@@ -136,9 +136,9 @@
  
 --- a/tools/scripts/Makefile.arch
 +++ b/tools/scripts/Makefile.arch
-@@ -10,9 +10,17 @@ ARCH := $(shell echo $(ARCH) | sed -e s/
-                                   -e s/sh[234].*/sh/ -e s/aarch64.*/arm64/ \
-                                   -e s/tile.*/tile/ )
+@@ -41,9 +41,17 @@ ifeq ($(ARCH),tilegx)
+        SRCARCH := tile
+ endif
  
 -LP64 := $(shell echo __LP64__ | ${CC} ${CFLAGS} -E -x c - | tail -n 1)
 -ifeq ($(LP64), 1)

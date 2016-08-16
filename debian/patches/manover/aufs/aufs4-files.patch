@@ -1727,10 +1727,9 @@
 +regular files only.
 --- /dev/null
 +++ b/fs/aufs/Kconfig
-@@ -0,0 +1,186 @@
+@@ -0,0 +1,185 @@
 +config AUFS_FS
 +	tristate "Aufs (Advanced multi layered unification filesystem) support"
-+	default n
 +	help
 +	Aufs is a stackable unification filesystem such as Unionfs,
 +	which unifies several directories and provides a merged single
@@ -9648,7 +9647,7 @@
 +#endif /* __AUFS_DIR_H__ */
 --- /dev/null
 +++ b/fs/aufs/dynop.c
-@@ -0,0 +1,369 @@
+@@ -0,0 +1,371 @@
 +/*
 + * Copyright (C) 2010-2016 Junjiro R. Okajima
 + *
@@ -9840,6 +9839,8 @@
 +	/* this one will be changed according to an aufs mount option */
 +	DySetAop(direct_IO);
 +	DySetAop(migratepage);
++	DySetAop(isolate_page);
++	DySetAop(putback_page);
 +	DySetAop(launder_page);
 +	DySetAop(is_partially_uptodate);
 +	DySetAop(is_dirty_writeback);
@@ -12141,7 +12142,7 @@
 +}
 --- /dev/null
 +++ b/fs/aufs/file.c
-@@ -0,0 +1,845 @@
+@@ -0,0 +1,851 @@
 +/*
 + * Copyright (C) 2005-2016 Junjiro R. Okajima
 + *
@@ -12945,6 +12946,10 @@
 +			    struct page *page, enum migrate_mode mode)
 +{ AuUnsupport(); return 0; }
 +#endif
++static bool aufs_isolate_page(struct page *page, isolate_mode_t mode)
++{ AuUnsupport(); return true; }
++static void aufs_putback_page(struct page *page)
++{ AuUnsupport(); }
 +static int aufs_launder_page(struct page *page)
 +{ AuUnsupport(); return 0; }
 +static int aufs_is_partially_uptodate(struct page *page,
@@ -12979,6 +12984,8 @@
 +	.releasepage		= aufs_releasepage,
 +	/* is fallback_migrate_page ok? */
 +	/* .migratepage		= aufs_migratepage, */
++	.isolate_page		= aufs_isolate_page,
++	.putback_page		= aufs_putback_page,
 +	.launder_page		= aufs_launder_page,
 +	.is_partially_uptodate	= aufs_is_partially_uptodate,
 +	.is_dirty_writeback	= aufs_is_dirty_writeback,
@@ -34372,7 +34379,7 @@
 +
 +#include <linux/limits.h>
 +
-+#define AUFS_VERSION	"4.7-20160815"
++#define AUFS_VERSION	"4.8-20160815"
 +
 +/* todo? move this to linux-2.6.19/include/magic.h */
 +#define AUFS_SUPER_MAGIC	('a' << 24 | 'u' << 16 | 'f' << 8 | 's')

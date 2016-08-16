@@ -33,19 +33,10 @@ Cc: stable@vger.kernel.org
 
 --- a/drivers/md/bcache/super.c
 +++ b/drivers/md/bcache/super.c
-@@ -1842,7 +1842,7 @@ static int register_cache(struct cache_s
- 				struct block_device *bdev, struct cache *ca)
- {
- 	char name[BDEVNAME_SIZE];
--	const char *err = NULL;
-+	const char *err = NULL; /* must be set for any error case */
- 	int ret = 0;
- 
- 	memcpy(&ca->sb, sb, sizeof(struct cache_sb));
-@@ -1859,8 +1859,13 @@ static int register_cache(struct cache_s
+@@ -1861,8 +1861,13 @@ static int register_cache(struct cache_s
  		ca->discard = CACHE_DISCARD(&ca->sb);
  
- 	ret = cache_alloc(sb, ca);
+ 	ret = cache_alloc(ca);
 -	if (ret != 0)
 +	if (ret != 0) {
 +		if (ret == -ENOMEM)

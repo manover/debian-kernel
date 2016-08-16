@@ -1,6 +1,6 @@
 --- a/fs/Kconfig
 +++ b/fs/Kconfig
-@@ -125,6 +125,7 @@ menu "Pseudo filesystems"
+@@ -134,6 +134,7 @@ menu "Pseudo filesystems"
  source "fs/proc/Kconfig"
  source "fs/kernfs/Kconfig"
  source "fs/sysfs/Kconfig"
@@ -12327,7 +12327,7 @@
 +
 +static unsigned int kdbus_strnhash(const char *str, size_t len)
 +{
-+	unsigned long hash = init_name_hash();
++	unsigned long hash = init_name_hash(NULL);
 +
 +	while (len--)
 +		hash = partial_name_hash(*str++, hash);
@@ -14559,7 +14559,7 @@
 + */
 +static inline unsigned int kdbus_strhash(const char *str)
 +{
-+	unsigned long hash = init_name_hash();
++	unsigned long hash = init_name_hash(NULL);
 +
 +	while (*str)
 +		hash = partial_name_hash(*str++, hash);

@@ -385,7 +385,7 @@
  	depends on INPUT
 --- a/drivers/platform/x86/Makefile
 +++ b/drivers/platform/x86/Makefile
-@@ -71,3 +71,4 @@ obj-$(CONFIG_INTEL_TELEMETRY)	+= intel_t
+@@ -72,3 +72,4 @@ obj-$(CONFIG_INTEL_TELEMETRY)	+= intel_t
  				   intel_telemetry_debugfs.o
  obj-$(CONFIG_INTEL_PMC_CORE)    += intel_pmc_core.o
  obj-$(CONFIG_THECUS_N5550) += n5550_ahci_leds.o n5550_board.o

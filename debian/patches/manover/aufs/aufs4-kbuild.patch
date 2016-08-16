@@ -2,7 +2,7 @@ aufs4.7 kbuild patch
 
 --- a/fs/Kconfig
 +++ b/fs/Kconfig
-@@ -237,6 +237,7 @@ source "fs/pstore/Kconfig"
+@@ -246,6 +246,7 @@ source "fs/pstore/Kconfig"
  source "fs/sysv/Kconfig"
  source "fs/ufs/Kconfig"
  source "fs/exofs/Kconfig"
@@ -12,7 +12,7 @@ aufs4.7 kbuild patch
  
 --- a/fs/Makefile
 +++ b/fs/Makefile
-@@ -128,3 +128,4 @@ obj-y				+= exofs/ # Multiple modules
+@@ -129,3 +129,4 @@ obj-y				+= exofs/ # Multiple modules
  obj-$(CONFIG_CEPH_FS)		+= ceph/
  obj-$(CONFIG_PSTORE)		+= pstore/
  obj-$(CONFIG_EFIVAR_FS)		+= efivarfs/

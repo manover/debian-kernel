@@ -13,7 +13,7 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 ---
 --- a/Documentation/kernel-parameters.txt
 +++ b/Documentation/kernel-parameters.txt
-@@ -615,8 +615,8 @@ bytes respectively. Such letter suffixes
+@@ -618,8 +618,8 @@ bytes respectively. Such letter suffixes
  	ccw_timeout_log [S390]
  			See Documentation/s390/CommonIO for details.
  
@@ -26,7 +26,7 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
  			  a single hierarchy
 --- a/init/Kconfig
 +++ b/init/Kconfig
-@@ -968,6 +968,14 @@ config MEMCG
+@@ -971,6 +971,14 @@ config MEMCG
  	help
  	  Provides control over the memory footprint of tasks in a cgroup.
  
@@ -43,7 +43,7 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
  	depends on MEMCG && SWAP
 --- a/kernel/cgroup.c
 +++ b/kernel/cgroup.c
-@@ -5591,7 +5591,11 @@ int __init cgroup_init_early(void)
+@@ -5588,7 +5588,11 @@ int __init cgroup_init_early(void)
  	return 0;
  }
  
@@ -55,7 +55,7 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
  
  /**
   * cgroup_init - cgroup initialization
-@@ -6073,7 +6077,7 @@ out_free:
+@@ -6070,7 +6074,7 @@ out_free:
  	kfree(pathbuf);
  }
  
@@ -64,7 +64,7 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
  {
  	struct cgroup_subsys *ss;
  	char *token;
-@@ -6087,13 +6091,28 @@ static int __init cgroup_disable(char *s
+@@ -6084,13 +6088,28 @@ static int __init cgroup_disable(char *s
  			if (strcmp(token, ss->name) &&
  			    strcmp(token, ss->legacy_name))
  				continue;

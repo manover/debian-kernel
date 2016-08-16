@@ -53,7 +53,7 @@ upstream submission.
  	/* disable MPU */
 --- a/arch/x86/kernel/cpu/microcode/amd.c
 +++ b/arch/x86/kernel/cpu/microcode/amd.c
-@@ -900,10 +900,8 @@ static enum ucode_state request_microcod
+@@ -903,10 +903,8 @@ static enum ucode_state request_microcod
  	if (c->x86 >= 0x15)
  		snprintf(fw_name, sizeof(fw_name), "amd-ucode/microcode_amd_fam%.2xh.bin", c->x86);
  
@@ -96,7 +96,7 @@ upstream submission.
      fw_size = firmware->size / sizeof(u32);
 --- a/drivers/bluetooth/ath3k.c
 +++ b/drivers/bluetooth/ath3k.c
-@@ -420,10 +420,8 @@ static int ath3k_load_patch(struct usb_d
+@@ -422,10 +422,8 @@ static int ath3k_load_patch(struct usb_d
  		 le32_to_cpu(fw_version.rom_version));
  
  	ret = request_firmware(&firmware, filename, &udev->dev);
@@ -108,7 +108,7 @@ upstream submission.
  
  	pt_rom_version = get_unaligned_le32(firmware->data +
  					    firmware->size - 8);
-@@ -483,10 +481,8 @@ static int ath3k_load_syscfg(struct usb_
+@@ -485,10 +483,8 @@ static int ath3k_load_syscfg(struct usb_
  		le32_to_cpu(fw_version.rom_version), clk_value, ".dfu");
  
  	ret = request_firmware(&firmware, filename, &udev->dev);
@@ -203,7 +203,7 @@ upstream submission.
  		       fw->size, fw_name);
 --- a/drivers/dma/imx-sdma.c
 +++ b/drivers/dma/imx-sdma.c
-@@ -1408,11 +1408,8 @@ static void sdma_load_firmware(const str
+@@ -1399,11 +1399,8 @@ static void sdma_load_firmware(const str
  	const struct sdma_script_start_addrs *addr;
  	unsigned short *ram_code;
  
@@ -233,7 +233,7 @@ upstream submission.
  	where = 0;
 --- a/drivers/gpu/drm/nouveau/nvkm/engine/gr/gf100.c
 +++ b/drivers/gpu/drm/nouveau/nvkm/engine/gr/gf100.c
-@@ -1759,10 +1759,8 @@ gf100_gr_ctor_fw(struct gf100_gr *gr, co
+@@ -1765,10 +1765,8 @@ gf100_gr_ctor_fw(struct gf100_gr *gr, co
  	int ret;
  
  	ret = nvkm_firmware_get(device, fwname, &fw);
@@ -698,7 +698,7 @@ upstream submission.
  		printk(KERN_ERR "ERROR: Firmware size mismatch "
 --- a/drivers/media/pci/cx23885/cx23885-cards.c
 +++ b/drivers/media/pci/cx23885/cx23885-cards.c
-@@ -2279,11 +2279,7 @@ void cx23885_card_setup(struct cx23885_d
+@@ -2312,11 +2312,7 @@ void cx23885_card_setup(struct cx23885_d
  				cinfo.rev, filename);
  
  		ret = request_firmware(&fw, filename, &dev->pci->dev);
@@ -1243,7 +1243,7 @@ upstream submission.
  	if (bp->mips_firmware->size < sizeof(*mips_fw) ||
 --- a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
 +++ b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
-@@ -13439,11 +13439,8 @@ static int bnx2x_init_firmware(struct bn
+@@ -13411,11 +13411,8 @@ static int bnx2x_init_firmware(struct bn
  	BNX2X_DEV_INFO("Loading %s\n", fw_file_name);
  
  	rc = request_firmware(&bp->firmware, fw_file_name, &bp->pdev->dev);
@@ -1831,7 +1831,7 @@ upstream submission.
  		wl1251_error("nvs size is not multiple of 32 bits: %zu",
 --- a/drivers/net/wireless/ti/wlcore/main.c
 +++ b/drivers/net/wireless/ti/wlcore/main.c
-@@ -747,10 +747,8 @@ static int wl12xx_fetch_firmware(struct
+@@ -756,10 +756,8 @@ static int wl12xx_fetch_firmware(struct
  
  	ret = request_firmware(&fw, fw_name, wl->dev);
  
@@ -1950,7 +1950,7 @@ upstream submission.
  	}
 --- a/drivers/scsi/ipr.c
 +++ b/drivers/scsi/ipr.c
-@@ -4014,10 +4014,8 @@ static ssize_t ipr_store_update_fw(struc
+@@ -4020,10 +4020,8 @@ static ssize_t ipr_store_update_fw(struc
  	if (endline)
  		*endline = '\0';
  
@@ -1988,7 +1988,7 @@ upstream submission.
  	}
 --- a/drivers/scsi/qla2xxx/qla_init.c
 +++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -5637,8 +5637,6 @@ qla2x00_load_risc(scsi_qla_host_t *vha,
+@@ -5656,8 +5656,6 @@ qla2x00_load_risc(scsi_qla_host_t *vha,
  	/* Load firmware blob. */
  	blob = qla2x00_request_firmware(vha);
  	if (!blob) {
@@ -1997,7 +1997,7 @@ upstream submission.
  		ql_log(ql_log_info, vha, 0x0084,
  		    "Firmware images can be retrieved from: "QLA_FW_URL ".\n");
  		return QLA_FUNCTION_FAILED;
-@@ -5740,8 +5738,6 @@ qla24xx_load_risc_blob(scsi_qla_host_t *
+@@ -5759,8 +5757,6 @@ qla24xx_load_risc_blob(scsi_qla_host_t *
  	/* Load firmware blob. */
  	blob = qla2x00_request_firmware(vha);
  	if (!blob) {
@@ -2023,7 +2023,7 @@ upstream submission.
  	if (qla82xx_validate_firmware_blob(vha,
 --- a/drivers/scsi/qla2xxx/qla_os.c
 +++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -5539,8 +5539,6 @@ qla2x00_request_firmware(scsi_qla_host_t
+@@ -5620,8 +5620,6 @@ qla2x00_request_firmware(scsi_qla_host_t
  		goto out;
  
  	if (request_firmware(&blob->fw, blob->name, &ha->pdev->dev)) {
@@ -2130,7 +2130,7 @@ upstream submission.
  	if (!buffer)
 --- a/drivers/tty/cyclades.c
 +++ b/drivers/tty/cyclades.c
-@@ -3499,10 +3499,8 @@ static int cyz_load_fw(struct pci_dev *p
+@@ -3495,10 +3495,8 @@ static int cyz_load_fw(struct pci_dev *p
  	int retval;
  
  	retval = request_firmware(&fw, "cyzfirm.bin", &pdev->dev);
@@ -2367,7 +2367,7 @@ upstream submission.
  
 --- a/drivers/usb/serial/ti_usb_3410_5052.c
 +++ b/drivers/usb/serial/ti_usb_3410_5052.c
-@@ -1536,10 +1536,8 @@ static int ti_download_firmware(struct t
+@@ -1757,10 +1757,8 @@ static int ti_download_firmware(struct t
  	}
  
  check_firmware:
@@ -2541,7 +2541,7 @@ upstream submission.
  			   filename, emu->firmware->size);
 --- a/sound/pci/hda/hda_intel.c
 +++ b/sound/pci/hda/hda_intel.c
-@@ -1787,10 +1787,8 @@ static void azx_firmware_cb(const struct
+@@ -1795,10 +1795,8 @@ static void azx_firmware_cb(const struct
  	struct azx *chip = card->private_data;
  	struct pci_dev *pci = chip->pci;
  

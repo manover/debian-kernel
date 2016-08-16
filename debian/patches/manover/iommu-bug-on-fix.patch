@@ -10,7 +10,7 @@ Signed-off-by: Nicholas Krause <xerofoify@gmail.com>
 
 --- a/drivers/iommu/Kconfig
 +++ b/drivers/iommu/Kconfig
-@@ -168,6 +168,20 @@ config INTEL_IOMMU_DEFAULT_ON
+@@ -169,6 +169,20 @@ config INTEL_IOMMU_DEFAULT_ON
  	  one is found. If this option is not selected, DMAR support can
  	  be enabled by passing intel_iommu=on to the kernel.
  
