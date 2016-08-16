@@ -1,4 +1,3 @@
-# Changes to support package build system
 debian/version.patch
 debian/uname-version-timestamp.patch
 debian/kernelvariables.patch
@@ -97,11 +96,16 @@ bugfix/all/KEYS-Fix-short-sprintf-buffer-in-proc-keys-show-func.patch
 bugfix/all/mm-remove-gup_flags-FOLL_WRITE-games-from-__get_user.patch
 
 # ABI maintenance
+<<<<<<< HEAD
 debian/i8042-revert-abi-break-in-4.7.3.patch
 debian/revert-arm64-define-at_vector_size_arch-for-arch_dlinfo.patch
 debian/uaccess-avoid-abi-change-in-4.7.5.patch
 debian/uio-fix-abi-change-in-4.7.5.patch
 debian/gro-fix-abi-change-for-cve-2016-7039-fix.patch
+=======
+bugfix/all/media-videobuf2-v4l2-verify-planes-array-in-buffer-d.patch
+bugfix/all/vfs-ioctl-prevent-double-fetch-in-dedupe-ioctl.patch
+>>>>>>> linux (4.7.0-5) unstable; urgency=medium
 
 # Tools bug fixes
 bugfix/all/usbip-document-tcp-wrappers.patch
