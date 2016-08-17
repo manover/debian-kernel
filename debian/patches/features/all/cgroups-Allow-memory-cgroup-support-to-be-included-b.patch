@@ -43,7 +43,7 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
  	depends on MEMCG && SWAP
 --- a/kernel/cgroup.c
 +++ b/kernel/cgroup.c
-@@ -5587,7 +5587,11 @@ int __init cgroup_init_early(void)
+@@ -5591,7 +5591,11 @@ int __init cgroup_init_early(void)
  	return 0;
  }
  
@@ -55,7 +55,7 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
  
  /**
   * cgroup_init - cgroup initialization
-@@ -6069,7 +6073,7 @@ out_free:
+@@ -6073,7 +6077,7 @@ out_free:
  	kfree(pathbuf);
  }
  
@@ -64,7 +64,7 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
  {
  	struct cgroup_subsys *ss;
  	char *token;
-@@ -6083,13 +6087,28 @@ static int __init cgroup_disable(char *s
+@@ -6087,13 +6091,28 @@ static int __init cgroup_disable(char *s
  			if (strcmp(token, ss->name) &&
  			    strcmp(token, ss->legacy_name))
  				continue;

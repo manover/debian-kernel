@@ -70,11 +70,9 @@ Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
  tools/perf/util/symbol.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-index b044f1a32d16..37e8d20ae03e 100644
 --- a/tools/perf/util/symbol.c
 +++ b/tools/perf/util/symbol.c
-@@ -1430,7 +1430,7 @@ int dso__load(struct dso *dso, struct map *map, symbol_filter_t filter)
+@@ -1466,7 +1466,7 @@ int dso__load(struct dso *dso, struct ma
  	 * Read the build id if possible. This is required for
  	 * DSO_BINARY_TYPE__BUILDID_DEBUGINFO to work
  	 */
@@ -83,6 +81,3 @@ index b044f1a32d16..37e8d20ae03e 100644
  	    filename__read_build_id(dso->long_name, build_id, BUILD_ID_SIZE) > 0)
  		dso__set_build_id(dso, build_id);
  
--- 
-2.8.1
-

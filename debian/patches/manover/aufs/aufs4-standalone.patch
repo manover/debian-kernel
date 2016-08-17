@@ -2,7 +2,7 @@ aufs4.6 standalone patch
 
 --- a/fs/dcache.c
 +++ b/fs/dcache.c
-@@ -1261,6 +1261,7 @@ rename_retry:
+@@ -1264,6 +1264,7 @@ rename_retry:
  	seq = 1;
  	goto again;
  }

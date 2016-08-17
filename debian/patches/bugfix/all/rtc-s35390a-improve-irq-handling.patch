@@ -23,8 +23,6 @@ Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
  drivers/rtc/rtc-s35390a.c | 48 ++++++++++++++++++++++++++++++-----------------
  1 file changed, 31 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/rtc/rtc-s35390a.c b/drivers/rtc/rtc-s35390a.c
-index 6c90c9f48cab..d5b572266a72 100644
 --- a/drivers/rtc/rtc-s35390a.c
 +++ b/drivers/rtc/rtc-s35390a.c
 @@ -35,10 +35,14 @@
@@ -56,7 +54,7 @@ index 6c90c9f48cab..d5b572266a72 100644
  
  	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
  		err = -ENODEV;
-@@ -427,29 +431,35 @@ static int s35390a_probe(struct i2c_client *client,
+@@ -427,29 +431,35 @@ static int s35390a_probe(struct i2c_clie
  		}
  	}
  
@@ -107,7 +105,7 @@ index 6c90c9f48cab..d5b572266a72 100644
  		dev_warn(&client->dev, "clock needs to be set\n");
  
  	device_set_wakeup_capable(&client->dev, 1);
-@@ -462,6 +472,10 @@ static int s35390a_probe(struct i2c_client *client,
+@@ -462,6 +472,10 @@ static int s35390a_probe(struct i2c_clie
  		err = PTR_ERR(s35390a->rtc);
  		goto exit_dummy;
  	}
@@ -118,6 +116,3 @@ index 6c90c9f48cab..d5b572266a72 100644
  	return 0;
  
  exit_dummy:
--- 
-2.8.1
-

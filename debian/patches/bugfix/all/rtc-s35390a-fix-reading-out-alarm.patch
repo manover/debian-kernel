@@ -23,11 +23,9 @@ Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
  drivers/rtc/rtc-s35390a.c | 40 +++++++++++++++++++++++++++++++---------
  1 file changed, 31 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/rtc/rtc-s35390a.c b/drivers/rtc/rtc-s35390a.c
-index f40afdd0e5f5..6507a01cf9ad 100644
 --- a/drivers/rtc/rtc-s35390a.c
 +++ b/drivers/rtc/rtc-s35390a.c
-@@ -242,6 +242,8 @@ static int s35390a_set_alarm(struct i2c_client *client, struct rtc_wkalrm *alm)
+@@ -242,6 +242,8 @@ static int s35390a_set_alarm(struct i2c_
  
  	if (alm->time.tm_wday != -1)
  		buf[S35390A_ALRM_BYTE_WDAY] = bin2bcd(alm->time.tm_wday) | 0x80;
@@ -36,7 +34,7 @@ index f40afdd0e5f5..6507a01cf9ad 100644
  
  	buf[S35390A_ALRM_BYTE_HOURS] = s35390a_hr2reg(s35390a,
  			alm->time.tm_hour) | 0x80;
-@@ -269,23 +271,43 @@ static int s35390a_read_alarm(struct i2c_client *client, struct rtc_wkalrm *alm)
+@@ -269,23 +271,43 @@ static int s35390a_read_alarm(struct i2c
  	if (err < 0)
  		return err;
  
@@ -89,6 +87,3 @@ index f40afdd0e5f5..6507a01cf9ad 100644
  
  	dev_dbg(&client->dev, "%s: alm is mins=%d, hours=%d, wday=%d\n",
  			__func__, alm->time.tm_min, alm->time.tm_hour,
--- 
-2.8.1
-

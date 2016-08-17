@@ -1,3 +1,9 @@
+linux (4.6.7-1) unstable; urgency=medium
+
+  * Linux 4.6.7
+
+ -- Denis Bychkov <manover@gmail.com>  Tue, 16 Aug 2016 05:55:45 -0400
+
 linux (4.6.6-1) unstable; urgency=medium
 
   * Merge debian/4.6.6-1
