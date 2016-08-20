@@ -17,11 +17,9 @@ Date:   Fri May 13 10:49:14 2016 +0530
     Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
     Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 
-diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-index 48da857..9244381 100644
 --- a/drivers/gpio/Kconfig
 +++ b/drivers/gpio/Kconfig
-@@ -871,6 +871,15 @@ config GPIO_LP3943
+@@ -874,6 +874,15 @@ config GPIO_LP3943
  	  LP3943 can be used as a GPIO expander which provides up to 16 GPIOs.
  	  Open drain outputs are required for this usage.
  
@@ -37,11 +35,9 @@ index 48da857..9244381 100644
  config GPIO_MSIC
  	bool "Intel MSIC mixed signal gpio support"
  	depends on MFD_INTEL_MSIC
-diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
-index 991598e..6e111fc 100644
 --- a/drivers/gpio/Makefile
 +++ b/drivers/gpio/Makefile
-@@ -61,6 +61,7 @@ obj-$(CONFIG_GPIO_MAX730X)	+= gpio-max730x.o
+@@ -61,6 +61,7 @@ obj-$(CONFIG_GPIO_MAX730X)	+= gpio-max73
  obj-$(CONFIG_GPIO_MAX7300)	+= gpio-max7300.o
  obj-$(CONFIG_GPIO_MAX7301)	+= gpio-max7301.o
  obj-$(CONFIG_GPIO_MAX732X)	+= gpio-max732x.o
@@ -49,9 +45,6 @@ index 991598e..6e111fc 100644
  obj-$(CONFIG_GPIO_MB86S7X)	+= gpio-mb86s7x.o
  obj-$(CONFIG_GPIO_MENZ127)	+= gpio-menz127.o
  obj-$(CONFIG_GPIO_MC33880)	+= gpio-mc33880.o
-diff --git a/drivers/gpio/gpio-max77620.c b/drivers/gpio/gpio-max77620.c
-new file mode 100644
-index 0000000..d927562
 --- /dev/null
 +++ b/drivers/gpio/gpio-max77620.c
 @@ -0,0 +1,238 @@
