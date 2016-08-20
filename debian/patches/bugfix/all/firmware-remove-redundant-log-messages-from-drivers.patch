@@ -96,7 +96,7 @@ upstream submission.
      fw_size = firmware->size / sizeof(u32);
 --- a/drivers/bluetooth/ath3k.c
 +++ b/drivers/bluetooth/ath3k.c
-@@ -420,10 +420,8 @@ static int ath3k_load_patch(struct usb_d
+@@ -422,10 +422,8 @@ static int ath3k_load_patch(struct usb_d
  		 le32_to_cpu(fw_version.rom_version));
  
  	ret = request_firmware(&firmware, filename, &udev->dev);
@@ -108,7 +108,7 @@ upstream submission.
  
  	pt_rom_version = get_unaligned_le32(firmware->data +
  					    firmware->size - 8);
-@@ -483,10 +481,8 @@ static int ath3k_load_syscfg(struct usb_
+@@ -485,10 +483,8 @@ static int ath3k_load_syscfg(struct usb_
  		le32_to_cpu(fw_version.rom_version), clk_value, ".dfu");
  
  	ret = request_firmware(&firmware, filename, &udev->dev);
