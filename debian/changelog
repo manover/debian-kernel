@@ -82,6 +82,12 @@ linux (4.7.2-1) UNRELEASED; urgency=medium
 
  -- Ben Hutchings <ben@decadent.org.uk>  Wed, 20 Jul 2016 03:50:18 +0100
 
+linux (4.7.2-1) unstable; urgency=medium
+
+  * Linux 4.7.2
+
+ -- Denis Bychkov <manover@gmail.com>  Sat, 20 Aug 2016 12:32:52 -0400
+
 linux (4.7.1-1) unstable; urgency=medium
 
   * Linux 4.7.1
