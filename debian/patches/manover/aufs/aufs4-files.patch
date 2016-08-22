@@ -5272,7 +5272,7 @@
 +#endif /* __AUFS_CPUP_H__ */
 --- /dev/null
 +++ b/fs/aufs/dbgaufs.c
-@@ -0,0 +1,432 @@
+@@ -0,0 +1,435 @@
 +/*
 + * Copyright (C) 2005-2016 Junjiro R. Okajima
 + *
@@ -5544,7 +5544,10 @@
 +	for (; bindex <= bbot; bindex++) {
 +		br = au_sbr(sb, bindex);
 +		xi = &br->br_xino;
++		/* debugfs acquires the parent i_mutex */
++		lockdep_off();
 +		debugfs_remove(xi->xi_dbgaufs);
++		lockdep_on();
 +		xi->xi_dbgaufs = NULL;
 +	}
 +}
@@ -20812,9 +20815,9 @@
 +		head = &au_dfree.cache[AuCache_##idx].llist;		\
 +		node = llist_del_all(head);				\
 +		for (; node; node = next) {				\
-+			struct au_##name *p =				\
-+				p = llist_entry(node, struct au_##name,	\
-+						lnode);			\
++			struct au_##name *p				\
++				= llist_entry(node, struct au_##name,	\
++					      lnode);			\
 +			next = llist_next(node);			\
 +			au_cache_free_##name(p);			\
 +		}							\
@@ -34372,7 +34375,7 @@
 +
 +#include <linux/limits.h>
 +
-+#define AUFS_VERSION	"4.6-20160808"
++#define AUFS_VERSION	"4.6-20160822"
 +
 +/* todo? move this to linux-2.6.19/include/magic.h */
 +#define AUFS_SUPER_MAGIC	('a' << 24 | 'u' << 16 | 'f' << 8 | 's')
