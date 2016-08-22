@@ -1,3 +1,10 @@
+linux (4.8~rc3-1~exp1) experimental; urgency=medium
+
+  * Linux 4.8 RC3
+  * AUFS 4.8-20160822
+
+ -- Denis Bychkov <manover@gmail.com>  Mon, 22 Aug 2016 06:46:27 -0400
+
 linux (4.8~rc2-1~exp2) experimental; urgency=medium
 
   * AUFS 4.8-20160815

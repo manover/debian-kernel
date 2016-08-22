@@ -53,7 +53,7 @@ upstream submission.
  	/* disable MPU */
 --- a/arch/x86/kernel/cpu/microcode/amd.c
 +++ b/arch/x86/kernel/cpu/microcode/amd.c
-@@ -903,10 +903,8 @@ static enum ucode_state request_microcod
+@@ -910,10 +910,8 @@ static enum ucode_state request_microcod
  	if (c->x86 >= 0x15)
  		snprintf(fw_name, sizeof(fw_name), "amd-ucode/microcode_amd_fam%.2xh.bin", c->x86);
  
