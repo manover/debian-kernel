@@ -46,7 +46,6 @@ debian/fanotify-taint-on-use-of-fanotify_access_permissions.patch
 # Arch bug fixes
 bugfix/parisc/parisc-fix-automatic-selection-of-cr16-clocksource.patch
 bugfix/parisc/parisc-fix-order-of-erefused-define-in-errno.h.patch
-bugfix/x86/x86-power-64-fix-crash-when-the-hibernation-code-pas.patch
 
 # Arch features
 features/mips/MIPS-increase-MAX-PHYSMEM-BITS-on-Loongson-3-only.patch
@@ -91,7 +90,6 @@ bugfix/all/tcp-fix-use-after-free-in-tcp_xmit_retransmit_queue.patch
 bugfix/all/aacraid-check-size-values-after-double-fetch-from-us.patch
 
 # ABI maintenance
-bugfix/all/media-videobuf2-v4l2-verify-planes-array-in-buffer-d.patch
 
 # Tools bug fixes
 bugfix/all/usbip-document-tcp-wrappers.patch
