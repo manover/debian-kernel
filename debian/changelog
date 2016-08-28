@@ -596,7 +596,13 @@ linux (4.7.4-1) unstable; urgency=medium
 
  -- Ben Hutchings <ben@decadent.org.uk>  Sun, 18 Sep 2016 14:56:01 +0100
 
-linux (4.7.2-1) unstable; urgency=medium
+linux (4.7.2-3) unstable; urgency=medium
+
+  * Rebase on debian/4.7.2-1
+
+ -- Denis Bychkov <manover@gmail.com>  Sun, 28 Aug 2016 03:52:53 -0400
+
+linux (4.7.2-1) UNRELEASED; urgency=medium
 
   * New upstream release: https://kernelnewbies.org/Linux_4.7
     - media: fix airspy usb probe error path (CVE-2016-5400)
