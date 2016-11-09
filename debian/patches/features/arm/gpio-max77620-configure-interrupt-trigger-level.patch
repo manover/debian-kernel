@@ -17,8 +17,6 @@ Date:   Tue May 24 18:43:44 2016 +0530
     Signed-off-by: Laxman Dewangan <ldewangan@nvidia.com>
     Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 
-diff --git a/drivers/gpio/gpio-max77620.c b/drivers/gpio/gpio-max77620.c
-index d927562..35f365c 100644
 --- a/drivers/gpio/gpio-max77620.c
 +++ b/drivers/gpio/gpio-max77620.c
 @@ -27,14 +27,62 @@ struct max77620_gpio {
@@ -92,7 +90,7 @@ index d927562..35f365c 100644
  };
  
  static struct regmap_irq_chip max77620_gpio_irq_chip = {
-@@ -42,8 +90,11 @@ static struct regmap_irq_chip max77620_gpio_irq_chip = {
+@@ -42,8 +90,11 @@ static struct regmap_irq_chip max77620_g
  	.irqs = max77620_gpio_irqs,
  	.num_irqs = ARRAY_SIZE(max77620_gpio_irqs),
  	.num_regs = 1,

@@ -14,11 +14,9 @@ Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
  drivers/rtc/interface.c | 12 +++++++++++-
  1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
-index 9ef5f6f89f98..99475908e556 100644
 --- a/drivers/rtc/interface.c
 +++ b/drivers/rtc/interface.c
-@@ -104,7 +104,17 @@ static int rtc_read_alarm_internal(struct rtc_device *rtc, struct rtc_wkalrm *al
+@@ -104,7 +104,17 @@ static int rtc_read_alarm_internal(struc
  	else if (!rtc->ops->read_alarm)
  		err = -EINVAL;
  	else {
@@ -37,6 +35,3 @@ index 9ef5f6f89f98..99475908e556 100644
  		err = rtc->ops->read_alarm(rtc->dev.parent, alarm);
  	}
  
--- 
-2.8.1
-

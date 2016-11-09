@@ -16,11 +16,9 @@ Date:   Mon Jun 27 16:26:24 2016 +0530
     Reviewed-by: Alexandre Courbot <acourbot@nvidia.com>
     Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 
-diff --git a/drivers/gpio/gpio-max77620.c b/drivers/gpio/gpio-max77620.c
-index 8658c32..b46b436 100644
 --- a/drivers/gpio/gpio-max77620.c
 +++ b/drivers/gpio/gpio-max77620.c
-@@ -123,7 +123,10 @@ static int max77620_gpio_get(struct gpio_chip *gc, unsigned int offset)
+@@ -123,7 +123,10 @@ static int max77620_gpio_get(struct gpio
  		return ret;
  	}
  

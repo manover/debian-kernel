@@ -15,8 +15,6 @@ Date:   Mon Nov 23 16:21:43 2015 +0100
     
     Signed-off-by: Thierry Reding <treding@nvidia.com>
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra210-p2371-2180.dts b/arch/arm64/boot/dts/nvidia/tegra210-p2371-2180.dts
-index 683b339..983775e 100644
 --- a/arch/arm64/boot/dts/nvidia/tegra210-p2371-2180.dts
 +++ b/arch/arm64/boot/dts/nvidia/tegra210-p2371-2180.dts
 @@ -6,4 +6,49 @@
@@ -69,8 +67,6 @@ index 683b339..983775e 100644
 +		};
 +	};
  };
-diff --git a/arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi b/arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi
-index b28aff5..78a16a5 100644
 --- a/arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi
 +++ b/arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi
 @@ -1261,6 +1261,23 @@

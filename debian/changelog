@@ -1,3 +1,9 @@
+linux (4.7.10-1) unstable; urgency=medium
+
+  * Linux 4.7.10
+
+ -- Denis Bychkov <manover@gmail.com>  Mon, 07 Nov 2016 21:06:52 -0500
+
 linux (4.7.8-1) unstable; urgency=high
 
   * New upstream stable update:
@@ -602,7 +608,13 @@ linux (4.7.2-3) unstable; urgency=medium
 
  -- Denis Bychkov <manover@gmail.com>  Sun, 28 Aug 2016 03:52:53 -0400
 
-linux (4.7.2-1) UNRELEASED; urgency=medium
+linux (4.7.2-2) unstable; urgency=medium
+
+  * AUFS 4.7-20160822
+
+ -- Denis Bychkov <manover@gmail.com>  Mon, 22 Aug 2016 07:05:31 -0400
+
+linux (4.7.2-1) unstable; urgency=medium
 
   * New upstream release: https://kernelnewbies.org/Linux_4.7
     - media: fix airspy usb probe error path (CVE-2016-5400)
@@ -691,12 +703,6 @@ linux (4.7.2-1) UNRELEASED; urgency=medium
 
  -- Ben Hutchings <ben@decadent.org.uk>  Sun, 28 Aug 2016 15:56:10 +0100
 
-linux (4.7.2-2) unstable; urgency=medium
-
-  * AUFS 4.7-20160822
-
- -- Denis Bychkov <manover@gmail.com>  Mon, 22 Aug 2016 07:05:31 -0400
-
 linux (4.7.2-1) unstable; urgency=medium
 
   * Linux 4.7.2
@@ -731,7 +737,7 @@ linux (4.7.0-3) unstable; urgency=medium
 
 linux (4.7.0-2) unstable; urgency=medium
 
-  * Enable build of smcs47m1 and smsc47m192 modules for m kernel
+  * Enable build of smcs47m1 and smsc47m192 modules for m kernel 
 
  -- Denis Bychkov <manover@gmail.com>  Sun, 31 Jul 2016 02:15:27 -0400
 

@@ -21,8 +21,6 @@ Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
  drivers/rtc/rtc-s35390a.c | 65 +++++++++++++++++++++++++++++++++++++++--------
  1 file changed, 55 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/rtc/rtc-s35390a.c b/drivers/rtc/rtc-s35390a.c
-index 6507a01cf9ad..6c90c9f48cab 100644
 --- a/drivers/rtc/rtc-s35390a.c
 +++ b/drivers/rtc/rtc-s35390a.c
 @@ -15,6 +15,7 @@
@@ -33,25 +31,27 @@ index 6507a01cf9ad..6c90c9f48cab 100644
  
  #define S35390A_CMD_STATUS1	0
  #define S35390A_CMD_STATUS2	1
-@@ -94,19 +95,63 @@ static int s35390a_get_reg(struct s35390a *s35390a, int reg, char *buf, int len)
+@@ -94,19 +95,63 @@ static int s35390a_get_reg(struct s35390
  	return 0;
  }
  
 -static int s35390a_reset(struct s35390a *s35390a)
+-{
+-	char buf[1];
+-
+-	if (s35390a_get_reg(s35390a, S35390A_CMD_STATUS1, buf, sizeof(buf)) < 0)
+-		return -EIO;
 +/*
 + * Returns <0 on error, 0 if rtc is setup fine and 1 if the chip was reset.
 + * To keep the information if an irq is pending, pass the value read from
 + * STATUS1 to the caller.
 + */
 +static int s35390a_reset(struct s35390a *s35390a, char *status1)
- {
--	char buf[1];
++{
 +	char buf;
 +	int ret;
 +	unsigned initcount = 0;
- 
--	if (s35390a_get_reg(s35390a, S35390A_CMD_STATUS1, buf, sizeof(buf)) < 0)
--		return -EIO;
++
 +	ret = s35390a_get_reg(s35390a, S35390A_CMD_STATUS1, status1, 1);
 +	if (ret < 0)
 +		return ret;
@@ -105,7 +105,7 @@ index 6507a01cf9ad..6c90c9f48cab 100644
  }
  
  static int s35390a_disable_test_mode(struct s35390a *s35390a)
-@@ -353,7 +398,7 @@ static int s35390a_probe(struct i2c_client *client,
+@@ -353,7 +398,7 @@ static int s35390a_probe(struct i2c_clie
  	unsigned int i;
  	struct s35390a *s35390a;
  	struct rtc_time tm;
@@ -114,7 +114,7 @@ index 6507a01cf9ad..6c90c9f48cab 100644
  
  	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
  		err = -ENODEV;
-@@ -382,7 +427,7 @@ static int s35390a_probe(struct i2c_client *client,
+@@ -382,7 +427,7 @@ static int s35390a_probe(struct i2c_clie
  		}
  	}
  
@@ -123,6 +123,3 @@ index 6507a01cf9ad..6c90c9f48cab 100644
  	if (err < 0) {
  		dev_err(&client->dev, "error resetting chip\n");
  		goto exit_dummy;
--- 
-2.8.1
-

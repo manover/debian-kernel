@@ -14,17 +14,6 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
  tools/lib/lockdep/common.c | 6 ++++++
  1 file changed, 6 insertions(+)
 
---- a/tools/lib/lockdep/lockdep.c
-+++ b/tools/lib/lockdep/lockdep.c
-@@ -1,8 +1,15 @@
- #include <linux/lockdep.h>
-+#include <stdlib.h>
- 
- /* Trivial API wrappers, we don't (yet) have RCU in user-space: */
- #define hlist_for_each_entry_rcu	hlist_for_each_entry
- #define hlist_add_head_rcu		hlist_add_head
- #define hlist_del_rcu			hlist_del
- 
 --- a/tools/lib/lockdep/common.c
 +++ b/tools/lib/lockdep/common.c
 @@ -1,5 +1,6 @@
@@ -43,5 +32,6 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 +	/* Used only by lock_pin_lock() which is dead code */
 +	abort();
 +}
-+
- #include "../../../kernel/locking/lockdep.c"
+ 
+ __attribute__((destructor)) static void liblockdep_exit(void)
+ {

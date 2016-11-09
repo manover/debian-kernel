@@ -16,11 +16,9 @@ Date:   Tue May 24 18:43:46 2016 +0530
     Signed-off-by: Laxman Dewangan <ldewangan@nvidia.com>
     Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 
-diff --git a/drivers/gpio/gpio-max77620.c b/drivers/gpio/gpio-max77620.c
-index 35f365c..8658c32 100644
 --- a/drivers/gpio/gpio-max77620.c
 +++ b/drivers/gpio/gpio-max77620.c
-@@ -202,6 +202,28 @@ static void max77620_gpio_set(struct gpio_chip *gc, unsigned int offset,
+@@ -202,6 +202,28 @@ static void max77620_gpio_set(struct gpi
  		dev_err(mgpio->dev, "CNFG_GPIO_OUT update failed: %d\n", ret);
  }
  
@@ -49,7 +47,7 @@ index 35f365c..8658c32 100644
  static int max77620_gpio_to_irq(struct gpio_chip *gc, unsigned int offset)
  {
  	struct max77620_gpio *mgpio = gpiochip_get_data(gc);
-@@ -238,6 +260,7 @@ static int max77620_gpio_probe(struct platform_device *pdev)
+@@ -238,6 +260,7 @@ static int max77620_gpio_probe(struct pl
  	mgpio->gpio_chip.direction_output = max77620_gpio_dir_output;
  	mgpio->gpio_chip.set_debounce = max77620_gpio_set_debounce;
  	mgpio->gpio_chip.set = max77620_gpio_set;

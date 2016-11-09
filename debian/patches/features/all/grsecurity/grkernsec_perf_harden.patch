@@ -48,7 +48,7 @@ This standalone version doesn't include making the variable read-only
  	return sysctl_perf_event_paranoid > -1;
 --- a/kernel/events/core.c
 +++ b/kernel/events/core.c
-@@ -352,8 +352,13 @@ static struct srcu_struct pmus_srcu;
+@@ -388,8 +388,13 @@ static struct srcu_struct pmus_srcu;
   *   0 - disallow raw tracepoint access for unpriv
   *   1 - disallow cpu events for unpriv
   *   2 - disallow kernel profiling for unpriv
@@ -62,7 +62,7 @@ This standalone version doesn't include making the variable read-only
  
  /* Minimum for 512 kiB + 1 user control page */
  int sysctl_perf_event_mlock __read_mostly = 512 + (PAGE_SIZE / 1024); /* 'free' kiB per user */
-@@ -9200,6 +9205,11 @@ SYSCALL_DEFINE5(perf_event_open,
+@@ -9236,6 +9241,11 @@ SYSCALL_DEFINE5(perf_event_open,
  	if (flags & ~PERF_FLAG_ALL)
  		return -EINVAL;
  

@@ -19,7 +19,7 @@ Date:   Fri May 13 10:49:14 2016 +0530
 
 --- a/drivers/gpio/Kconfig
 +++ b/drivers/gpio/Kconfig
-@@ -874,6 +874,15 @@ config GPIO_LP3943
+@@ -875,6 +875,15 @@ config GPIO_LP3943
  	  LP3943 can be used as a GPIO expander which provides up to 16 GPIOs.
  	  Open drain outputs are required for this usage.
  

@@ -19,8 +19,6 @@ Date:   Fri May 13 10:49:15 2016 +0530
     Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
     Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 
-diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
-index f06589c..ea25eee 100644
 --- a/drivers/pinctrl/Kconfig
 +++ b/drivers/pinctrl/Kconfig
 @@ -196,6 +196,16 @@ config PINCTRL_COH901
@@ -40,11 +38,9 @@ index f06589c..ea25eee 100644
  config PINCTRL_PALMAS
  	bool "Pinctrl driver for the PALMAS Series MFD devices"
  	depends on OF && MFD_PALMAS
-diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
-index f678343..2ed0b3f 100644
 --- a/drivers/pinctrl/Makefile
 +++ b/drivers/pinctrl/Makefile
-@@ -16,6 +16,7 @@ obj-$(CONFIG_PINCTRL_AT91PIO4)	+= pinctrl-at91-pio4.o
+@@ -16,6 +16,7 @@ obj-$(CONFIG_PINCTRL_AT91PIO4)	+= pinctr
  obj-$(CONFIG_PINCTRL_AMD)	+= pinctrl-amd.o
  obj-$(CONFIG_PINCTRL_DIGICOLOR)	+= pinctrl-digicolor.o
  obj-$(CONFIG_PINCTRL_FALCON)	+= pinctrl-falcon.o
@@ -52,9 +48,6 @@ index f678343..2ed0b3f 100644
  obj-$(CONFIG_PINCTRL_MESON)	+= meson/
  obj-$(CONFIG_PINCTRL_PALMAS)	+= pinctrl-palmas.o
  obj-$(CONFIG_PINCTRL_PIC32)	+= pinctrl-pic32.o
-diff --git a/drivers/pinctrl/pinctrl-max77620.c b/drivers/pinctrl/pinctrl-max77620.c
-new file mode 100644
-index 0000000..19005a0
 --- /dev/null
 +++ b/drivers/pinctrl/pinctrl-max77620.c
 @@ -0,0 +1,678 @@

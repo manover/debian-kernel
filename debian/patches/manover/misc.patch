@@ -1,9 +1,9 @@
 --- a/Makefile
 +++ b/Makefile
 @@ -263,10 +263,10 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH"
-	  else if [ -x /bin/bash ]; then echo /bin/bash; \
-	  else echo sh; fi ; fi)
-
+ 	  else if [ -x /bin/bash ]; then echo /bin/bash; \
+ 	  else echo sh; fi ; fi)
+ 
 -HOSTCC       = gcc
 -HOSTCXX      = g++
 -HOSTCFLAGS   = -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu89
@@ -12,15 +12,15 @@
 +HOSTCXX      ?= g++
 +HOSTCFLAGS   ?= -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu89
 +HOSTCXXFLAGS ?= -O2
-
+ 
  ifeq ($(shell $(HOSTCC) -v 2>&1 | grep -c "clang version"), 1)
  HOSTCFLAGS  += -Wno-unused-value -Wno-unused-parameter \
 --- a/arch/x86/Kconfig
 +++ b/arch/x86/Kconfig
 @@ -2710,19 +2710,6 @@ config PMC_ATOM
-	def_bool y
+ 	def_bool y
          depends on PCI
-
+ 
 -config VMD
 -	depends on PCI_MSI
 -	tristate "Volume Management Device Driver"
@@ -35,14 +35,14 @@
 -	  has devices attached to it, say Y; if you are not sure, say N.
 -
  source "net/Kconfig"
-
+ 
  source "drivers/Kconfig"
 --- a/drivers/Kconfig
 +++ b/drivers/Kconfig
 @@ -200,6 +200,19 @@ source "drivers/hwtracing/stm/Kconfig"
-
+ 
  source "drivers/hwtracing/intel_th/Kconfig"
-
+ 
 +config VMD
 +	depends on PCI_MSI
 +	tristate "Volume Management Device Driver"
@@ -57,7 +57,7 @@
 +	  has devices attached to it, say Y; if you are not sure, say N.
 +
  source "drivers/fpga/Kconfig"
-
+ 
  endmenu
 --- a/scripts/kconfig/nconf.c
 +++ b/scripts/kconfig/nconf.c
@@ -70,24 +70,9 @@
 +#endif
  #include <string.h>
  #include <stdlib.h>
-
+ 
 --- a/scripts/package/builddeb
 +++ b/scripts/package/builddeb
-<<<<<<< HEAD
-@@ -12,6 +12,8 @@
-
- set -e
-
-+KDEB_SOURCENAME=linux
-+
- create_package() {
-	local pname="$1" pdir="$2"
-
-@@ -236,24 +238,24 @@ fi
- maintainer="$name <$email>"
-
- # Try to determine distribution
-=======
 @@ -12,6 +12,22 @@
  
  set -e
@@ -116,7 +101,6 @@
  maintainer="$name <$email>"
  
 -# Try to determine distribution
->>>>>>> linux (4.7.0-5) unstable; urgency=medium
 -if [ -n "$KDEB_CHANGELOG_DIST" ]; then
 -        distribution=$KDEB_CHANGELOG_DIST
 -elif distribution=$(lsb_release -cs 2>/dev/null) && [ -n "$distribution" ]; then
@@ -135,31 +119,6 @@
 -
 - -- $maintainer  $(date -R)
 -EOF
-<<<<<<< HEAD
-+#if [ -n "$KDEB_CHANGELOG_DIST" ]; then
-+#        distribution=$KDEB_CHANGELOG_DIST
-+#elif distribution=$(lsb_release -cs 2>/dev/null) && [ -n "$distribution" ]; then
-+#        : # nothing to do in this case
-+#else
-+#        distribution="unstable"
-+#        echo >&2 "Using default distribution of 'unstable' in the changelog"
-+#        echo >&2 "Install lsb-release or set \$KDEB_CHANGELOG_DIST explicitly"
-+#fi
-+
-+## Generate a simple changelog template
-+#cat <<EOF > debian/changelog
-+#$sourcename ($packageversion) $distribution; urgency=low
-+#
-+#  * Custom built Linux kernel.
-+#
-+# -- $maintainer  $(date -R)
-+#EOF
-
- # Generate copyright file
- cat <<EOF > debian/copyright
-@@ -364,20 +366,20 @@ EOF
-	create_package "$fwpackagename" "$fwdir"
-=======
 -
 -# Generate copyright file
 -cat <<EOF > debian/copyright
@@ -183,13 +142,12 @@
 -
 -
  build_depends="bc, kmod, cpio "
-
+ 
  # Generate a control file
 @@ -364,20 +339,8 @@ EOF
  	create_package "$fwpackagename" "$fwdir"
->>>>>>> linux (4.7.0-5) unstable; urgency=medium
  fi
-
+ 
 -cat <<EOF >> debian/control
 -
 -Package: $libc_headers_packagename
@@ -200,33 +158,19 @@
 - This package provides userspaces headers from the Linux kernel.  These headers
 - are used by the installed headers for GNU glibc and other system libraries.
 -EOF
-<<<<<<< HEAD
-+#cat <<EOF >> debian/control
-+#
-+#Package: $libc_headers_packagename
-+#Section: devel
-+#Provides: linux-kernel-headers
-+#Architecture: any
-+#Description: Linux support headers for userspace development
-+# This package provides userspaces headers from the Linux kernel.  These headers
-+# are used by the installed headers for GNU glibc and other system libraries.
-+#EOF
-
-=======
 -
->>>>>>> linux (4.7.0-5) unstable; urgency=medium
  if [ "$ARCH" != "um" ]; then
-	create_package "$kernel_headers_packagename" "$kernel_headers_dir"
+ 	create_package "$kernel_headers_packagename" "$kernel_headers_dir"
 -	create_package "$libc_headers_packagename" "$libc_headers_dir"
  fi
-
+ 
  create_package "$packagename" "$tmpdir"
 @@ -434,7 +397,7 @@ EOF
-	mv ${sourcename}_${packageversion}*dsc ..
-	dpkg-genchanges > ../${sourcename}_${packageversion}_${debarch}.changes
+ 	mv ${sourcename}_${packageversion}*dsc ..
+ 	dpkg-genchanges > ../${sourcename}_${packageversion}_${debarch}.changes
  else
 -	dpkg-genchanges -b > ../${sourcename}_${packageversion}_${debarch}.changes
 +	dpkg-genchanges -b -DArchitecture=${debarch} > ../${sourcename}_${packageversion}_${debarch}.changes
  fi
-
+ 
  exit 0
