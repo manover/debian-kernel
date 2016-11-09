@@ -5,7 +5,7 @@ Subject: Revert "perf build: Fix libunwind feature detection on 32-bit x86"
 This reverts commit 05b41775e2edd69a83f592e3534930c934d4038e.
 It broke feature detection that was working just fine for us.
 ---
- tools/perf/Makefile.config | 2 +-
+ tools/perf/config/Makefile | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 --- a/tools/perf/Makefile.config

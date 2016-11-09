@@ -34,23 +34,14 @@ correctness.
  static int m88e1145_config_init(struct phy_device *phydev)
  {
  	int err;
-<<<<<<< HEAD
 @@ -1179,6 +1182,7 @@ static int marvell_read_status_page(stru
-=======
-@@ -1012,6 +1015,7 @@ static int m88e1145_config_init(struct p
->>>>>>> debian/sid
  
  	return 0;
  }
 +#endif
  
-<<<<<<< HEAD
  /* marvell_read_status
   *
-=======
- /**
-  * fiber_lpa_to_ethtool_lpa_t
->>>>>>> debian/sid
 @@ -1595,6 +1599,7 @@ static struct phy_driver marvell_drivers
  		.get_strings = marvell_get_strings,
  		.get_stats = marvell_get_stats,

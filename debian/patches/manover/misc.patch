@@ -17,7 +17,7 @@
  HOSTCFLAGS  += -Wno-unused-value -Wno-unused-parameter \
 --- a/arch/x86/Kconfig
 +++ b/arch/x86/Kconfig
-@@ -2746,19 +2746,6 @@ config PMC_ATOM
+@@ -2745,19 +2745,6 @@ config PMC_ATOM
  	def_bool y
          depends on PCI
  
@@ -145,7 +145,7 @@
  build_depends="bc, kmod, cpio "
  
  # Generate a control file
-@@ -368,20 +342,8 @@ EOF
+@@ -370,20 +344,8 @@ EOF
  	create_package "$fwpackagename" "$fwdir"
  fi
  
@@ -166,7 +166,7 @@
  fi
  
  create_package "$packagename" "$tmpdir"
-@@ -438,7 +400,7 @@ EOF
+@@ -440,7 +402,7 @@ EOF
  	mv ${sourcename}_${packageversion}*dsc ..
  	dpkg-genchanges > ../${sourcename}_${packageversion}_${debarch}.changes
  else

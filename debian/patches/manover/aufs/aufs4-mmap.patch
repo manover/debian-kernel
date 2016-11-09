@@ -2,7 +2,7 @@ aufs4.7 mmap patch
 
 --- a/fs/proc/base.c
 +++ b/fs/proc/base.c
-@@ -1943,7 +1943,7 @@ static int map_files_get_link(struct den
+@@ -1938,7 +1938,7 @@ static int map_files_get_link(struct den
  	down_read(&mm->mmap_sem);
  	vma = find_exact_vma(mm, vm_start, vm_end);
  	if (vma && vma->vm_file) {
@@ -39,7 +39,7 @@ aufs4.7 mmap patch
  		dev = inode->i_sb->s_dev;
  		ino = inode->i_ino;
  		pgoff = ((loff_t)vma->vm_pgoff) << PAGE_SHIFT;
-@@ -1632,7 +1635,7 @@ static int show_numa_map(struct seq_file
+@@ -1634,7 +1637,7 @@ static int show_numa_map(struct seq_file
  	struct proc_maps_private *proc_priv = &numa_priv->proc_maps;
  	struct vm_area_struct *vma = v;
  	struct numa_maps *md = &numa_priv->md;
@@ -135,7 +135,7 @@ aufs4.7 mmap patch
  
 --- a/mm/filemap.c
 +++ b/mm/filemap.c
-@@ -2284,7 +2284,7 @@ int filemap_page_mkwrite(struct vm_area_
+@@ -2301,7 +2301,7 @@ int filemap_page_mkwrite(struct vm_area_
  	int ret = VM_FAULT_LOCKED;
  
  	sb_start_pagefault(inode->i_sb);

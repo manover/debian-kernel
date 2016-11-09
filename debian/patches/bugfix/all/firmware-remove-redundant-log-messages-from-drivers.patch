@@ -53,7 +53,7 @@ upstream submission.
  	/* disable MPU */
 --- a/arch/x86/kernel/cpu/microcode/amd.c
 +++ b/arch/x86/kernel/cpu/microcode/amd.c
-@@ -910,10 +910,8 @@ static enum ucode_state request_microcod
+@@ -917,10 +917,8 @@ static enum ucode_state request_microcod
  	if (c->x86 >= 0x15)
  		snprintf(fw_name, sizeof(fw_name), "amd-ucode/microcode_amd_fam%.2xh.bin", c->x86);
  
@@ -1243,7 +1243,7 @@ upstream submission.
  	if (bp->mips_firmware->size < sizeof(*mips_fw) ||
 --- a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
 +++ b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
-@@ -13411,11 +13411,8 @@ static int bnx2x_init_firmware(struct bn
+@@ -13422,11 +13422,8 @@ static int bnx2x_init_firmware(struct bn
  	BNX2X_DEV_INFO("Loading %s\n", fw_file_name);
  
  	rc = request_firmware(&bp->firmware, fw_file_name, &bp->pdev->dev);

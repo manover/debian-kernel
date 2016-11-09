@@ -82,26 +82,3 @@ the kernel.
  
  # ar-option
  # Usage: KBUILD_ARFLAGS := $(call ar-option,D)
-<<<<<<< HEAD
-=======
---- a/Makefile
-+++ b/Makefile
-@@ -634,6 +634,8 @@ KBUILD_CFLAGS   += -O2
- endif
- endif
- 
-+NOSTDINC_FLAGS += -nostdinc
-+
- # Tell gcc to never replace conditional load with a non-conditional one
- KBUILD_CFLAGS	+= $(call cc-option,--param=allow-store-data-races=0)
- 
-@@ -752,7 +754,7 @@ KBUILD_CFLAGS += $(call cc-option, -fno-
- endif
- 
- # arch Makefile may override CC so keep this after arch Makefile is included
--NOSTDINC_FLAGS += -nostdinc -isystem $(shell $(CC) -print-file-name=include)
-+NOSTDINC_FLAGS += -isystem $(shell $(CC) -print-file-name=include)
- CHECKFLAGS     += $(NOSTDINC_FLAGS)
- 
- # warn about C99 declaration after statement
->>>>>>> debian/sid

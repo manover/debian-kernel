@@ -37,7 +37,7 @@ Acked-by: Hannes Frederic Sowa <hannes@stressinduktion.org>
 
 --- a/drivers/net/geneve.c
 +++ b/drivers/net/geneve.c
-@@ -471,7 +471,7 @@ static struct sk_buff **geneve_gro_recei
+@@ -453,7 +453,7 @@ static struct sk_buff **geneve_gro_recei
  
  	skb_gro_pull(skb, gh_len);
  	skb_gro_postpull_rcsum(skb, gh, gh_len);
@@ -48,7 +48,7 @@ Acked-by: Hannes Frederic Sowa <hannes@stressinduktion.org>
  out_unlock:
 --- a/drivers/net/vxlan.c
 +++ b/drivers/net/vxlan.c
-@@ -601,7 +601,7 @@ static struct sk_buff **vxlan_gro_receiv
+@@ -584,7 +584,7 @@ static struct sk_buff **vxlan_gro_receiv
  		}
  	}
  
@@ -59,7 +59,7 @@ Acked-by: Hannes Frederic Sowa <hannes@stressinduktion.org>
  out:
 --- a/include/linux/netdevice.h
 +++ b/include/linux/netdevice.h
-@@ -2114,7 +2114,10 @@ struct napi_gro_cb {
+@@ -2154,7 +2154,10 @@ struct napi_gro_cb {
  	/* Used to determine if flush_id can be ignored */
  	u8	is_atomic:1;
  
@@ -71,7 +71,7 @@ Acked-by: Hannes Frederic Sowa <hannes@stressinduktion.org>
  
  	/* used to support CHECKSUM_COMPLETE for tunneling protocols */
  	__wsum	csum;
-@@ -2125,6 +2128,25 @@ struct napi_gro_cb {
+@@ -2165,6 +2168,25 @@ struct napi_gro_cb {
  
  #define NAPI_GRO_CB(skb) ((struct napi_gro_cb *)(skb)->cb)
  
@@ -110,7 +110,7 @@ Acked-by: Hannes Frederic Sowa <hannes@stressinduktion.org>
  	rcu_read_unlock();
 --- a/net/core/dev.c
 +++ b/net/core/dev.c
-@@ -4500,6 +4500,7 @@ static enum gro_result dev_gro_receive(s
+@@ -4496,6 +4496,7 @@ static enum gro_result dev_gro_receive(s
  		NAPI_GRO_CB(skb)->flush = 0;
  		NAPI_GRO_CB(skb)->free = 0;
  		NAPI_GRO_CB(skb)->encap_mark = 0;
@@ -142,7 +142,7 @@ Acked-by: Hannes Frederic Sowa <hannes@stressinduktion.org>
  	rcu_read_unlock();
 --- a/net/ipv4/fou.c
 +++ b/net/ipv4/fou.c
-@@ -219,7 +219,7 @@ static struct sk_buff **fou_gro_receive(
+@@ -249,7 +249,7 @@ static struct sk_buff **fou_gro_receive(
  	if (!ops || !ops->callbacks.gro_receive)
  		goto out_unlock;
  
@@ -151,7 +151,7 @@ Acked-by: Hannes Frederic Sowa <hannes@stressinduktion.org>
  
  out_unlock:
  	rcu_read_unlock();
-@@ -387,7 +387,7 @@ static struct sk_buff **gue_gro_receive(
+@@ -441,7 +441,7 @@ next_proto:
  	if (WARN_ON_ONCE(!ops || !ops->callbacks.gro_receive))
  		goto out_unlock;
  
