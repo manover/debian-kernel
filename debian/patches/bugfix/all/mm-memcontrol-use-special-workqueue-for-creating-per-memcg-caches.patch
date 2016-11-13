@@ -33,9 +33,9 @@ Cc: Michal Hocko <mhocko@kernel.org>
 Cc: Pekka Enberg <penberg@kernel.org>
 Acked-by: Michal Hocko <mhocko@suse.com>
 ---
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -2175,6 +2175,8 @@ struct memcg_kmem_cache_create_work {
+--- linux-4.8.7.orig/mm/memcontrol.c
++++ linux-4.8.7/mm/memcontrol.c
+@@ -2184,6 +2184,8 @@ struct memcg_kmem_cache_create_work {
  	struct work_struct work;
  };
  
@@ -44,7 +44,7 @@ Acked-by: Michal Hocko <mhocko@suse.com>
  static void memcg_kmem_cache_create_func(struct work_struct *w)
  {
  	struct memcg_kmem_cache_create_work *cw =
-@@ -2206,7 +2208,7 @@ static void __memcg_schedule_kmem_cache_
+@@ -2215,7 +2217,7 @@ static void __memcg_schedule_kmem_cache_
  	cw->cachep = cachep;
  	INIT_WORK(&cw->work, memcg_kmem_cache_create_func);
  
@@ -53,7 +53,7 @@ Acked-by: Michal Hocko <mhocko@suse.com>
  }
  
  static void memcg_schedule_kmem_cache_create(struct mem_cgroup *memcg,
-@@ -5794,6 +5796,17 @@ static int __init mem_cgroup_init(void)
+@@ -5803,6 +5805,17 @@ static int __init mem_cgroup_init(void)
  {
  	int cpu, node;
  
