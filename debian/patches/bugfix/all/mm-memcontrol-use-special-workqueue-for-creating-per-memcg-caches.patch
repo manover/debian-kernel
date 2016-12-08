@@ -33,8 +33,8 @@ Cc: Michal Hocko <mhocko@kernel.org>
 Cc: Pekka Enberg <penberg@kernel.org>
 Acked-by: Michal Hocko <mhocko@suse.com>
 ---
---- linux-4.8.7.orig/mm/memcontrol.c
-+++ linux-4.8.7/mm/memcontrol.c
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
 @@ -2184,6 +2184,8 @@ struct memcg_kmem_cache_create_work {
  	struct work_struct work;
  };

@@ -69,7 +69,16 @@ bugfix/all/mm-memcontrol-use-special-workqueue-for-creating-per-memcg-caches.pat
 # Security fixes
 bugfix/all/ptrace-being-capable-wrt-a-process-requires-mapped-uids-gids.patch
 debian/i386-686-pae-pci-set-pci-nobios-by-default.patch
-bugfix/all/net-add-recursion-limit-to-gro.patch
+bugfix/all/xfs-Propagate-dentry-down-to-inode_change_ok.patch
+bugfix/all/ceph-Propagate-dentry-down-to-inode_change_ok.patch
+bugfix/all/fuse-Propagate-dentry-down-to-inode_change_ok.patch
+bugfix/all/fs-Give-dentry-to-inode_change_ok-instead-of-inode.patch
+bugfix/all/fs-Avoid-premature-clearing-of-capabilities.patch
+bugfix/all/vfio-pci-Fix-integer-overflows-bitmask-check.patch
+bugfix/all/mnt-Add-a-per-mount-namespace-limit-on-the-number-of.patch
+bugfix/all/tipc-check-minimum-bearer-MTU.patch
+bugfix/all/packet-fix-race-condition-in-packet_set_ring.patch
+bugfix/all/net-avoid-signed-overflows-for-SO_-SND-RCV-BUFFORCE.patch
 
 # ABI maintenance
 

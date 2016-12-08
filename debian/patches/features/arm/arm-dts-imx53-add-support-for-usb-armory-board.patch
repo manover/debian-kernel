@@ -18,8 +18,6 @@ Signed-off-by: Shawn Guo <shawnguo@kernel.org>
  2 files changed, 225 insertions(+)
  create mode 100644 arch/arm/boot/dts/imx53-usbarmory.dts
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 5dcc2394fbad..f79cac25afa8 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
 @@ -315,6 +315,7 @@ dtb-$(CONFIG_SOC_IMX53) += \
@@ -30,9 +28,6 @@ index 5dcc2394fbad..f79cac25afa8 100644
  	imx53-voipac-bsb.dtb
  dtb-$(CONFIG_SOC_IMX6Q) += \
  	imx6dl-apf6dev.dtb \
-diff --git a/arch/arm/boot/dts/imx53-usbarmory.dts b/arch/arm/boot/dts/imx53-usbarmory.dts
-new file mode 100644
-index 000000000000..6782d7fc5961
 --- /dev/null
 +++ b/arch/arm/boot/dts/imx53-usbarmory.dts
 @@ -0,0 +1,224 @@

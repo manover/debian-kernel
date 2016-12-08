@@ -54,6 +54,8 @@ Build-Depends:
  libpci-dev <!stage1 !pkg.linux.notools>,
 # used by debian/rules.real to build linux-perf and linux-support
  dh-python <!stage1>,
+# used by debian/rules.real to build hyperv-daemons
+ dh-systemd <!stage1 !pkg.linux.notools>,
 Build-Depends-Indep:
 # used by debian/rules.real to build linux-source
  patchutils <!stage1>,

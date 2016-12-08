@@ -860,7 +860,7 @@ upstream submission.
  	fw_data = (void *)fw_entry->data;
 --- a/drivers/media/tuners/tuner-xc2028.c
 +++ b/drivers/media/tuners/tuner-xc2028.c
-@@ -1373,7 +1373,6 @@ static void load_firmware_cb(const struc
+@@ -1374,7 +1374,6 @@ static void load_firmware_cb(const struc
  
  	tuner_dbg("request_firmware_nowait(): %s\n", fw ? "OK" : "error");
  	if (!fw) {
@@ -1221,7 +1221,7 @@ upstream submission.
  
 --- a/drivers/net/ethernet/broadcom/bnx2.c
 +++ b/drivers/net/ethernet/broadcom/bnx2.c
-@@ -3720,16 +3720,13 @@ static int bnx2_request_uncached_firmwar
+@@ -3721,16 +3721,13 @@ static int bnx2_request_uncached_firmwar
  	}
  
  	rc = request_firmware(&bp->mips_firmware, mips_fw_file, &bp->pdev->dev);
@@ -2023,7 +2023,7 @@ upstream submission.
  	if (qla82xx_validate_firmware_blob(vha,
 --- a/drivers/scsi/qla2xxx/qla_os.c
 +++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -5620,8 +5620,6 @@ qla2x00_request_firmware(scsi_qla_host_t
+@@ -5622,8 +5622,6 @@ qla2x00_request_firmware(scsi_qla_host_t
  		goto out;
  
  	if (request_firmware(&blob->fw, blob->name, &ha->pdev->dev)) {
@@ -2541,7 +2541,7 @@ upstream submission.
  			   filename, emu->firmware->size);
 --- a/sound/pci/hda/hda_intel.c
 +++ b/sound/pci/hda/hda_intel.c
-@@ -1795,10 +1795,8 @@ static void azx_firmware_cb(const struct
+@@ -1798,10 +1798,8 @@ static void azx_firmware_cb(const struct
  	struct azx *chip = card->private_data;
  	struct pci_dev *pci = chip->pci;
  
