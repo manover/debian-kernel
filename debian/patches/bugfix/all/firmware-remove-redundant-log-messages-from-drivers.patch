@@ -53,7 +53,7 @@ upstream submission.
  	/* disable MPU */
 --- a/arch/x86/kernel/cpu/microcode/amd.c
 +++ b/arch/x86/kernel/cpu/microcode/amd.c
-@@ -910,10 +910,8 @@ static enum ucode_state request_microcod
+@@ -917,10 +917,8 @@ static enum ucode_state request_microcod
  	if (c->x86 >= 0x15)
  		snprintf(fw_name, sizeof(fw_name), "amd-ucode/microcode_amd_fam%.2xh.bin", c->x86);
  
@@ -860,7 +860,7 @@ upstream submission.
  	fw_data = (void *)fw_entry->data;
 --- a/drivers/media/tuners/tuner-xc2028.c
 +++ b/drivers/media/tuners/tuner-xc2028.c
-@@ -1373,7 +1373,6 @@ static void load_firmware_cb(const struc
+@@ -1374,7 +1374,6 @@ static void load_firmware_cb(const struc
  
  	tuner_dbg("request_firmware_nowait(): %s\n", fw ? "OK" : "error");
  	if (!fw) {
@@ -1221,7 +1221,7 @@ upstream submission.
  
 --- a/drivers/net/ethernet/broadcom/bnx2.c
 +++ b/drivers/net/ethernet/broadcom/bnx2.c
-@@ -3720,16 +3720,13 @@ static int bnx2_request_uncached_firmwar
+@@ -3721,16 +3721,13 @@ static int bnx2_request_uncached_firmwar
  	}
  
  	rc = request_firmware(&bp->mips_firmware, mips_fw_file, &bp->pdev->dev);
@@ -1243,7 +1243,7 @@ upstream submission.
  	if (bp->mips_firmware->size < sizeof(*mips_fw) ||
 --- a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
 +++ b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
-@@ -13411,11 +13411,8 @@ static int bnx2x_init_firmware(struct bn
+@@ -13422,11 +13422,8 @@ static int bnx2x_init_firmware(struct bn
  	BNX2X_DEV_INFO("Loading %s\n", fw_file_name);
  
  	rc = request_firmware(&bp->firmware, fw_file_name, &bp->pdev->dev);
@@ -2023,7 +2023,7 @@ upstream submission.
  	if (qla82xx_validate_firmware_blob(vha,
 --- a/drivers/scsi/qla2xxx/qla_os.c
 +++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -5620,8 +5620,6 @@ qla2x00_request_firmware(scsi_qla_host_t
+@@ -5622,8 +5622,6 @@ qla2x00_request_firmware(scsi_qla_host_t
  		goto out;
  
  	if (request_firmware(&blob->fw, blob->name, &ha->pdev->dev)) {
@@ -2541,7 +2541,7 @@ upstream submission.
  			   filename, emu->firmware->size);
 --- a/sound/pci/hda/hda_intel.c
 +++ b/sound/pci/hda/hda_intel.c
-@@ -1795,10 +1795,8 @@ static void azx_firmware_cb(const struct
+@@ -1798,10 +1798,8 @@ static void azx_firmware_cb(const struct
  	struct azx *chip = card->private_data;
  	struct pci_dev *pci = chip->pci;
  

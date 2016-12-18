@@ -551,11 +551,6 @@ CONFIG_SERIAL_8250_RUNTIME_UARTS=4
 # CONFIG_USB_SUPPORT is not set
 
 ##
-## file: drivers/vhost/Kconfig
-##
-# CONFIG_VHOST_NET is not set
-
-##
 ## file: drivers/video/backlight/Kconfig
 ##
 # CONFIG_BACKLIGHT_LCD_SUPPORT is not set
@@ -723,7 +718,9 @@ CONFIG_USELIB=y
 # CONFIG_IKCONFIG is not set
 CONFIG_LOG_BUF_SHIFT=16
 # CONFIG_SCHED_AUTOGROUP is not set
+## choice: Compiler optimization level
 CONFIG_CC_OPTIMIZE_FOR_SIZE=y
+## end choice
 CONFIG_SGETMASK_SYSCALL=y
 CONFIG_SYSFS_SYSCALL=y
 CONFIG_COMPAT_BRK=y

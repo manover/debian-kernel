@@ -17,7 +17,7 @@
  HOSTCFLAGS  += -Wno-unused-value -Wno-unused-parameter \
 --- a/arch/x86/Kconfig
 +++ b/arch/x86/Kconfig
-@@ -2746,19 +2746,6 @@ config PMC_ATOM
+@@ -2745,19 +2745,6 @@ config PMC_ATOM
  	def_bool y
          depends on PCI
  
@@ -96,7 +96,19 @@
  create_package() {
  	local pname="$1" pdir="$2"
  
-@@ -237,48 +253,6 @@ else
+@@ -185,11 +201,6 @@ if grep -q '^CONFIG_MODULES=y' $KCONFIG_
+ 	fi
+ fi
+ 
+-if [ "$ARCH" != "um" ]; then
+-	$MAKE headers_check KBUILD_SRC=
+-	$MAKE headers_install KBUILD_SRC= INSTALL_HDR_PATH="$libc_headers_dir/usr"
+-fi
+-
+ # Install the maintainer scripts
+ # Note: hook scripts under /etc/kernel are also executed by official Debian
+ # kernel packages, as well as kernel packages built using make-kpkg.
+@@ -237,48 +248,6 @@ else
  fi
  maintainer="$name <$email>"
  
@@ -145,7 +157,7 @@
  build_depends="bc, kmod, cpio "
  
  # Generate a control file
-@@ -368,20 +342,8 @@ EOF
+@@ -370,20 +339,8 @@ EOF
  	create_package "$fwpackagename" "$fwdir"
  fi
  
@@ -166,7 +178,7 @@
  fi
  
  create_package "$packagename" "$tmpdir"
-@@ -438,7 +400,7 @@ EOF
+@@ -440,7 +397,7 @@ EOF
  	mv ${sourcename}_${packageversion}*dsc ..
  	dpkg-genchanges > ../${sourcename}_${packageversion}_${debarch}.changes
  else

@@ -1,36 +1,48 @@
---- a/drivers/platform/x86/Kconfig
-+++ b/drivers/platform/x86/Kconfig
-@@ -931,6 +931,21 @@ config MXM_WMI
-           MXM is a standard for laptop graphics cards, the WMI interface
- 	  is required for switchable nvidia graphics machines
+--- a/drivers/leds/Kconfig
++++ b/drivers/leds/Kconfig
+@@ -434,6 +434,30 @@ config LEDS_INTEL_SS4200
+ 	  drive or power LEDs on the front panel. Using this driver
+ 	  can stop the front LED from blinking after startup.
  
-+config THECUS_N5550
-+	tristate "Support Thecus N5550 NAS LEDs"
-+	depends on X86
-+	depends on SATA_AHCI && m
-+	select CONFIG_I2C
-+	select CONFIG_I2C_I801
-+	select LEDS_PCA9532
-+	select LEDS_PCA9532_GPIO
-+	default n
-+	---help---
-+	  Select this option to enable Thecus N5550 NAS LED support.
-+	  The driver includes 2 modules: one defines LED sets controlled
-+	  by pca9532 dimmer chip and the second one registers LED trigger
-+	  with the libahci hook.
++config LEDS_THECUS_N5550
++    tristate "Support Thecus N5550 NAS LEDs"
++    depends on X86
++    depends on SATA_AHCI && m
++	depends on LEDS_CLASS
++    select I2C_I801
++    select LEDS_PCA9532
++    select LEDS_PCA9532_GPIO
++    select LEDS_GPIO
++	select GPIO_ICH
++    default n
++    help
++      Select this option to enable Thecus N5550 NAS LED support.
++      If you choose M here, 2 modules will be built:
++        - leds-n5550-board performs platform specific initialization, creates
++          LED triggers and enables user space access to the NAS front panel
++          LEDs, using the new LED kernel API. It is using pca9532 dimmer
++          driver in order to control the LEDs;
++        - leds-n5550-ahci module inserts itself into the kernel SATA stack,
++          using qc_issue() function and hooks up the triggers provided by
++          leds-n5550-board module.
++       This feature must be built as modules due to the way it interacts with
++       libahci.
 +
- config INTEL_OAKTRAIL
- 	tristate "Intel Oaktrail Platform Extras"
- 	depends on ACPI
---- a/drivers/platform/x86/Makefile
-+++ b/drivers/platform/x86/Makefile
-@@ -71,3 +71,4 @@ obj-$(CONFIG_INTEL_TELEMETRY)	+= intel_t
- 				   intel_telemetry_pltdrv.o \
- 				   intel_telemetry_debugfs.o
- obj-$(CONFIG_INTEL_PMC_CORE)    += intel_pmc_core.o
-+obj-$(CONFIG_THECUS_N5550) += n5550_ahci_leds.o n5550_board.o
+ config LEDS_LT3593
+ 	tristate "LED driver for LT3593 controllers"
+ 	depends on LEDS_CLASS
+--- a/drivers/leds/Makefile
++++ b/drivers/leds/Makefile
+@@ -68,6 +68,7 @@ obj-$(CONFIG_LEDS_KTD2692)		+= leds-ktd2
+ obj-$(CONFIG_LEDS_POWERNV)		+= leds-powernv.o
+ obj-$(CONFIG_LEDS_SEAD3)		+= leds-sead3.o
+ obj-$(CONFIG_LEDS_IS31FL32XX)		+= leds-is31fl32xx.o
++obj-$(CONFIG_LEDS_THECUS_N5550) += leds-n5550-ahci.o leds-n5550-board.o
+ 
+ # LED SPI Drivers
+ obj-$(CONFIG_LEDS_DAC124S085)		+= leds-dac124s085.o
 --- /dev/null
-+++ b/drivers/platform/x86/n5550_ahci_leds.c
++++ b/drivers/leds/leds-n5550-ahci.c
 @@ -0,0 +1,291 @@
 +/*
 + * Copyright 2013 Ian Pilcher <arequipeno@gmail.com>
@@ -324,7 +336,7 @@
 +module_init(n5550_ahci_leds_init);
 +module_exit(n5550_ahci_leds_exit);
 --- /dev/null
-+++ b/drivers/platform/x86/n5550_board.c
++++ b/drivers/leds/leds-n5550-board.c
 @@ -0,0 +1,454 @@
 +/*
 + * Copyright 2013 Ian Pilcher <arequipeno@gmail.com>
