@@ -1,6 +1,6 @@
 --- a/fs/Kconfig
 +++ b/fs/Kconfig
-@@ -134,6 +134,7 @@ menu "Pseudo filesystems"
+@@ -135,6 +135,7 @@ menu "Pseudo filesystems"
  source "fs/proc/Kconfig"
  source "fs/kernfs/Kconfig"
  source "fs/sysfs/Kconfig"
@@ -8556,7 +8556,7 @@
 +#endif
 --- /dev/null
 +++ b/ipc/kdbus/metadata.c
-@@ -0,0 +1,1347 @@
+@@ -0,0 +1,1346 @@
 +/*
 + * Copyright (C) 2013-2015 Kay Sievers
 + * Copyright (C) 2013-2015 Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -9524,8 +9524,7 @@
 +		item = kdbus_write_head(&items, KDBUS_ITEM_AUXGROUPS,
 +					info->ngroups * sizeof(u64));
 +		for (i = 0; i < info->ngroups; ++i)
-+			item->data64[i] = from_kgid_munged(user_ns,
-+							   GROUP_AT(info, i));
++			item->data64[i] = from_kgid_munged(user_ns, info->gid[i]);
 +	}
 +
 +	if (staging->mp && (staging->mask & KDBUS_ATTACH_TID_COMM))
@@ -12436,7 +12435,7 @@
 +			}
 +
 +			for (i = 0; i < cred->group_info->ngroups; i++) {
-+				kgid_t gid = GROUP_AT(cred->group_info, i);
++				kgid_t gid = cred->group_info->gid[i];
 +
 +				if (gid_eq(gid, a->gid)) {
 +					highest = a->access;

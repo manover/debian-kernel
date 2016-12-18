@@ -15,16 +15,16 @@ the kernel.
 
 --- a/Makefile
 +++ b/Makefile
-@@ -636,6 +636,8 @@ KBUILD_CFLAGS   += -O2
- endif
- endif
+@@ -650,6 +650,8 @@ endif
+ KBUILD_CFLAGS += $(call cc-ifversion, -lt, 0409, \
+ 			$(call cc-disable-warning,maybe-uninitialized,))
  
 +NOSTDINC_FLAGS += -nostdinc
 +
  # Tell gcc to never replace conditional load with a non-conditional one
  KBUILD_CFLAGS	+= $(call cc-option,--param=allow-store-data-races=0)
  
-@@ -754,7 +756,7 @@ KBUILD_CFLAGS += $(call cc-option, -fno-
+@@ -768,7 +770,7 @@ KBUILD_CFLAGS += $(call cc-option, -fno-
  endif
  
  # arch Makefile may override CC so keep this after arch Makefile is included

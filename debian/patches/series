@@ -54,7 +54,6 @@ features/mips/MIPS-Loongson-3-Add-Loongson-LS3A-RS780E-1-way-machi.patch
 features/mips/MIPS-octeon-Add-support-for-the-UBNT-E200-board.patch
 features/x86/x86-memtest-WARN-if-bad-RAM-found.patch
 #features/x86/x86-make-x32-syscall-support-conditional.patch
-features/arm/arm-dts-imx53-add-support-for-usb-armory-board.patch
 
 # Miscellaneous bug fixes
 bugfix/all/kbuild-use-nostdinc-in-compile-tests.patch
@@ -69,13 +68,6 @@ bugfix/all/mm-memcontrol-use-special-workqueue-for-creating-per-memcg-caches.pat
 # Security fixes
 bugfix/all/ptrace-being-capable-wrt-a-process-requires-mapped-uids-gids.patch
 debian/i386-686-pae-pci-set-pci-nobios-by-default.patch
-bugfix/all/xfs-Propagate-dentry-down-to-inode_change_ok.patch
-bugfix/all/ceph-Propagate-dentry-down-to-inode_change_ok.patch
-bugfix/all/fuse-Propagate-dentry-down-to-inode_change_ok.patch
-bugfix/all/fs-Give-dentry-to-inode_change_ok-instead-of-inode.patch
-bugfix/all/fs-Avoid-premature-clearing-of-capabilities.patch
-bugfix/all/vfio-pci-Fix-integer-overflows-bitmask-check.patch
-bugfix/all/mnt-Add-a-per-mount-namespace-limit-on-the-number-of.patch
 
 # ABI maintenance
 

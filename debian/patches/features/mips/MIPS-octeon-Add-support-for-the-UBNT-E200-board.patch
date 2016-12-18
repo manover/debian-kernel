@@ -15,7 +15,7 @@ Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
 
 --- a/arch/mips/cavium-octeon/executive/cvmx-helper-board.c
 +++ b/arch/mips/cavium-octeon/executive/cvmx-helper-board.c
-@@ -186,6 +186,8 @@ int cvmx_helper_board_get_mii_address(in
+@@ -173,6 +173,8 @@ int cvmx_helper_board_get_mii_address(in
  			return 7 - ipd_port;
  		else
  			return -1;
@@ -24,7 +24,7 @@ Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
  	case CVMX_BOARD_TYPE_KONTRON_S1901:
  		if (ipd_port == CVMX_HELPER_BOARD_MGMT_IPD_PORT)
  			return 1;
-@@ -744,6 +746,7 @@ enum cvmx_helper_board_usb_clock_types _
+@@ -411,6 +413,7 @@ enum cvmx_helper_board_usb_clock_types _
  	case CVMX_BOARD_TYPE_LANAI2_G:
  	case CVMX_BOARD_TYPE_NIC10E_66:
  	case CVMX_BOARD_TYPE_UBNT_E100:

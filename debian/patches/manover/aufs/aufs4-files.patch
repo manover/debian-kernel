@@ -14950,7 +14950,7 @@
 +}
 --- /dev/null
 +++ b/fs/aufs/i_op.c
-@@ -0,0 +1,1451 @@
+@@ -0,0 +1,1442 @@
 +/*
 + * Copyright (C) 2005-2016 Junjiro R. Okajima
 + *
@@ -16340,10 +16340,7 @@
 +		.getattr	= aufs_getattr,
 +
 +#ifdef CONFIG_AUFS_XATTR
-+		.setxattr	= aufs_setxattr,
-+		.getxattr	= aufs_getxattr,
-+		.listxattr	= aufs_listxattr,
-+		.removexattr	= aufs_removexattr,
++        .listxattr  = aufs_listxattr,
 +#endif
 +
 +		.readlink	= generic_readlink,
@@ -16372,10 +16369,7 @@
 +		.getattr	= aufs_getattr,
 +
 +#ifdef CONFIG_AUFS_XATTR
-+		.setxattr	= aufs_setxattr,
-+		.getxattr	= aufs_getxattr,
-+		.listxattr	= aufs_listxattr,
-+		.removexattr	= aufs_removexattr,
++        .listxattr  = aufs_listxattr,
 +#endif
 +
 +		.update_time	= aufs_update_time,
@@ -16393,10 +16387,7 @@
 +		.getattr	= aufs_getattr,
 +
 +#ifdef CONFIG_AUFS_XATTR
-+		.setxattr	= aufs_setxattr,
-+		.getxattr	= aufs_getxattr,
-+		.listxattr	= aufs_listxattr,
-+		.removexattr	= aufs_removexattr,
++        .listxattr  = aufs_listxattr,
 +#endif
 +
 +		.update_time	= aufs_update_time
@@ -17845,7 +17836,7 @@
 +}
 --- /dev/null
 +++ b/fs/aufs/i_op_ren.c
-@@ -0,0 +1,1015 @@
+@@ -0,0 +1,1017 @@
 +/*
 + * Copyright (C) 2005-2016 Junjiro R. Okajima
 + *
@@ -18650,11 +18641,13 @@
 +/* ---------------------------------------------------------------------- */
 +
 +int aufs_rename(struct inode *_src_dir, struct dentry *_src_dentry,
-+		struct inode *_dst_dir, struct dentry *_dst_dentry)
++		struct inode *_dst_dir, struct dentry *_dst_dentry, unsigned int p_flags)
 +{
 +	int err, flags;
 +	/* reduce stack space */
 +	struct au_ren_args *a;
++
++	(void)(p_flags);
 +
 +	AuDbg("%pd, %pd\n", _src_dentry, _dst_dentry);
 +	IMustLock(_src_dir);
@@ -19914,7 +19907,7 @@
 +/* i_op_ren.c */
 +int au_wbr(struct dentry *dentry, aufs_bindex_t btgt);
 +int aufs_rename(struct inode *src_dir, struct dentry *src_dentry,
-+		struct inode *dir, struct dentry *dentry);
++		struct inode *dir, struct dentry *dentry, unsigned int p_flags);
 +
 +/* iinfo.c */
 +struct inode *au_h_iptr(struct inode *inode, aufs_bindex_t bindex);
@@ -32791,7 +32784,7 @@
 +#endif /* __AUFS_WKQ_H__ */
 --- /dev/null
 +++ b/fs/aufs/xattr.c
-@@ -0,0 +1,347 @@
+@@ -0,0 +1,304 @@
 +/*
 + * Copyright (C) 2014-2016 Junjiro R. Okajima
 + *
@@ -33047,58 +33040,15 @@
 +
 +ssize_t aufs_listxattr(struct dentry *dentry, char *list, size_t size)
 +{
-+	struct au_lgxattr arg = {
-+		.type = AU_XATTR_LIST,
-+		.u.list = {
-+			.list	= list,
-+			.size	= size
-+		},
-+	};
++   struct au_lgxattr arg = {
++       .type = AU_XATTR_LIST,
++       .u.list = {
++           .list   = list,
++           .size   = size
++       },
++   };
 +
-+	return au_lgxattr(dentry, &arg);
-+}
-+
-+ssize_t aufs_getxattr(struct dentry *dentry, struct inode *inode __maybe_unused,
-+		      const char *name, void *value, size_t size)
-+{
-+	struct au_lgxattr arg = {
-+		.type = AU_XATTR_GET,
-+		.u.get = {
-+			.name	= name,
-+			.value	= value,
-+			.size	= size
-+		},
-+	};
-+
-+	return au_lgxattr(dentry, &arg);
-+}
-+
-+int aufs_setxattr(struct dentry *dentry, struct inode *inode, const char *name,
-+		  const void *value, size_t size, int flags)
-+{
-+	struct au_srxattr arg = {
-+		.type = AU_XATTR_SET,
-+		.u.set = {
-+			.name	= name,
-+			.value	= value,
-+			.size	= size,
-+			.flags	= flags
-+		},
-+	};
-+
-+	return au_srxattr(dentry, inode, &arg);
-+}
-+
-+int aufs_removexattr(struct dentry *dentry, const char *name)
-+{
-+	struct au_srxattr arg = {
-+		.type = AU_XATTR_REMOVE,
-+		.u.remove = {
-+			.name	= name
-+		},
-+	};
-+
-+	return au_srxattr(dentry, d_inode(dentry), &arg);
++   return au_lgxattr(dentry, &arg);
 +}
 +
 +/* ---------------------------------------------------------------------- */
