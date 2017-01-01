@@ -1,3 +1,15 @@
+linux (4.8.15-2) unstable; urgency=medium
+
+  Backport N5550 leds driver from 4.9 series:
+  * Load i2c_i801 before n5550-board (SOFTDEP PRE dependency)
+  * Rename ids inside leds-n5550-ahci module:
+    n5550-ahci-leds* => leds-n5550-ahci*
+  * Use SOFTDEPS with n5550-ahci modules
+  * Add platform specific (Thecus N5550) dmi string as a module alias
+    for leds-n5550-board to make it load the module automatically
+
+ -- Denis Bychkov <manover@gmail.com>  Sun, 01 Jan 2017 00:21:16 -0500
+
 linux (4.8.15-1) unstable; urgency=medium
 
   * Linux 4.8.15
