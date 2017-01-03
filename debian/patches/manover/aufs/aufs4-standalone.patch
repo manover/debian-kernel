@@ -1,4 +1,4 @@
-aufs4.8 standalone patch
+aufs4.9 standalone patch
 
 --- a/fs/dcache.c
 +++ b/fs/dcache.c
@@ -10,6 +10,14 @@ aufs4.8 standalone patch
  
  /*
   * Search for at least 1 mount point in the dentry's subdirs.
+@@ -2855,6 +2856,7 @@ void d_exchange(struct dentry *dentry1,
+ 
+ 	write_sequnlock(&rename_lock);
+ }
++EXPORT_SYMBOL_GPL(d_exchange);
+ 
+ /**
+  * d_ancestor - search for an ancestor
 --- a/fs/exec.c
 +++ b/fs/exec.c
 @@ -104,6 +104,7 @@ bool path_noexec(const struct path *path

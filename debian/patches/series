@@ -98,9 +98,12 @@ bugfix/all/liblockdep-fix-defined-but-not-used-warning-for-init.patch
 # Manover custom patches
 manover/x32-support.patch
 # Bcache
+manover/bcache-name-device-by-label.patch
+manover/bcache-avoid-accessing-bi-io-vec-directly.patch
+manover/bcache-make-gc-wakeup-sane.patch
+manover/bcache-partition-support.patch
 # Docs
 #
-manover/bcache-name-device-by-label.patch
 # Thecus N5550
 manover/n5550_leds.patch
 # kdbus

@@ -1,0 +1,48 @@
+commit 4113b88a658772e09b3fe475a5a4b7c9a9cdc04b
+Author: Ming Lei <tom.leiming@gmail.com>
+Date:   Fri Nov 11 20:05:33 2016 +0800
+
+    bcache: debug: avoid accessing .bi_io_vec directly
+    
+    Instead we use standard iterator way to do that.
+    
+    Signed-off-by: Ming Lei <tom.leiming@gmail.com>
+    Reviewed-by: Christoph Hellwig <hch@lst.de>
+    Signed-off-by: Jens Axboe <axboe@fb.com>
+
+--- a/drivers/md/bcache/debug.c
++++ b/drivers/md/bcache/debug.c
+@@ -107,8 +107,8 @@ void bch_data_verify(struct cached_dev *
+ {
+ 	char name[BDEVNAME_SIZE];
+ 	struct bio *check;
+-	struct bio_vec bv;
+-	struct bvec_iter iter;
++	struct bio_vec bv, cbv;
++	struct bvec_iter iter, citer = { 0 };
+ 
+ 	check = bio_clone(bio, GFP_NOIO);
+ 	if (!check)
+@@ -120,9 +120,13 @@ void bch_data_verify(struct cached_dev *
+ 
+ 	submit_bio_wait(check);
+ 
++	citer.bi_size = UINT_MAX;
+ 	bio_for_each_segment(bv, bio, iter) {
+ 		void *p1 = kmap_atomic(bv.bv_page);
+-		void *p2 = page_address(check->bi_io_vec[iter.bi_idx].bv_page);
++		void *p2;
++
++		cbv = bio_iter_iovec(check, citer);
++		p2 = page_address(cbv.bv_page);
+ 
+ 		cache_set_err_on(memcmp(p1 + bv.bv_offset,
+ 					p2 + bv.bv_offset,
+@@ -133,6 +137,7 @@ void bch_data_verify(struct cached_dev *
+ 				 (uint64_t) bio->bi_iter.bi_sector);
+ 
+ 		kunmap_atomic(p1);
++		bio_advance_iter(check, &citer, bv.bv_len);
+ 	}
+ 
+ 	bio_free_pages(check);
