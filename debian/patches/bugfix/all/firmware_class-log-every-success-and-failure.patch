@@ -53,7 +53,7 @@ format to detect missing firmware.
  	return rc;
  }
  
-@@ -1155,7 +1156,7 @@ _request_firmware(const struct firmware
+@@ -1156,7 +1157,7 @@ _request_firmware(const struct firmware
  	if (opt_flags & FW_OPT_NOWAIT) {
  		timeout = usermodehelper_read_lock_wait(timeout);
  		if (!timeout) {
