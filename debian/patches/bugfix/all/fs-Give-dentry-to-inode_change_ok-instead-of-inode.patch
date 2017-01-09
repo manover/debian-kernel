@@ -250,7 +250,7 @@ Signed-off-by: Jan Kara <jack@suse.cz>
  
 --- a/fs/ext4/inode.c
 +++ b/fs/ext4/inode.c
-@@ -5082,7 +5082,7 @@ int ext4_setattr(struct dentry *dentry,
+@@ -5088,7 +5088,7 @@ int ext4_setattr(struct dentry *dentry,
  	int orphan = 0;
  	const unsigned int ia_valid = attr->ia_valid;
  

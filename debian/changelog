@@ -1,3 +1,9 @@
+linux (4.8.16-1) unstable; urgency=medium
+
+  * Linux 4.8.16
+
+ -- Denis Bychkov <manover@gmail.com>  Fri, 06 Jan 2017 12:21:15 -0500
+
 linux (4.8.15-2) unstable; urgency=medium
 
   Backport N5550 leds driver from 4.9 series:

@@ -27,7 +27,7 @@ Signed-off-by: Serge Hallyn <serge.hallyn@ubuntu.com>
  
  /*
   * Minimum number of threads to boot the kernel
-@@ -1314,6 +1319,10 @@ static struct task_struct *copy_process(
+@@ -1317,6 +1322,10 @@ static struct task_struct *copy_process(
  	if ((clone_flags & (CLONE_NEWUSER|CLONE_FS)) == (CLONE_NEWUSER|CLONE_FS))
  		return ERR_PTR(-EINVAL);
  
@@ -38,7 +38,7 @@ Signed-off-by: Serge Hallyn <serge.hallyn@ubuntu.com>
  	/*
  	 * Thread groups must share signals as well, and detached threads
  	 * can only be started up within the thread group.
-@@ -2047,6 +2056,12 @@ SYSCALL_DEFINE1(unshare, unsigned long,
+@@ -2050,6 +2059,12 @@ SYSCALL_DEFINE1(unshare, unsigned long,
  	if (unshare_flags & CLONE_NEWNS)
  		unshare_flags |= CLONE_FS;
  
