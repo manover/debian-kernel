@@ -233,18 +233,31 @@ upstream submission.
  	where = 0;
 --- a/drivers/gpu/drm/nouveau/nvkm/engine/gr/gf100.c
 +++ b/drivers/gpu/drm/nouveau/nvkm/engine/gr/gf100.c
-@@ -1765,10 +1765,8 @@ gf100_gr_ctor_fw(struct gf100_gr *gr, co
- 	int ret;
- 
- 	ret = nvkm_firmware_get(device, fwname, &fw);
--	if (ret) {
+@@ -1773,11 +1773,9 @@ gf100_gr_ctor_fw_legacy(struct gf100_gr
+ 		fwname = "fuc41ac";
+ 	else if (!strcmp(fwname, "gpccs_data"))
+ 		fwname = "fuc41ad";
+-	else {
++	else
+ 		/* nope, let's just return the error we got */
 -		nvkm_error(subdev, "failed to load %s\n", fwname);
-+	if (ret)
  		return ret;
 -	}
  
+ 	/* yes, try to load from the legacy path */
+ 	nvkm_debug(subdev, "%s: falling back to legacy path\n", fwname);
+@@ -1787,10 +1785,8 @@ gf100_gr_ctor_fw_legacy(struct gf100_gr
+ 	if (ret) {
+ 		snprintf(f, sizeof(f), "nouveau/%s", fwname);
+ 		ret = request_firmware(&fw, f, device->dev);
+-		if (ret) {
+-			nvkm_error(subdev, "failed to load %s\n", fwname);
++		if (ret)
+ 			return ret;
+-		}
+ 	}
+ 
  	fuc->size = fw->size;
- 	fuc->data = kmemdup(fw->data, fuc->size, GFP_KERNEL);
 --- a/drivers/gpu/drm/r128/r128_cce.c
 +++ b/drivers/gpu/drm/r128/r128_cce.c
 @@ -154,11 +154,8 @@ static int r128_cce_load_microcode(drm_r
