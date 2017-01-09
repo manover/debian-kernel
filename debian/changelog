@@ -1,3 +1,9 @@
+linux (4.9.1-1) unstable; urgency=medium
+
+  * Linux 4.9.1
+
+ -- Denis Bychkov <manover@gmail.com>  Fri, 06 Jan 2017 12:12:11 -0500
+
 linux (4.9.0-4) unstable; urgency=medium
 
   * Backport bcache patches from 4.10 series

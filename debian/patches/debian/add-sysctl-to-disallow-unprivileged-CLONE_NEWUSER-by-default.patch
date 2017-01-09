@@ -27,7 +27,7 @@ Signed-off-by: Serge Hallyn <serge.hallyn@ubuntu.com>
  
  /*
   * Minimum number of threads to boot the kernel
-@@ -1464,6 +1469,10 @@ static __latent_entropy struct task_stru
+@@ -1467,6 +1472,10 @@ static __latent_entropy struct task_stru
  	if ((clone_flags & (CLONE_NEWUSER|CLONE_FS)) == (CLONE_NEWUSER|CLONE_FS))
  		return ERR_PTR(-EINVAL);
  
@@ -38,7 +38,7 @@ Signed-off-by: Serge Hallyn <serge.hallyn@ubuntu.com>
  	/*
  	 * Thread groups must share signals as well, and detached threads
  	 * can only be started up within the thread group.
-@@ -2200,6 +2209,12 @@ SYSCALL_DEFINE1(unshare, unsigned long,
+@@ -2203,6 +2212,12 @@ SYSCALL_DEFINE1(unshare, unsigned long,
  	if (unshare_flags & CLONE_NEWNS)
  		unshare_flags |= CLONE_FS;
  
