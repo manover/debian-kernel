@@ -1,6 +1,6 @@
 --- a/tools/perf/Makefile.config
 +++ b/tools/perf/Makefile.config
-@@ -793,11 +793,7 @@ sysconfdir = $(prefix)/etc
+@@ -860,11 +860,7 @@ sysconfdir = $(prefix)/etc
  ETC_PERFCONFIG = etc/perfconfig
  endif
  ifndef lib

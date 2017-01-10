@@ -134,7 +134,7 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
  		case S_BOOLEAN:
 --- a/scripts/kconfig/expr.h
 +++ b/scripts/kconfig/expr.h
-@@ -114,6 +114,8 @@ struct symbol {
+@@ -115,6 +115,8 @@ struct symbol {
  /* Set symbol to y if allnoconfig; used for symbols that hide others */
  #define SYMBOL_ALLNOCONFIG_Y 0x200000
  

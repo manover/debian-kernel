@@ -1,6 +1,6 @@
 --- a/drivers/ata/ahci.c
 +++ b/drivers/ata/ahci.c
-@@ -1676,6 +1676,10 @@ static void ahci_remove_one(struct pci_d
+@@ -1715,6 +1715,10 @@ static void ahci_remove_one(struct pci_d
  
  module_pci_driver(ahci_pci_driver);
  
@@ -13,7 +13,7 @@
  MODULE_LICENSE("GPL");
 --- a/drivers/ata/libahci.c
 +++ b/drivers/ata/libahci.c
-@@ -2577,6 +2577,10 @@ int ahci_host_activate(struct ata_host *
+@@ -2578,6 +2578,10 @@ int ahci_host_activate(struct ata_host *
  }
  EXPORT_SYMBOL_GPL(ahci_host_activate);
  
@@ -59,14 +59,14 @@
  	depends on LEDS_CLASS
 --- a/drivers/leds/Makefile
 +++ b/drivers/leds/Makefile
-@@ -71,6 +71,7 @@ obj-$(CONFIG_LEDS_IS31FL319X)		+= leds-i
- obj-$(CONFIG_LEDS_IS31FL32XX)		+= leds-is31fl32xx.o
- obj-$(CONFIG_LEDS_PM8058)		+= leds-pm8058.o
- obj-$(CONFIG_LEDS_MLXCPLD)		+= leds-mlxcpld.o
+@@ -50,6 +50,7 @@ obj-$(CONFIG_LEDS_WM8350)		+= leds-wm835
+ obj-$(CONFIG_LEDS_PWM)			+= leds-pwm.o
+ obj-$(CONFIG_LEDS_REGULATOR)		+= leds-regulator.o
+ obj-$(CONFIG_LEDS_INTEL_SS4200)		+= leds-ss4200.o
 +obj-$(CONFIG_LEDS_THECUS_N5550) += leds-n5550-ahci.o leds-n5550-board.o
- 
- # LED SPI Drivers
- obj-$(CONFIG_LEDS_DAC124S085)		+= leds-dac124s085.o
+ obj-$(CONFIG_LEDS_LT3593)		+= leds-lt3593.o
+ obj-$(CONFIG_LEDS_ADP5520)		+= leds-adp5520.o
+ obj-$(CONFIG_LEDS_DELL_NETBOOKS)	+= dell-led.o
 --- /dev/null
 +++ b/drivers/leds/leds-n5550-ahci.c
 @@ -0,0 +1,292 @@

@@ -15,18 +15,6 @@
  
  ifeq ($(shell $(HOSTCC) -v 2>&1 | grep -c "clang version"), 1)
  HOSTCFLAGS  += -Wno-unused-value -Wno-unused-parameter \
---- a/scripts/kconfig/nconf.c
-+++ b/scripts/kconfig/nconf.c
-@@ -5,7 +5,9 @@
-  * Derived from menuconfig.
-  *
-  */
-+#ifndef _GNU_SOURCE
- #define _GNU_SOURCE
-+#endif
- #include <string.h>
- #include <stdlib.h>
- 
 --- a/scripts/package/builddeb
 +++ b/scripts/package/builddeb
 @@ -12,6 +12,22 @@

@@ -2,7 +2,7 @@ aufs4.9 mmap patch
 
 --- a/fs/proc/base.c
 +++ b/fs/proc/base.c
-@@ -1953,7 +1953,7 @@ static int map_files_get_link(struct den
+@@ -1958,7 +1958,7 @@ static int map_files_get_link(struct den
  	down_read(&mm->mmap_sem);
  	vma = find_exact_vma(mm, vm_start, vm_end);
  	if (vma && vma->vm_file) {
@@ -39,7 +39,7 @@ aufs4.9 mmap patch
  		dev = inode->i_sb->s_dev;
  		ino = inode->i_ino;
  		pgoff = ((loff_t)vma->vm_pgoff) << PAGE_SHIFT;
-@@ -1627,7 +1630,7 @@ static int show_numa_map(struct seq_file
+@@ -1628,7 +1631,7 @@ static int show_numa_map(struct seq_file
  	struct proc_maps_private *proc_priv = &numa_priv->proc_maps;
  	struct vm_area_struct *vma = v;
  	struct numa_maps *md = &numa_priv->md;
@@ -64,7 +64,7 @@ aufs4.9 mmap patch
  		pgoff = (loff_t)vma->vm_pgoff << PAGE_SHIFT;
 --- a/include/linux/mm.h
 +++ b/include/linux/mm.h
-@@ -1266,6 +1266,28 @@ static inline int fixup_user_fault(struc
+@@ -1257,6 +1257,28 @@ static inline int fixup_user_fault(struc
  }
  #endif
  
@@ -113,7 +113,7 @@ aufs4.9 mmap patch
  #ifndef CONFIG_MMU
 --- a/kernel/fork.c
 +++ b/kernel/fork.c
-@@ -629,7 +629,7 @@ static __latent_entropy int dup_mmap(str
+@@ -631,7 +631,7 @@ static __latent_entropy int dup_mmap(str
  			struct inode *inode = file_inode(file);
  			struct address_space *mapping = file->f_mapping;
  
@@ -135,7 +135,7 @@ aufs4.9 mmap patch
  
 --- a/mm/filemap.c
 +++ b/mm/filemap.c
-@@ -2304,7 +2304,7 @@ int filemap_page_mkwrite(struct vm_area_
+@@ -2366,7 +2366,7 @@ int filemap_page_mkwrite(struct vm_area_
  	int ret = VM_FAULT_LOCKED;
  
  	sb_start_pagefault(inode->i_sb);
@@ -144,17 +144,6 @@ aufs4.9 mmap patch
  	lock_page(page);
  	if (page->mapping != inode->i_mapping) {
  		unlock_page(page);
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -2117,7 +2117,7 @@ static inline int wp_page_reuse(struct f
- 		}
- 
- 		if (!page_mkwrite)
--			file_update_time(vma->vm_file);
-+			vma_file_update_time(vma);
- 	}
- 
- 	return VM_FAULT_WRITE;
 --- a/mm/mmap.c
 +++ b/mm/mmap.c
 @@ -170,7 +170,7 @@ static struct vm_area_struct *remove_vma

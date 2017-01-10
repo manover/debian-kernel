@@ -15,7 +15,7 @@ Forwarded: not-needed
  
  /* describe a ptrace relationship for potential exception */
  struct ptrace_relation {
-@@ -470,7 +470,7 @@ static inline void yama_init_sysctl(void
+@@ -484,7 +484,7 @@ static inline void yama_init_sysctl(void
  
  void __init yama_add_hooks(void)
  {

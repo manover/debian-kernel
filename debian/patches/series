@@ -60,8 +60,6 @@ bugfix/all/kbuild-use-nostdinc-in-compile-tests.patch
 bugfix/all/disable-some-marvell-phys.patch
 bugfix/all/fs-add-module_softdep-declarations-for-hard-coded-cr.patch
 bugfix/all/kbuild-do-not-use-hyphen-in-exported-variable-name.patch
-bugfix/all/ext4-fix-bug-838544.patch
-bugfix/all/mm-memcontrol-use-special-workqueue-for-creating-per-memcg-caches.patch
 
 # Miscellaneous features
 
@@ -98,22 +96,19 @@ bugfix/all/liblockdep-fix-defined-but-not-used-warning-for-init.patch
 # Manover custom patches
 manover/x32-support.patch
 # Bcache
-manover/bcache-name-device-by-label.patch
-manover/bcache-avoid-accessing-bi-io-vec-directly.patch
-manover/bcache-make-gc-wakeup-sane.patch
-manover/bcache-partition-support.patch
 # Docs
 #
+manover/bcache-name-device-by-label.patch
 # Thecus N5550
 manover/n5550_leds.patch
 # kdbus
 manover/kdbus.patch
 # AUFS
-manover/aufs/aufs4-base.patch
-manover/aufs/aufs4-mmap.patch
-manover/aufs/aufs4-standalone.patch
-manover/aufs/aufs4-kbuild.patch
-manover/aufs/aufs4-files.patch
+#manover/aufs/aufs4-base.patch
+#manover/aufs/aufs4-mmap.patch
+#manover/aufs/aufs4-standalone.patch
+#manover/aufs/aufs4-kbuild.patch
+#manover/aufs/aufs4-files.patch
 # Thinkpad specific
 manover/tp_smapi.patch
 manover/iommu-bug-on-fix.patch

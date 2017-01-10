@@ -1,20 +1,20 @@
-linux (4.9.2-1) unstable; urgency=medium
+linux (4.10~rc3-1~exp1) experimental; urgency=medium
 
-  * Linux 4.9.2
+  * Linux 4.10 RC3
 
- -- Denis Bychkov <manover@gmail.com>  Mon, 09 Jan 2017 03:43:26 -0500
+ -- Denis Bychkov <manover@gmail.com>  Sun, 08 Jan 2017 20:15:43 -0500
 
-linux (4.9.1-1) unstable; urgency=medium
+linux (4.10~rc2-1~exp1) experimental; urgency=medium
 
-  * Linux 4.9.1
+  * Linux 4.10 RC 2 
 
- -- Denis Bychkov <manover@gmail.com>  Fri, 06 Jan 2017 12:12:11 -0500
+ -- Denis Bychkov <manover@gmail.com>  Sun, 01 Jan 2017 20:50:12 -0500
 
-linux (4.9.0-4) unstable; urgency=medium
+linux (4.10~rc1-1~exp1) experimental; urgency=medium
 
-  * Backport bcache patches from 4.10 series
+  * Linux 4.10 RC 1 
 
- -- Denis Bychkov <manover@gmail.com>  Mon, 02 Jan 2017 03:44:44 -0500
+ -- Denis Bychkov <manover@gmail.com>  Sun, 01 Jan 2017 02:41:17 -0500
 
 linux (4.9.0-3) unstable; urgency=medium
 

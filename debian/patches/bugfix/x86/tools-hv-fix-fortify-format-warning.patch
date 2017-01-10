@@ -19,7 +19,7 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 ---
 --- a/tools/hv/hv_kvp_daemon.c
 +++ b/tools/hv/hv_kvp_daemon.c
-@@ -691,10 +691,10 @@ static char *kvp_mac_to_if_name(char *ma
+@@ -688,10 +688,10 @@ static char *kvp_mac_to_if_name(char *ma
  	DIR *dir;
  	struct dirent *entry;
  	FILE    *file;
@@ -32,11 +32,11 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
  	char dev_id[256];
  	unsigned int i;
  
-@@ -702,17 +702,9 @@ static char *kvp_mac_to_if_name(char *ma
+@@ -699,17 +699,9 @@ static char *kvp_mac_to_if_name(char *ma
  	if (dir == NULL)
  		return NULL;
  
--	snprintf(dev_id, sizeof(dev_id), kvp_net_dir);
+-	snprintf(dev_id, sizeof(dev_id), "%s", kvp_net_dir);
 -	q = dev_id + strlen(kvp_net_dir);
 -
  	while ((entry = readdir(dir)) != NULL) {
@@ -48,7 +48,7 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 -		strcat(dev_id, entry->d_name);
 -		strcat(dev_id, "/address");
 +		snprintf(dev_id, sizeof(dev_id), "%s%s/address",
-+			 kvp_net_dir, entry->d_name);
++			kvp_net_dir, entry->d_name);
  
  		file = fopen(dev_id, "r");
  		if (file == NULL)
