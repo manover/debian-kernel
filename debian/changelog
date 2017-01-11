@@ -1,3 +1,14 @@
+linux (4.9.2-2) unstable; urgency=medium
+
+  * Remove obsolete patches
+  * Import new debian patches:
+    - arm-dts-add-support-for-turris-omnia.patch
+    - arm-dts-turris-omnia-add-support-for-ethernet-switch.patch
+    - partially-revert-usb-kconfig-using-select-for-usb_co.patch
+  * Merge debian packaging templates and binaries
+
+ -- Denis Bychkov <manover@gmail.com>  Thu, 12 Jan 2017 02:09:48 -0500
+
 linux (4.9.2-1) unstable; urgency=medium
 
   * Linux 4.9.2
