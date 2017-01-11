@@ -1,3 +1,9 @@
+linux (4.10~rc3-1~exp2) experimental; urgency=medium
+
+  * Remove obsolete patches
+
+ -- Denis Bychkov <manover@gmail.com>  Tue, 10 Jan 2017 22:09:41 -0500
+
 linux (4.10~rc3-1~exp1) experimental; urgency=medium
 
   * Linux 4.10 RC3

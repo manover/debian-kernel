@@ -46,7 +46,6 @@ bugfix/x86/viafb-autoload-on-olpc-xo1.5-only.patch
 debian/fanotify-taint-on-use-of-fanotify_access_permissions.patch
 
 # Arch bug fixes
-bugfix/arm64/arm64-mm-limit-task_size_64-for-compatibility.patch
 
 # Arch features
 features/mips/MIPS-increase-MAX-PHYSMEM-BITS-on-Loongson-3-only.patch
@@ -64,7 +63,6 @@ bugfix/all/kbuild-do-not-use-hyphen-in-exported-variable-name.patch
 # Miscellaneous features
 
 # Security fixes
-bugfix/all/ptrace-being-capable-wrt-a-process-requires-mapped-uids-gids.patch
 debian/i386-686-pae-pci-set-pci-nobios-by-default.patch
 
 # ABI maintenance
