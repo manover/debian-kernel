@@ -2380,7 +2380,7 @@ upstream submission.
  
 --- a/drivers/usb/serial/ti_usb_3410_5052.c
 +++ b/drivers/usb/serial/ti_usb_3410_5052.c
-@@ -1702,10 +1702,8 @@ static int ti_download_firmware(struct t
+@@ -1709,10 +1709,8 @@ static int ti_download_firmware(struct t
  	}
  
  check_firmware:
