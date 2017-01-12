@@ -1,3 +1,9 @@
+linux (4.10~rc3-1~exp3) experimental; urgency=medium
+
+  * Merge packaging templates, binaries and config from debian
+
+ -- Denis Bychkov <manover@gmail.com>  Thu, 12 Jan 2017 02:32:53 -0500
+
 linux (4.10~rc3-1~exp2) experimental; urgency=medium
 
   * Remove obsolete patches
