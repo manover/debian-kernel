@@ -1,3 +1,11 @@
+linux (4.9.3-2) unstable; urgency=medium
+
+  * m: make BBR the default congestion control
+  * m: misc config clean-up
+  * Add local configs to the git tree
+
+ -- Denis Bychkov <manover@gmail.com>  Thu, 12 Jan 2017 09:25:01 -0500
+
 linux (4.9.3-1) unstable; urgency=medium
 
   * Linux 4.9.3
