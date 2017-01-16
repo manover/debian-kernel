@@ -1,3 +1,9 @@
+linux (4.9.3-3) unstable; urgency=medium
+
+  * new patch: Force enable HPET on ICH4-M
+
+ -- Denis Bychkov <manover@gmail.com>  Sat, 14 Jan 2017 12:41:53 -0500
+
 linux (4.9.3-2) unstable; urgency=medium
 
   * m: make BBR the default congestion control

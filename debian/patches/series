@@ -115,6 +115,8 @@ manover/aufs/aufs4-mmap.patch
 manover/aufs/aufs4-standalone.patch
 manover/aufs/aufs4-kbuild.patch
 manover/aufs/aufs4-files.patch
+# Force HPET on ICH4-M
+manover/hpet-force-ich4.patch
 # Thinkpad specific
 manover/tp_smapi.patch
 manover/iommu-bug-on-fix.patch
