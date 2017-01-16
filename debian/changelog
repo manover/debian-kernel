@@ -1,3 +1,9 @@
+linux (4.9.4-1) unstable; urgency=medium
+
+  * Linux 4.9.4
+
+ -- Denis Bychkov <manover@gmail.com>  Sun, 15 Jan 2017 19:03:31 -0500
+
 linux (4.9.3-3) unstable; urgency=medium
 
   * new patch: Force enable HPET on ICH4-M
