@@ -1,8 +1,14 @@
+linux (4.10~rc4-1~exp1) experimental; urgency=medium
+
+  * Linux 4.10 RC4
+
+ -- Denis Bychkov <manover@gmail.com>  Mon, 16 Jan 2017 00:17:21 -0500
+
 linux (4.10~rc3-1~exp3) experimental; urgency=medium
 
-  * Merge packaging templates, binaries and config from debian
+  * new patch: Force enable HPET on ICH4-M
 
- -- Denis Bychkov <manover@gmail.com>  Thu, 12 Jan 2017 02:32:53 -0500
+ -- Denis Bychkov <manover@gmail.com>  Sat, 14 Jan 2017 14:13:15 -0500
 
 linux (4.10~rc3-1~exp2) experimental; urgency=medium
 

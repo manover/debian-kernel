@@ -971,7 +971,7 @@ upstream submission.
  	if (rc) {
 --- a/drivers/net/ethernet/broadcom/tg3.c
 +++ b/drivers/net/ethernet/broadcom/tg3.c
-@@ -11346,11 +11346,8 @@ static int tg3_request_firmware(struct t
+@@ -11349,11 +11349,8 @@ static int tg3_request_firmware(struct t
  {
  	const struct tg3_firmware_hdr *fw_hdr;
  

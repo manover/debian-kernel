@@ -112,6 +112,8 @@ manover/tp_smapi.patch
 manover/iommu-bug-on-fix.patch
 # Realtek 8111/8168 driver
 #manover/realtek-8168.patch
+# Force HPET on ICH4-M
+manover/hpet-force-ich4.patch
 # Modern Intel CPU support
 manover/modern-intel-cpu.patch
 # Misc minor patches

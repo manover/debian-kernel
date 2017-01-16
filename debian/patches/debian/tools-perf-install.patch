@@ -46,5 +46,5 @@ Forwarded: no
 -		$(INSTALL) tests/attr/* '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/attr'
 +		$(INSTALL) -m 644 tests/attr/* '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/attr'
  
- install-bin: install-tools install-tests
+ install-bin: install-tools install-tests install-traceevent-plugins
  
