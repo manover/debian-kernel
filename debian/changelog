@@ -1,3 +1,9 @@
+linux (4.10~rc4-1~exp2) experimental; urgency=medium
+
+  * Update it87 driver from the upstream source
+
+ -- Denis Bychkov <manover@gmail.com>  Mon, 16 Jan 2017 21:01:43 -0500
+
 linux (4.10~rc4-1~exp1) experimental; urgency=medium
 
   * Linux 4.10 RC4

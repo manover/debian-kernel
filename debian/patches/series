@@ -118,5 +118,6 @@ manover/hpet-force-ich4.patch
 manover/modern-intel-cpu.patch
 # Misc minor patches
 manover/misc.patch
+manover/it87-update.patch
 #unifdef-hang.patch
 #smsc-lpc47m182.patch
