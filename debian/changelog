@@ -1,3 +1,15 @@
+linux (4.9.4-2) unstable; urgency=medium
+
+  * Update it87 driver from the upstream source
+  * ath9k: fix NULL pointer dereference (Closes: #851621)
+  * tmpfs: clear S_ISGID when setting posix ACLs
+  * sysctl: Drop reference added by grab_header in proc_sys_readdir
+    (CVE-2016-9191)
+  * nbd: use loff_t for blocksize and nbd_set_size args (Closes:
+    #851533)
+
+ -- Denis Bychkov <manover@gmail.com>  Tue, 17 Jan 2017 01:10:56 -0500
+
 linux (4.9.4-1) unstable; urgency=medium
 
   * Linux 4.9.4
