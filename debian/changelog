@@ -1,8 +1,9 @@
 linux (4.10~rc4-1~exp2) experimental; urgency=medium
 
   * Update it87 driver from the upstream source
+  * Import debian patches from 4.9.y branch
 
- -- Denis Bychkov <manover@gmail.com>  Mon, 16 Jan 2017 21:01:43 -0500
+ -- Denis Bychkov <manover@gmail.com>  Tue, 17 Jan 2017 03:39:11 -0500
 
 linux (4.10~rc4-1~exp1) experimental; urgency=medium
 
