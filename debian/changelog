@@ -1,3 +1,15 @@
+linux (4.9.5~rc2-1) unstable; urgency=medium
+
+  * New 4.9.5 RC
+
+ -- Denis Bychkov <manover@gmail.com>  Wed, 18 Jan 2017 09:10:07 -0500
+
+linux (4.9.5~rc1-1) unstable; urgency=medium
+
+  * Linux 4.9.5 RC1
+
+ -- Denis Bychkov <manover@gmail.com>  Tue, 17 Jan 2017 14:28:03 -0500
+
 linux (4.9.4-2) unstable; urgency=medium
 
   * Update it87 driver from the upstream source

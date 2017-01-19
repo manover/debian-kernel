@@ -163,7 +163,7 @@ $
         self.linux_modifier = d['modifier']
         self.linux_version = d['version']
         if d['modifier'] is not None:
-            assert not d['update']
+            #assert not d['update']
             self.linux_upstream = '-'.join((d['version'], d['modifier']))
         else:
             self.linux_upstream = d['version']

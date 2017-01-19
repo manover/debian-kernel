@@ -71,7 +71,6 @@ bugfix/all/ath9k-fix-null-pointer-dereference.patch
 
 # Security fixes
 debian/i386-686-pae-pci-set-pci-nobios-by-default.patch
-bugfix/all/sysctl-Drop-reference-added-by-grab_header-in-proc_s.patch
 bugfix/all/tmpfs-clear-S_ISGID-when-setting-posix-ACLs.patch
 
 # ABI maintenance
