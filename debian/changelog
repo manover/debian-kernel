@@ -1,3 +1,9 @@
+linux (4.9.5-1) unstable; urgency=medium
+
+  * Linux 4.9.5
+
+ -- Denis Bychkov <manover@gmail.com>  Fri, 20 Jan 2017 09:33:15 -0500
+
 linux (4.9.5~rc2-1) unstable; urgency=medium
 
   * New 4.9.5 RC
