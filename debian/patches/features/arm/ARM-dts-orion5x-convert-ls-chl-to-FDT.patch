@@ -18,7 +18,7 @@ Signed-off-by: Gregory CLEMENT <gregory.clement@free-electrons.com>
 
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
-@@ -597,6 +597,7 @@ dtb-$(CONFIG_ARCH_ORION5X) += \
+@@ -598,6 +598,7 @@ dtb-$(CONFIG_ARCH_ORION5X) += \
  	orion5x-lacie-ethernet-disk-mini-v2.dtb \
  	orion5x-linkstation-lsgl.dtb \
  	orion5x-linkstation-lswtgl.dtb \

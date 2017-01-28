@@ -46,6 +46,7 @@ bugfix/x86/viafb-autoload-on-olpc-xo1.5-only.patch
 debian/fanotify-taint-on-use-of-fanotify_access_permissions.patch
 
 # Arch bug fixes
+bugfix/x86/asoc-intel-select-dw_dmac_core-since-it-s-mandatory.patch
 
 # Arch features
 features/mips/MIPS-increase-MAX-PHYSMEM-BITS-on-Loongson-3-only.patch
@@ -56,6 +57,7 @@ features/x86/x86-memtest-WARN-if-bad-RAM-found.patch
 features/arm/arm-dts-add-support-for-turris-omnia.patch
 features/arm/arm-dts-turris-omnia-add-support-for-ethernet-switch.patch
 features/arm/ARM-dts-orion5x-convert-ls-chl-to-FDT.patch
+features/arm64/dts-meson-gx-add-firmware-reserved-memory-zone.patch
 
 # Miscellaneous bug fixes
 bugfix/all/kbuild-use-nostdinc-in-compile-tests.patch
@@ -72,7 +74,9 @@ bugfix/all/ath9k-fix-null-pointer-dereference.patch
 
 # Security fixes
 debian/i386-686-pae-pci-set-pci-nobios-by-default.patch
-bugfix/all/tmpfs-clear-S_ISGID-when-setting-posix-ACLs.patch
+bugfix/all/fbdev-color-map-coying-bounds-checking.patch
+bugfix/arm/drm-vc4-fix-an-integer-overflow-in-temporary-allocation-layout.patch
+bugfix/arm/vc4-return-einval-on-the-overflow-checks-failing.patch
 
 # ABI maintenance
 
@@ -133,3 +137,4 @@ manover/misc.patch
 manover/it87-update.patch
 #unifdef-hang.patch
 #smsc-lpc47m182.patch
+#it87-wdt-new-dev-api.patch

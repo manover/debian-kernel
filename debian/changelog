@@ -1,3 +1,10 @@
+linux (4.9.6-1) unstable; urgency=medium
+
+  * Linux 4.9.6
+  * Remove obsolete/refesh/import new patches
+
+ -- Denis Bychkov <manover@gmail.com>  Fri, 27 Jan 2017 23:07:21 -0500
+
 linux (4.9.5-2) unstable; urgency=medium
 
   * Import debian patches
