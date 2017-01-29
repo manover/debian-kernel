@@ -1,3 +1,10 @@
+linux (4.10~rc5-1~exp2) experimental; urgency=medium
+
+  * linux-cpupower: package turbostat and x86_energy_perf_policy
+    utilities
+
+ -- Denis Bychkov <manover@gmail.com>  Sat, 28 Jan 2017 21:00:13 -0500
+
 linux (4.10~rc5-1~exp1) experimental; urgency=medium
 
   * Linux 4.10 rc5
