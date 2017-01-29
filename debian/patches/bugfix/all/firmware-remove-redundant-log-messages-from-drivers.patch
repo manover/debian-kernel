@@ -1721,7 +1721,7 @@ upstream submission.
  		    QLA_FW_URL ".\n");
 --- a/drivers/scsi/qla2xxx/qla_nx.c
 +++ b/drivers/scsi/qla2xxx/qla_nx.c
-@@ -2460,11 +2460,8 @@ try_blob_fw:
+@@ -2465,11 +2465,8 @@ try_blob_fw:
  
  	/* Load firmware blob. */
  	blob = ha->hablob = qla2x00_request_firmware(vha);
@@ -1736,7 +1736,7 @@ upstream submission.
  	if (qla82xx_validate_firmware_blob(vha,
 --- a/drivers/scsi/qla2xxx/qla_os.c
 +++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -5833,8 +5833,6 @@ qla2x00_request_firmware(scsi_qla_host_t
+@@ -5841,8 +5841,6 @@ qla2x00_request_firmware(scsi_qla_host_t
  		goto out;
  
  	if (request_firmware(&blob->fw, blob->name, &ha->pdev->dev)) {
