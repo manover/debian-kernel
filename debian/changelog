@@ -1,3 +1,9 @@
+linux (4.10~rc6-1~exp2) experimental; urgency=medium
+
+  * Import/update debian patches
+
+ -- Denis Bychkov <manover@gmail.com>  Mon, 30 Jan 2017 15:32:53 -0500
+
 linux (4.10~rc6-1~exp1) experimental; urgency=medium
 
   * Linux 4.10 RC6
