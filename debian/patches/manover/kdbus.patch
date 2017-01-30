@@ -1,6 +1,6 @@
 --- a/fs/Kconfig
 +++ b/fs/Kconfig
-@@ -134,6 +134,7 @@ menu "Pseudo filesystems"
+@@ -135,6 +135,7 @@ menu "Pseudo filesystems"
  source "fs/proc/Kconfig"
  source "fs/kernfs/Kconfig"
  source "fs/sysfs/Kconfig"

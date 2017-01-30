@@ -76,7 +76,7 @@ correctness.
  	{
  		.phy_id = MARVELL_PHY_ID_88E1116R,
  		.phy_id_mask = MARVELL_PHY_ID_MASK,
-@@ -1734,9 +1744,9 @@ static struct mdio_device_id __maybe_unu
+@@ -1736,9 +1746,9 @@ static struct mdio_device_id __maybe_unu
  	{ MARVELL_PHY_ID_88E1111, MARVELL_PHY_ID_MASK },
  	{ MARVELL_PHY_ID_88E1118, MARVELL_PHY_ID_MASK },
  	{ MARVELL_PHY_ID_88E1121R, MARVELL_PHY_ID_MASK },

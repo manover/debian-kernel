@@ -96,9 +96,10 @@ bugfix/all/liblockdep-fix-defined-but-not-used-warning-for-init.patch
 # Manover custom patches
 manover/x32-support.patch
 # Bcache
+manover/bcache-release-correct-minors.patch
+manover/bcache-name-device-by-label.patch
 # Docs
 #
-manover/bcache-name-device-by-label.patch
 # Thecus N5550
 manover/n5550_leds.patch
 # kdbus

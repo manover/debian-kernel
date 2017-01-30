@@ -1,3 +1,10 @@
+linux (4.10~rc6-1~exp1) experimental; urgency=medium
+
+  * Linux 4.10 RC6
+  * Try to release correct bcache minor ids
+
+ -- Denis Bychkov <manover@gmail.com>  Sun, 29 Jan 2017 18:55:58 -0500
+
 linux (4.10~rc5-1~exp2) experimental; urgency=medium
 
   * linux-cpupower: package turbostat and x86_energy_perf_policy
