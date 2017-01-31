@@ -1,3 +1,9 @@
+linux (4.9.6-3) unstable; urgency=medium
+
+  * Disable CONFIG_RT_GROUP_SCHED
+
+ -- Denis Bychkov <manover@gmail.com>  Tue, 31 Jan 2017 12:16:15 -0500
+
 linux (4.9.6-2) unstable; urgency=medium
 
   * Release correct bcache minor ids
