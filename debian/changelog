@@ -1,3 +1,9 @@
+linux (4.9.6-2) unstable; urgency=medium
+
+  * Release correct bcache minor ids
+
+ -- Denis Bychkov <manover@gmail.com>  Sun, 29 Jan 2017 19:43:48 -0500
+
 linux (4.9.6-1) unstable; urgency=medium
 
   * Linux 4.9.6
