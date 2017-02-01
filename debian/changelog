@@ -1,3 +1,11 @@
+linux (4.9.7-1) unstable; urgency=medium
+
+  * Linux 4.9.7
+  * Remove debian patches merged upstream
+  * Import new debian patches
+
+ -- Denis Bychkov <manover@gmail.com>  Wed, 01 Feb 2017 12:22:30 -0500
+
 linux (4.9.6-3) unstable; urgency=medium
 
   * Disable CONFIG_RT_GROUP_SCHED
