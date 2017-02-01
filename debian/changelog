@@ -1,3 +1,9 @@
+linux (4.10~rc7-5) experimental; urgency=medium
+
+  * [sparc64] topology_64.h: Fix condition for including cpudata.h
+
+ -- Denis Bychkov <manover@gmail.com>  Fri, 10 Feb 2017 23:26:32 -0500
+
 linux (4.10~rc7-4) experimental; urgency=medium
 
   * Apply HDAPS driver patch from TP-SMAPI project
