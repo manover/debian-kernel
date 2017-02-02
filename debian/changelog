@@ -1,3 +1,10 @@
+linux (4.10~rc6-3) experimental; urgency=medium
+
+  * Disable CONFIG_RT_GROUP_SCHED
+  * Change rc versions format
+
+ -- Denis Bychkov <manover@gmail.com>  Wed, 01 Feb 2017 18:13:08 -0500
+
 linux (4.10~rc6-1~exp2) experimental; urgency=medium
 
   * Import/update debian patches
