@@ -107,11 +107,11 @@ manover/n5550_leds.patch
 # kdbus
 manover/kdbus.patch
 # AUFS
-#manover/aufs/aufs4-base.patch
-#manover/aufs/aufs4-mmap.patch
-#manover/aufs/aufs4-standalone.patch
-#manover/aufs/aufs4-kbuild.patch
-#manover/aufs/aufs4-files.patch
+manover/aufs/aufs4-base.patch
+manover/aufs/aufs4-mmap.patch
+manover/aufs/aufs4-standalone.patch
+manover/aufs/aufs4-kbuild.patch
+manover/aufs/aufs4-files.patch
 # Thinkpad specific
 manover/tp_smapi.patch
 manover/iommu-bug-on-fix.patch

@@ -1,4 +1,4 @@
-aufs4.9 mmap patch
+aufs4.x-rcN mmap patch
 
 --- a/fs/proc/base.c
 +++ b/fs/proc/base.c
@@ -135,7 +135,7 @@ aufs4.9 mmap patch
  
 --- a/mm/filemap.c
 +++ b/mm/filemap.c
-@@ -2366,7 +2366,7 @@ int filemap_page_mkwrite(struct vm_area_
+@@ -2397,7 +2397,7 @@ int filemap_page_mkwrite(struct vm_area_
  	int ret = VM_FAULT_LOCKED;
  
  	sb_start_pagefault(inode->i_sb);
