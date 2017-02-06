@@ -1,7 +1,12 @@
+linux (4.10~rc7-1) experimental; urgency=medium
+
+  * Linux 4.10 RC 7
+
+ -- Denis Bychkov <manover@gmail.com>  Mon, 06 Feb 2017 00:10:05 -0500
+
 linux (4.10~rc6-3) experimental; urgency=medium
 
   * Disable CONFIG_RT_GROUP_SCHED
-  * Change rc versions format
 
  -- Denis Bychkov <manover@gmail.com>  Wed, 01 Feb 2017 18:13:08 -0500
 
