@@ -222,6 +222,16 @@ aufs4.9 standalone patch
  
  /**
   * splice_direct_to_actor - splices data directly between two non-pipes
+--- a/fs/sync.c
++++ b/fs/sync.c
+@@ -38,6 +38,7 @@ int __sync_filesystem(struct super_block
+ 		sb->s_op->sync_fs(sb, wait);
+ 	return __sync_blockdev(sb->s_bdev, wait);
+ }
++EXPORT_SYMBOL_GPL(__sync_filesystem);
+ 
+ /*
+  * Write out and wait upon all dirty data associated with this
 --- a/fs/xattr.c
 +++ b/fs/xattr.c
 @@ -296,6 +296,7 @@ vfs_getxattr_alloc(struct dentry *dentry

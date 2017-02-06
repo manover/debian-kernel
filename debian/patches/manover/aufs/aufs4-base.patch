@@ -148,6 +148,17 @@ aufs4.9 base patch
  {
  	ssize_t (*splice_read)(struct file *, loff_t *,
  			       struct pipe_inode_info *, size_t, unsigned int);
+--- a/fs/sync.c
++++ b/fs/sync.c
+@@ -27,7 +27,7 @@
+  * wait == 1 case since in that case write_inode() functions do
+  * sync_dirty_buffer() and thus effectively write one block at a time.
+  */
+-static int __sync_filesystem(struct super_block *sb, int wait)
++int __sync_filesystem(struct super_block *sb, int wait)
+ {
+ 	if (wait)
+ 		sync_inodes_sb(sb);
 --- a/include/linux/file.h
 +++ b/include/linux/file.h
 @@ -19,6 +19,7 @@ struct dentry;
@@ -197,6 +208,14 @@ aufs4.9 base patch
  
  /* /sys/fs */
  extern struct kobject *fs_kobj;
+@@ -2419,6 +2428,7 @@ static inline bool sb_is_blkdev_sb(struc
+ 	return false;
+ }
+ #endif
++extern int __sync_filesystem(struct super_block *, int);
+ extern int sync_filesystem(struct super_block *);
+ extern const struct file_operations def_blk_fops;
+ extern const struct file_operations def_chr_fops;
 --- a/include/linux/splice.h
 +++ b/include/linux/splice.h
 @@ -86,4 +86,10 @@ extern void spd_release_page(struct spli

@@ -1,3 +1,9 @@
+linux (4.9.8-3) unstable; urgency=medium
+
+  * AUFS 4.9-20170206
+
+ -- Denis Bychkov <manover@gmail.com>  Mon, 06 Feb 2017 18:12:31 -0500
+
 linux (4.9.8-2) unstable; urgency=medium
 
   * Import recent debian patches

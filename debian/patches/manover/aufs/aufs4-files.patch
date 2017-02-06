@@ -87,7 +87,7 @@
 +		will be empty. About XINO files, see the aufs manual.
 --- /dev/null
 +++ b/Documentation/filesystems/aufs/README
-@@ -0,0 +1,392 @@
+@@ -0,0 +1,393 @@
 +
 +Aufs4 -- advanced multi layered unification filesystem version 4.x
 +http://aufs.sf.net
@@ -463,6 +463,7 @@
 +Daniel Epellei made a donation (2015/1).
 +OmegaPhil made a donation (2016/1).
 +Tomasz Szewczyk made a donation (2016/4).
++James Burry made a donation (2016/12).
 +
 +Thank you very much.
 +Donations are always, including future donations, very important and
@@ -14903,7 +14904,7 @@
 +}
 --- /dev/null
 +++ b/fs/aufs/i_op.c
-@@ -0,0 +1,1444 @@
+@@ -0,0 +1,1449 @@
 +/*
 + * Copyright (C) 2005-2016 Junjiro R. Okajima
 + *
@@ -16038,7 +16039,8 @@
 + * returns zero or negative (an error).
 + * @dentry will be read-locked in success.
 + */
-+int au_h_path_getattr(struct dentry *dentry, int force, struct path *h_path)
++int au_h_path_getattr(struct dentry *dentry, int force, struct path *h_path,
++		      int locked)
 +{
 +	int err;
 +	unsigned int mnt_flags, sigen;
@@ -16054,6 +16056,9 @@
 +	sb = dentry->d_sb;
 +	mnt_flags = au_mntflags(sb);
 +	udba_none = !!au_opt_test(mnt_flags, UDBA_NONE);
++
++	if (unlikely(locked))
++		goto body; /* skip locking dinfo */
 +
 +	/* support fstat(2) */
 +	if (!d_unlinked(dentry) && !udba_none) {
@@ -16082,6 +16087,7 @@
 +	} else
 +		di_read_lock_child(dentry, AuLock_IR);
 +
++body:
 +	inode = d_inode(dentry);
 +	bindex = au_ibtop(inode);
 +	h_path->mnt = au_sbr_mnt(sb, bindex);
@@ -16120,7 +16126,7 @@
 +	err = si_read_lock(sb, AuLock_FLUSH | AuLock_NOPLM);
 +	if (unlikely(err))
 +		goto out;
-+	err = au_h_path_getattr(dentry, /*force*/0, &h_path);
++	err = au_h_path_getattr(dentry, /*force*/0, &h_path, /*locked*/0);
 +	if (unlikely(err))
 +		goto out_si;
 +	if (unlikely(!h_path.dentry))
@@ -19773,7 +19779,7 @@
 +}
 --- /dev/null
 +++ b/fs/aufs/inode.h
-@@ -0,0 +1,691 @@
+@@ -0,0 +1,692 @@
 +/*
 + * Copyright (C) 2005-2016 Junjiro R. Okajima
 + *
@@ -19986,7 +19992,8 @@
 +int au_pin_and_icpup(struct dentry *dentry, struct iattr *ia,
 +		     struct au_icpup_args *a);
 +
-+int au_h_path_getattr(struct dentry *dentry, int force, struct path *h_path);
++int au_h_path_getattr(struct dentry *dentry, int force, struct path *h_path,
++		      int locked);
 +
 +/* i_op_add.c */
 +int au_may_add(struct dentry *dentry, aufs_bindex_t bindex,
@@ -24790,7 +24797,7 @@
 +}
 --- /dev/null
 +++ b/fs/aufs/posix_acl.c
-@@ -0,0 +1,98 @@
+@@ -0,0 +1,102 @@
 +/*
 + * Copyright (C) 2014-2016 Junjiro R. Okajima
 + *
@@ -24842,6 +24849,8 @@
 +
 +	/* always topmost only */
 +	acl = get_acl(h_inode, type);
++	if (!IS_ERR_OR_NULL(acl))
++		set_cached_acl(inode, type, acl);
 +
 +out:
 +	ii_read_unlock(inode);
@@ -24883,8 +24892,10 @@
 +	ssz = au_sxattr(dentry, inode, &arg);
 +	dput(dentry);
 +	err = ssz;
-+	if (ssz >= 0)
++	if (ssz >= 0) {
 +		err = 0;
++		set_cached_acl(inode, type, acl);
++	}
 +
 +out:
 +	return err;
@@ -26122,7 +26133,7 @@
 +#endif /* __AUFS_SPL_H__ */
 --- /dev/null
 +++ b/fs/aufs/super.c
-@@ -0,0 +1,1046 @@
+@@ -0,0 +1,1044 @@
 +/*
 + * Copyright (C) 2005-2016 Junjiro R. Okajima
 + *
@@ -26572,12 +26583,10 @@
 +			continue;
 +
 +		h_sb = au_sbr_sb(sb, bindex);
-+		if (h_sb->s_op->sync_fs) {
-+			e = h_sb->s_op->sync_fs(h_sb, wait);
-+			if (unlikely(e && !err))
-+				err = e;
-+			/* go on even if an error happens */
-+		}
++		e = vfsub_sync_filesystem(h_sb, wait);
++		if (unlikely(e && !err))
++			err = e;
++		/* go on even if an error happens */
 +	}
 +	si_read_unlock(sb);
 +
@@ -29466,7 +29475,7 @@
 +}
 --- /dev/null
 +++ b/fs/aufs/vfsub.c
-@@ -0,0 +1,886 @@
+@@ -0,0 +1,899 @@
 +/*
 + * Copyright (C) 2005-2016 Junjiro R. Okajima
 + *
@@ -29510,6 +29519,19 @@
 +	return real_mount(mnt)->mnt_ns == ns->mnt_ns ? 0 : -EACCES;
 +}
 +#endif
++
++int vfsub_sync_filesystem(struct super_block *h_sb, int wait)
++{
++	int err;
++
++	lockdep_off();
++	down_read(&h_sb->s_umount);
++	err = __sync_filesystem(h_sb, wait);
++	up_read(&h_sb->s_umount);
++	lockdep_on();
++
++	return err;
++}
 +
 +/* ---------------------------------------------------------------------- */
 +
@@ -30355,7 +30377,7 @@
 +}
 --- /dev/null
 +++ b/fs/aufs/vfsub.h
-@@ -0,0 +1,316 @@
+@@ -0,0 +1,318 @@
 +/*
 + * Copyright (C) 2005-2016 Junjiro R. Okajima
 + *
@@ -30440,6 +30462,8 @@
 +#else
 +AuStubInt0(vfsub_test_mntns, struct vfsmount *mnt, struct super_block *h_sb);
 +#endif
++
++int vfsub_sync_filesystem(struct super_block *h_sb, int wait);
 +
 +/* ---------------------------------------------------------------------- */
 +
@@ -32971,7 +32995,7 @@
 +#endif /* __AUFS_WKQ_H__ */
 --- /dev/null
 +++ b/fs/aufs/xattr.c
-@@ -0,0 +1,332 @@
+@@ -0,0 +1,357 @@
 +/*
 + * Copyright (C) 2014-2016 Junjiro R. Okajima
 + *
@@ -32993,6 +33017,8 @@
 + * handling xattr functions
 + */
 +
++#include <linux/fs.h>
++#include <linux/posix_acl_xattr.h>
 +#include <linux/xattr.h>
 +#include "aufs.h"
 +
@@ -33165,6 +33191,19 @@
 +
 +/* ---------------------------------------------------------------------- */
 +
++static int au_smack_reentering(struct super_block *sb)
++{
++#if IS_ENABLED(CONFIG_SECURITY_SMACK)
++	/*
++	 * as a part of lookup, smack_d_instantiate() is called, and it calls
++	 * i_op->getxattr(). ouch.
++	 */
++	return si_pid_test(sb);
++#else
++	return 0;
++#endif
++}
++
 +enum {
 +	AU_XATTR_LIST,
 +	AU_XATTR_GET
@@ -33188,14 +33227,18 @@
 +static ssize_t au_lgxattr(struct dentry *dentry, struct au_lgxattr *arg)
 +{
 +	ssize_t err;
++	int reenter;
 +	struct path h_path;
 +	struct super_block *sb;
 +
 +	sb = dentry->d_sb;
-+	err = si_read_lock(sb, AuLock_FLUSH | AuLock_NOPLM);
-+	if (unlikely(err))
-+		goto out;
-+	err = au_h_path_getattr(dentry, /*force*/1, &h_path);
++	reenter = au_smack_reentering(sb);
++	if (!reenter) {
++		err = si_read_lock(sb, AuLock_FLUSH | AuLock_NOPLM);
++		if (unlikely(err))
++			goto out;
++	}
++	err = au_h_path_getattr(dentry, /*force*/1, &h_path, reenter);
 +	if (unlikely(err))
 +		goto out_si;
 +	if (unlikely(!h_path.dentry))
@@ -33217,9 +33260,11 @@
 +	}
 +
 +out_di:
-+	di_read_unlock(dentry, AuLock_IR);
++	if (!reenter)
++		di_read_unlock(dentry, AuLock_IR);
 +out_si:
-+	si_read_unlock(sb);
++	if (!reenter)
++		si_read_unlock(sb);
 +out:
 +	AuTraceErr(err);
 +	return err;
@@ -33296,7 +33341,11 @@
 +};
 +
 +static const struct xattr_handler *au_xattr_handlers[] = {
-+	&au_xattr_handler,
++#ifdef CONFIG_FS_POSIX_ACL
++	&posix_acl_access_xattr_handler,
++	&posix_acl_default_xattr_handler,
++#endif
++	&au_xattr_handler, /* must be last */
 +	NULL
 +};
 +
@@ -34669,7 +34718,7 @@
 +
 +#include <linux/limits.h>
 +
-+#define AUFS_VERSION	"4.9-20161219"
++#define AUFS_VERSION	"4.9-20170206"
 +
 +/* todo? move this to linux-2.6.19/include/magic.h */
 +#define AUFS_SUPER_MAGIC	('a' << 24 | 'u' << 16 | 'f' << 8 | 's')
