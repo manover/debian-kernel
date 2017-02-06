@@ -3,7 +3,7 @@
 !*.diff
 *.debhelper*
 *.local
-!config.local
+!/config.local/
 *.pyc
 *.substvars
 *-di
