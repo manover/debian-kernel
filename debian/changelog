@@ -1,3 +1,12 @@
+linux (4.9.8-4) unstable; urgency=medium
+
+  * Import recent debian patches
+  * Update it87 driver (84bff31dc1 -> 294699b7d2)
+    - Fix fan4_ctl detection for IT8620, IT8628
+    - Do not overwrite bit 2..6 of pwm control registers
+
+ -- Denis Bychkov <manover@gmail.com>  Wed, 08 Feb 2017 22:39:50 -0500
+
 linux (4.9.8-3) unstable; urgency=medium
 
   * AUFS 4.9-20170206
@@ -16,7 +25,7 @@ linux (4.9.8-1) unstable; urgency=medium
 
  -- Denis Bychkov <manover@gmail.com>  Sat, 04 Feb 2017 16:33:40 -0500
 
-linux (4.9.8-1) UNRELEASED; urgency=medium
+linux (4.9.8-1) unstable; urgency=medium
 
   * New upstream stable update:
     https://www.kernel.org/pub/linux/kernel/v4.x/ChangeLog-4.9.7
