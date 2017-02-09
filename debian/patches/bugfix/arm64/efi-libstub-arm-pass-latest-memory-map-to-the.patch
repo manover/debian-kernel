@@ -10,11 +10,9 @@ This reverts commit 74ce3fd64bc44f89856ff57bf684882dc098f93b.
  drivers/firmware/efi/libstub/fdt.c     | 87 ++++++++++++----------------------
  2 files changed, 39 insertions(+), 56 deletions(-)
 
-diff --git a/drivers/firmware/efi/libstub/efistub.h b/drivers/firmware/efi/libstub/efistub.h
-index fac67992bede..ee49cd23ee63 100644
 --- a/drivers/firmware/efi/libstub/efistub.h
 +++ b/drivers/firmware/efi/libstub/efistub.h
-@@ -30,6 +30,14 @@ efi_status_t efi_file_close(void *handle);
+@@ -30,6 +30,14 @@ efi_status_t efi_file_close(void *handle
  
  unsigned long get_dram_base(efi_system_table_t *sys_table_arg);
  
@@ -29,8 +27,6 @@ index fac67992bede..ee49cd23ee63 100644
  efi_status_t allocate_new_fdt_and_exit_boot(efi_system_table_t *sys_table,
  					    void *handle,
  					    unsigned long *new_fdt_addr,
-diff --git a/drivers/firmware/efi/libstub/fdt.c b/drivers/firmware/efi/libstub/fdt.c
-index 921dfa047202..a6a93116a8f0 100644
 --- a/drivers/firmware/efi/libstub/fdt.c
 +++ b/drivers/firmware/efi/libstub/fdt.c
 @@ -16,10 +16,13 @@
@@ -51,7 +47,7 @@ index 921dfa047202..a6a93116a8f0 100644
  {
  	int node, num_rsv;
  	int status;
-@@ -98,23 +101,25 @@ static efi_status_t update_fdt(efi_system_table_t *sys_table, void *orig_fdt,
+@@ -98,23 +101,25 @@ static efi_status_t update_fdt(efi_syste
  	if (status)
  		goto fdt_set_fail;
  
@@ -79,7 +75,7 @@ index 921dfa047202..a6a93116a8f0 100644
  	status = fdt_setprop(fdt, node, "linux,uefi-mmap-desc-ver",
  			     &fdt_val32, sizeof(fdt_val32));
  	if (status)
-@@ -143,43 +148,6 @@ static efi_status_t update_fdt(efi_system_table_t *sys_table, void *orig_fdt,
+@@ -143,43 +148,6 @@ fdt_set_fail:
  	return EFI_LOAD_ERROR;
  }
  
@@ -123,7 +119,7 @@ index 921dfa047202..a6a93116a8f0 100644
  #ifndef EFI_FDT_ALIGN
  #define EFI_FDT_ALIGN EFI_PAGE_SIZE
  #endif
-@@ -275,10 +243,20 @@ efi_status_t allocate_new_fdt_and_exit_boot(efi_system_table_t *sys_table,
+@@ -276,10 +244,20 @@ efi_status_t allocate_new_fdt_and_exit_b
  			goto fail;
  		}
  
@@ -145,7 +141,7 @@ index 921dfa047202..a6a93116a8f0 100644
  
  		/* Succeeding the first time is the expected case. */
  		if (status == EFI_SUCCESS)
-@@ -288,16 +266,20 @@ efi_status_t allocate_new_fdt_and_exit_boot(efi_system_table_t *sys_table,
+@@ -289,16 +267,20 @@ efi_status_t allocate_new_fdt_and_exit_b
  			/*
  			 * We need to allocate more space for the new
  			 * device tree, so free existing buffer that is
@@ -167,25 +163,8 @@ index 921dfa047202..a6a93116a8f0 100644
 +	sys_table->boottime->free_pool(memory_map);
  	priv.runtime_map = runtime_map;
  	priv.runtime_entry_count = &runtime_entry_count;
- 	status = efi_exit_boot_services(sys_table, handle, &map, &priv,
-@@ -306,16 +288,6 @@ efi_status_t allocate_new_fdt_and_exit_boot(efi_system_table_t *sys_table,
- 	if (status == EFI_SUCCESS) {
- 		efi_set_virtual_address_map_t *svam;
- 
--		status = update_fdt_memmap((void *)*new_fdt_addr, &map);
--		if (status != EFI_SUCCESS) {
--			/*
--			 * The kernel won't get far without the memory map, but
--			 * may still be able to print something meaningful so
--			 * return success here.
--			 */
--			return EFI_SUCCESS;
--		}
--
- 		/* Install the new virtual address map */
- 		svam = sys_table->runtime->set_virtual_address_map;
- 		status = svam(runtime_entry_count * desc_size, desc_size,
-@@ -347,6 +319,9 @@ efi_status_t allocate_new_fdt_and_exit_boot(efi_system_table_t *sys_table,
+ 	priv.new_fdt_addr = (void *)*new_fdt_addr;
+@@ -339,6 +321,9 @@ efi_status_t allocate_new_fdt_and_exit_b
  
  	pr_efi_err(sys_table, "Exit boot services failed.\n");
  
@@ -195,6 +174,3 @@ index 921dfa047202..a6a93116a8f0 100644
  fail_free_new_fdt:
  	efi_free(sys_table, new_fdt_size, *new_fdt_addr);
  
--- 
-2.11.0
-

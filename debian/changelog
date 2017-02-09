@@ -1,3 +1,9 @@
+linux (4.9.9-1) unstable; urgency=medium
+
+  * Linux 4.9.9
+
+ -- Denis Bychkov <manover@gmail.com>  Thu, 09 Feb 2017 03:22:31 -0500
+
 linux (4.9.8-4) unstable; urgency=medium
 
   * Import recent debian patches
