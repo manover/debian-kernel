@@ -160,7 +160,55 @@
  
  struct it87_sio_data {
  	enum chips type;
-@@ -1344,6 +1381,7 @@ static ssize_t set_pwm(struct device *de
+@@ -1300,25 +1337,35 @@ static ssize_t set_pwm_enable(struct dev
+ 			it87_write_value(data, IT87_REG_FAN_MAIN_CTRL,
+ 					 data->fan_main_ctrl);
+ 		} else {
++			u8 ctrl;
++
+ 			/* No on/off mode, set maximum pwm value */
+ 			data->pwm_duty[nr] = pwm_to_reg(data, 0xff);
+ 			it87_write_value(data, IT87_REG_PWM_DUTY[nr],
+ 					 data->pwm_duty[nr]);
+ 			/* and set manual mode */
+-			data->pwm_ctrl[nr] = has_newer_autopwm(data) ?
+-					     data->pwm_temp_map[nr] :
+-					     data->pwm_duty[nr];
+-			it87_write_value(data, IT87_REG_PWM[nr],
+-					 data->pwm_ctrl[nr]);
++			if (has_newer_autopwm(data)) {
++				ctrl = (data->pwm_ctrl[nr] & 0x7c) |
++					data->pwm_temp_map[nr];
++			} else {
++				ctrl = data->pwm_duty[nr];
++			}
++			data->pwm_ctrl[nr] = ctrl;
++			it87_write_value(data, IT87_REG_PWM[nr], ctrl);
+ 		}
+ 	} else {
+-		if (val == 1)				/* Manual mode */
+-			data->pwm_ctrl[nr] = has_newer_autopwm(data) ?
+-					     data->pwm_temp_map[nr] :
+-					     data->pwm_duty[nr];
+-		else					/* Automatic mode */
+-			data->pwm_ctrl[nr] = 0x80 | data->pwm_temp_map[nr];
+-		it87_write_value(data, IT87_REG_PWM[nr], data->pwm_ctrl[nr]);
++		u8 ctrl;
++
++		if (has_newer_autopwm(data)) {
++			ctrl = (data->pwm_ctrl[nr] & 0x7c) |
++				data->pwm_temp_map[nr];
++			if (val != 1)
++				ctrl |= 0x80;
++		} else {
++			ctrl = (val == 1 ? data->pwm_duty[nr] : 0x80);
++		}
++		data->pwm_ctrl[nr] = ctrl;
++		it87_write_value(data, IT87_REG_PWM[nr], ctrl);
+ 
+ 		if (data->type != it8603 && nr < 3) {
+ 			/* set SmartGuardian mode */
+@@ -1344,6 +1391,7 @@ static ssize_t set_pwm(struct device *de
  		return -EINVAL;
  
  	mutex_lock(&data->update_lock);
@@ -168,7 +216,7 @@
  	if (has_newer_autopwm(data)) {
  		/*
  		 * If we are in automatic mode, the PWM duty cycle register
-@@ -1456,6 +1494,7 @@ static ssize_t set_pwm_temp_map(struct d
+@@ -1456,13 +1504,15 @@ static ssize_t set_pwm_temp_map(struct d
  	}
  
  	mutex_lock(&data->update_lock);
@@ -176,7 +224,16 @@
  	data->pwm_temp_map[nr] = reg;
  	/*
  	 * If we are in automatic mode, write the temp mapping immediately;
-@@ -1916,17 +1955,21 @@ static ssize_t show_label(struct device
+ 	 * otherwise, just store it for later use.
+ 	 */
+ 	if (data->pwm_ctrl[nr] & 0x80) {
+-		data->pwm_ctrl[nr] = 0x80 | data->pwm_temp_map[nr];
++		data->pwm_ctrl[nr] = (data->pwm_ctrl[nr] & 0xfc) |
++						data->pwm_temp_map[nr];
+ 		it87_write_value(data, IT87_REG_PWM[nr], data->pwm_ctrl[nr]);
+ 	}
+ 	mutex_unlock(&data->update_lock);
+@@ -1916,17 +1966,21 @@ static ssize_t show_label(struct device
  		"+5V",
  		"5VSB",
  		"Vbat",
@@ -199,7 +256,7 @@
  		label = labels_it8721[nr];
  	else
  		label = labels[nr];
-@@ -1937,7 +1980,7 @@ static SENSOR_DEVICE_ATTR(in3_label, S_I
+@@ -1937,7 +1991,7 @@ static SENSOR_DEVICE_ATTR(in3_label, S_I
  static SENSOR_DEVICE_ATTR(in7_label, S_IRUGO, show_label, NULL, 1);
  static SENSOR_DEVICE_ATTR(in8_label, S_IRUGO, show_label, NULL, 2);
  /* AVCC3 */
@@ -208,7 +265,7 @@
  
  static umode_t it87_in_is_visible(struct kobject *kobj,
  				  struct attribute *attr, int index)
-@@ -2011,10 +2054,10 @@ static struct attribute *it87_attributes
+@@ -2011,10 +2065,10 @@ static struct attribute *it87_attributes
  	&sensor_dev_attr_in7_beep.dev_attr.attr,	/* 39 */
  
  	&sensor_dev_attr_in8_input.dev_attr.attr,	/* 40 */
@@ -223,7 +280,7 @@
  	NULL
  };
  
-@@ -2386,6 +2429,9 @@ static int __init it87_find(int sioaddr,
+@@ -2386,6 +2440,9 @@ static int __init it87_find(int sioaddr,
  	case IT8732F_DEVID:
  		sio_data->type = it8732;
  		break;
@@ -233,7 +290,7 @@
  	case IT8771E_DEVID:
  		sio_data->type = it8771;
  		break;
-@@ -2411,9 +2457,15 @@ static int __init it87_find(int sioaddr,
+@@ -2411,9 +2468,15 @@ static int __init it87_find(int sioaddr,
  	case IT8623E_DEVID:
  		sio_data->type = it8603;
  		break;
@@ -249,7 +306,7 @@
  	case IT8628E_DEVID:
  		sio_data->type = it8628;
  		break;
-@@ -2457,8 +2509,10 @@ static int __init it87_find(int sioaddr,
+@@ -2457,8 +2520,10 @@ static int __init it87_find(int sioaddr,
  	else
  		sio_data->skip_in |= BIT(9);
  
@@ -261,7 +318,7 @@
  
  	if (!has_vid(config))
  		sio_data->skip_vid = 1;
-@@ -2536,7 +2590,7 @@ static int __init it87_find(int sioaddr,
+@@ -2536,7 +2601,7 @@ static int __init it87_find(int sioaddr,
  
  		sio_data->beep_pin = superio_inb(sioaddr,
  						 IT87_SIO_BEEP_PIN_REG) & 0x3f;
@@ -270,7 +327,7 @@
  		int reg27, reg29;
  
  		superio_select(sioaddr, GPIO);
-@@ -2556,8 +2610,10 @@ static int __init it87_find(int sioaddr,
+@@ -2556,8 +2621,10 @@ static int __init it87_find(int sioaddr,
  		if (reg29 & BIT(2))
  			sio_data->skip_fan |= BIT(1);
  
@@ -283,7 +340,16 @@
  
  		sio_data->beep_pin = superio_inb(sioaddr,
  						 IT87_SIO_BEEP_PIN_REG) & 0x3f;
-@@ -2602,6 +2658,50 @@ static int __init it87_find(int sioaddr,
+@@ -2587,7 +2654,7 @@ static int __init it87_find(int sioaddr,
+ 
+ 		/* Check for pwm4 */
+ 		reg = superio_inb(sioaddr, IT87_SIO_GPIO4_REG);
+-		if (!(reg & BIT(2)))
++		if (reg & BIT(2))
+ 			sio_data->skip_pwm |= BIT(3);
+ 
+ 		/* Check for pwm2, fan2 */
+@@ -2602,6 +2669,50 @@ static int __init it87_find(int sioaddr,
  			sio_data->skip_fan |= BIT(5);
  		}
  

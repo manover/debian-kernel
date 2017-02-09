@@ -1,3 +1,11 @@
+linux (4.10~rc7-3) experimental; urgency=medium
+
+  * Update it87 driver (84bff31dc1 -> 294699b7d2)
+    - Fix fan4_ctl detection for IT8620, IT8628
+    - Do not overwrite bit 2..6 of pwm control registers
+
+ -- Denis Bychkov <manover@gmail.com>  Wed, 08 Feb 2017 22:50:22 -0500
+
 linux (4.10~rc7-2) experimental; urgency=medium
 
   * AUFS 4.x-rcN-20170206
