@@ -1,3 +1,9 @@
+linux (4.10~rc7-4) experimental; urgency=medium
+
+  * Apply HDAPS driver patch from TP-SMAPI project
+
+ -- Denis Bychkov <manover@gmail.com>  Thu, 09 Feb 2017 23:17:37 -0500
+
 linux (4.10~rc7-3) experimental; urgency=medium
 
   * Update it87 driver (84bff31dc1 -> 294699b7d2)
