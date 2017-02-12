@@ -1,3 +1,10 @@
+linux (4.10~rc8-1) experimental; urgency=medium
+
+  * Linux 4.10 RC 8
+  * Refresh/remove outdated patches
+
+ -- Denis Bychkov <manover@gmail.com>  Sun, 12 Feb 2017 17:03:36 -0500
+
 linux (4.10~rc7-5) experimental; urgency=medium
 
   * [sparc64] topology_64.h: Fix condition for including cpudata.h
