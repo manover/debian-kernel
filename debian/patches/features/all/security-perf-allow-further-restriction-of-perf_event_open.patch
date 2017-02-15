@@ -45,7 +45,7 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
  
  /* Minimum for 512 kiB + 1 user control page */
  int sysctl_perf_event_mlock __read_mostly = 512 + (PAGE_SIZE / 1024); /* 'free' kiB per user */
-@@ -9587,6 +9592,9 @@ SYSCALL_DEFINE5(perf_event_open,
+@@ -9592,6 +9597,9 @@ SYSCALL_DEFINE5(perf_event_open,
  	if (flags & ~PERF_FLAG_ALL)
  		return -EINVAL;
  
