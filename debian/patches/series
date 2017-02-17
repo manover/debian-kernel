@@ -77,6 +77,7 @@ bugfix/all/nbd-use-loff_t-for-blocksize-and-nbd_set_size-args.patch
 bugfix/all/ath9k-fix-null-pointer-dereference.patch
 bugfix/all/pegasus-use-heap-buffers-for-all-register-access.patch
 bugfix/all/net-ipv6-check-route-protocol-when-deleting-routes.patch
+bugfix/all/media-dvb-usb-dibusb-mc-common-add-module_license.patch
 
 # Miscellaneous features
 
