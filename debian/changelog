@@ -3,6 +3,8 @@ linux (4.10.1-1) unstable; urgency=medium
   * Linux 4.10.1
   * dccp: Disable auto-loading as mitigation against local exploits
   * [x86] platform: acer-wmi: setup accelerometer when machine has appropriate
+    notify event (Closes: #853067)
+  * [x86] xen: Fix APIC id mismatch warning on Intel (Closes: #853193)
 
  -- Denis Bychkov <manover@gmail.com>  Mon, 27 Feb 2017 21:18:43 -0500
 
