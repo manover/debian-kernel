@@ -324,6 +324,11 @@ linux (4.9.8-1) unstable; urgency=medium
     USB_CONFIGFS_F_{LB_SS,LS,UAC1,UAC2,MIDI,HID,UVC,PRINTER}, USB_ETH_RNDIS,
     USB_FUNCTIONFS_{ETH,RNDIS,GENERIC} (thanks to Riku Voipio)
   * [ppc64el] Disable IBMEBUS; this bus does not exist on POWER8 systems
+  * pegasus: Use heap buffers for all register access (Closes: #852556)
+  * test-patches: Use the pkg.linux.notools build profile
+  * test-patches: Set default number of jobs to number of available processors
+  * dccp: Disable auto-loading as mitigation against local exploits
+  * net: ipv6: check route protocol when deleting routes (Closes: #855153)
 
   [ Roger Shimizu ]
   * [armel] ARM: dts: orion5x-lschl: Fix model name
