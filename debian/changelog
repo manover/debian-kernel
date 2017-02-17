@@ -337,6 +337,8 @@ linux (4.9.8-1) unstable; urgency=medium
   * test-patches: Set default number of jobs to number of available processors
   * dccp: Disable auto-loading as mitigation against local exploits
   * net: ipv6: check route protocol when deleting routes (Closes: #855153)
+  * [x86] platform: acer-wmi: setup accelerometer when machine has appropriate
+    notify event (Closes: #853067)
 
   [ Roger Shimizu ]
   * [armel] ARM: dts: orion5x-lschl: Fix model name
