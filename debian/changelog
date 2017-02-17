@@ -1,3 +1,11 @@
+linux (4.9.10-2) unstable; urgency=medium
+
+  * Import new debian patches
+    - net: ipv6: check route protocol when deleting routes (Closes: #855153)
+    - dccp: Disable auto-loading as mitigation against local exploits
+
+ -- Denis Bychkov <manover@gmail.com>  Thu, 16 Feb 2017 21:43:02 -0500
+
 linux (4.9.10-1) unstable; urgency=medium
 
   * Linux 4.9.10
