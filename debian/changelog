@@ -3,8 +3,11 @@ linux (4.9.11-1) unstable; urgency=medium
   * Linux 4.9.11
   * Remove patched merged upstream; pegasus: Use heap buffers for all
     register access
+  * [armel] dts: kirkwood: Fix SATA pinmux-ing for TS419 (Closes: #855017)
+  * Expand format for a file rename patch; ARM-dts-orion5x-lschl-More-
+    consistent-naming-on-link.patch
 
- -- Denis Bychkov <manover@gmail.com>  Sun, 19 Feb 2017 01:11:59 -0500
+ -- Denis Bychkov <manover@gmail.com>  Sun, 19 Feb 2017 01:41:39 -0500
 
 linux (4.9.10-3) unstable; urgency=medium
 
