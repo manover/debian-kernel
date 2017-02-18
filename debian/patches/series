@@ -48,6 +48,7 @@ debian/fjes-disable-autoload.patch
 debian/fanotify-taint-on-use-of-fanotify_access_permissions.patch
 
 # Arch bug fixes
+bugfix/arm/arm-dts-kirkwood-fix-sata-pinmux-ing-for-ts419.patch
 
 # Arch features
 features/mips/MIPS-increase-MAX-PHYSMEM-BITS-on-Loongson-3-only.patch

@@ -3,6 +3,7 @@ linux (4.11~rc7-2) experimental; urgency=medium
   * Import debian patches
   * fjes: Disable auto-loading, as this driver matches a very common ACPI ID
     (Closes: #853976)
+  * [armel] dts: kirkwood: Fix SATA pinmux-ing for TS419 (Closes: #855017)
 
  -- Denis Bychkov <manover@gmail.com>  Wed, 19 Apr 2017 21:19:19 -0400
 
