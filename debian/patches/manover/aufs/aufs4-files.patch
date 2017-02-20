@@ -485,7 +485,7 @@
 +++ b/Documentation/filesystems/aufs/design/01intro.txt
 @@ -0,0 +1,170 @@
 +
-+# Copyright (C) 2005-2016 Junjiro R. Okajima
++# Copyright (C) 2005-2017 Junjiro R. Okajima
 +#
 +# This program is free software; you can redistribute it and/or modify
 +# it under the terms of the GNU General Public License as published by
@@ -658,7 +658,7 @@
 +++ b/Documentation/filesystems/aufs/design/02struct.txt
 @@ -0,0 +1,258 @@
 +
-+# Copyright (C) 2005-2016 Junjiro R. Okajima
++# Copyright (C) 2005-2017 Junjiro R. Okajima
 +#
 +# This program is free software; you can redistribute it and/or modify
 +# it under the terms of the GNU General Public License as published by
@@ -919,7 +919,7 @@
 +++ b/Documentation/filesystems/aufs/design/03atomic_open.txt
 @@ -0,0 +1,85 @@
 +
-+# Copyright (C) 2015-2016 Junjiro R. Okajima
++# Copyright (C) 2015-2017 Junjiro R. Okajima
 +#
 +# This program is free software; you can redistribute it and/or modify
 +# it under the terms of the GNU General Public License as published by
@@ -1007,7 +1007,7 @@
 +++ b/Documentation/filesystems/aufs/design/03lookup.txt
 @@ -0,0 +1,113 @@
 +
-+# Copyright (C) 2005-2016 Junjiro R. Okajima
++# Copyright (C) 2005-2017 Junjiro R. Okajima
 +#
 +# This program is free software; you can redistribute it and/or modify
 +# it under the terms of the GNU General Public License as published by
@@ -1123,7 +1123,7 @@
 +++ b/Documentation/filesystems/aufs/design/04branch.txt
 @@ -0,0 +1,74 @@
 +
-+# Copyright (C) 2005-2016 Junjiro R. Okajima
++# Copyright (C) 2005-2017 Junjiro R. Okajima
 +#
 +# This program is free software; you can redistribute it and/or modify
 +# it under the terms of the GNU General Public License as published by
@@ -1200,7 +1200,7 @@
 +++ b/Documentation/filesystems/aufs/design/05wbr_policy.txt
 @@ -0,0 +1,64 @@
 +
-+# Copyright (C) 2005-2016 Junjiro R. Okajima
++# Copyright (C) 2005-2017 Junjiro R. Okajima
 +#
 +# This program is free software; you can redistribute it and/or modify
 +# it under the terms of the GNU General Public License as published by
@@ -1267,7 +1267,7 @@
 +++ b/Documentation/filesystems/aufs/design/06fhsm.txt
 @@ -0,0 +1,120 @@
 +
-+# Copyright (C) 2011-2016 Junjiro R. Okajima
++# Copyright (C) 2011-2017 Junjiro R. Okajima
 +#
 +# This program is free software; you can redistribute it and/or modify
 +# it under the terms of the GNU General Public License as published by
@@ -1390,7 +1390,7 @@
 +++ b/Documentation/filesystems/aufs/design/06mmap.txt
 @@ -0,0 +1,72 @@
 +
-+# Copyright (C) 2005-2016 Junjiro R. Okajima
++# Copyright (C) 2005-2017 Junjiro R. Okajima
 +#
 +# This program is free software; you can redistribute it and/or modify
 +# it under the terms of the GNU General Public License as published by
@@ -1465,7 +1465,7 @@
 +++ b/Documentation/filesystems/aufs/design/06xattr.txt
 @@ -0,0 +1,96 @@
 +
-+# Copyright (C) 2014-2016 Junjiro R. Okajima
++# Copyright (C) 2014-2017 Junjiro R. Okajima
 +#
 +# This program is free software; you can redistribute it and/or modify
 +# it under the terms of the GNU General Public License as published by
@@ -1564,7 +1564,7 @@
 +++ b/Documentation/filesystems/aufs/design/07export.txt
 @@ -0,0 +1,58 @@
 +
-+# Copyright (C) 2005-2016 Junjiro R. Okajima
++# Copyright (C) 2005-2017 Junjiro R. Okajima
 +#
 +# This program is free software; you can redistribute it and/or modify
 +# it under the terms of the GNU General Public License as published by
@@ -1625,7 +1625,7 @@
 +++ b/Documentation/filesystems/aufs/design/08shwh.txt
 @@ -0,0 +1,52 @@
 +
-+# Copyright (C) 2005-2016 Junjiro R. Okajima
++# Copyright (C) 2005-2017 Junjiro R. Okajima
 +#
 +# This program is free software; you can redistribute it and/or modify
 +# it under the terms of the GNU General Public License as published by
@@ -1680,7 +1680,7 @@
 +++ b/Documentation/filesystems/aufs/design/10dynop.txt
 @@ -0,0 +1,47 @@
 +
-+# Copyright (C) 2010-2016 Junjiro R. Okajima
++# Copyright (C) 2010-2017 Junjiro R. Okajima
 +#
 +# This program is free software; you can redistribute it and/or modify
 +# it under the terms of the GNU General Public License as published by
@@ -1728,10 +1728,9 @@
 +regular files only.
 --- /dev/null
 +++ b/fs/aufs/Kconfig
-@@ -0,0 +1,186 @@
+@@ -0,0 +1,185 @@
 +config AUFS_FS
 +	tristate "Aufs (Advanced multi layered unification filesystem) support"
-+	default m
 +	help
 +	Aufs is a stackable unification filesystem such as Unionfs,
 +	which unifies several directories and provides a merged single
@@ -1966,7 +1965,7 @@
 +++ b/fs/aufs/aufs.h
 @@ -0,0 +1,59 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -2028,7 +2027,7 @@
 +++ b/fs/aufs/branch.c
 @@ -0,0 +1,1412 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -3443,7 +3442,7 @@
 +++ b/fs/aufs/branch.h
 @@ -0,0 +1,309 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -3796,7 +3795,7 @@
 +++ b/fs/aufs/cpup.c
 @@ -0,0 +1,1388 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -5187,7 +5186,7 @@
 +++ b/fs/aufs/cpup.h
 @@ -0,0 +1,94 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -5284,7 +5283,7 @@
 +++ b/fs/aufs/dbgaufs.c
 @@ -0,0 +1,438 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -5725,7 +5724,7 @@
 +++ b/fs/aufs/dbgaufs.h
 @@ -0,0 +1,48 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -5776,7 +5775,7 @@
 +++ b/fs/aufs/dcsub.c
 @@ -0,0 +1,225 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -6004,7 +6003,7 @@
 +++ b/fs/aufs/dcsub.h
 @@ -0,0 +1,136 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -6143,7 +6142,7 @@
 +++ b/fs/aufs/debug.c
 @@ -0,0 +1,440 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -6586,7 +6585,7 @@
 +++ b/fs/aufs/debug.h
 @@ -0,0 +1,225 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -6814,7 +6813,7 @@
 +++ b/fs/aufs/dentry.c
 @@ -0,0 +1,1130 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -7947,7 +7946,7 @@
 +++ b/fs/aufs/dentry.h
 @@ -0,0 +1,255 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -8205,7 +8204,7 @@
 +++ b/fs/aufs/dinfo.c
 @@ -0,0 +1,553 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -8761,7 +8760,7 @@
 +++ b/fs/aufs/dir.c
 @@ -0,0 +1,762 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -9526,7 +9525,7 @@
 +++ b/fs/aufs/dir.h
 @@ -0,0 +1,137 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -9666,7 +9665,7 @@
 +++ b/fs/aufs/dynop.c
 @@ -0,0 +1,371 @@
 +/*
-+ * Copyright (C) 2010-2016 Junjiro R. Okajima
++ * Copyright (C) 2010-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -10040,7 +10039,7 @@
 +++ b/fs/aufs/dynop.h
 @@ -0,0 +1,74 @@
 +/*
-+ * Copyright (C) 2010-2016 Junjiro R. Okajima
++ * Copyright (C) 2010-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -10117,7 +10116,7 @@
 +++ b/fs/aufs/export.c
 @@ -0,0 +1,836 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -10956,7 +10955,7 @@
 +++ b/fs/aufs/f_op.c
 @@ -0,0 +1,723 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -11682,7 +11681,7 @@
 +++ b/fs/aufs/fhsm.c
 @@ -0,0 +1,426 @@
 +/*
-+ * Copyright (C) 2011-2016 Junjiro R. Okajima
++ * Copyright (C) 2011-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -12111,7 +12110,7 @@
 +++ b/fs/aufs/file.c
 @@ -0,0 +1,857 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -12971,7 +12970,7 @@
 +++ b/fs/aufs/file.h
 @@ -0,0 +1,294 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -13268,7 +13267,7 @@
 +++ b/fs/aufs/finfo.c
 @@ -0,0 +1,151 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -13422,7 +13421,7 @@
 +++ b/fs/aufs/fstype.h
 @@ -0,0 +1,400 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -13825,7 +13824,7 @@
 +++ b/fs/aufs/hfsnotify.c
 @@ -0,0 +1,287 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -14115,7 +14114,7 @@
 +++ b/fs/aufs/hfsplus.c
 @@ -0,0 +1,56 @@
 +/*
-+ * Copyright (C) 2010-2016 Junjiro R. Okajima
++ * Copyright (C) 2010-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -14174,7 +14173,7 @@
 +++ b/fs/aufs/hnotify.c
 @@ -0,0 +1,723 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -14900,7 +14899,7 @@
 +++ b/fs/aufs/i_op.c
 @@ -0,0 +1,1448 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -16351,7 +16350,7 @@
 +++ b/fs/aufs/i_op_add.c
 @@ -0,0 +1,928 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -17282,7 +17281,7 @@
 +++ b/fs/aufs/i_op_del.c
 @@ -0,0 +1,511 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -17796,7 +17795,7 @@
 +++ b/fs/aufs/i_op_ren.c
 @@ -0,0 +1,1165 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -18964,7 +18963,7 @@
 +++ b/fs/aufs/iinfo.c
 @@ -0,0 +1,285 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -19252,7 +19251,7 @@
 +++ b/fs/aufs/inode.c
 @@ -0,0 +1,519 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -19774,7 +19773,7 @@
 +++ b/fs/aufs/inode.h
 @@ -0,0 +1,692 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -20469,7 +20468,7 @@
 +++ b/fs/aufs/ioctl.c
 @@ -0,0 +1,219 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -20691,7 +20690,7 @@
 +++ b/fs/aufs/loop.c
 @@ -0,0 +1,147 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -20841,7 +20840,7 @@
 +++ b/fs/aufs/loop.h
 @@ -0,0 +1,52 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -20929,7 +20928,7 @@
 +++ b/fs/aufs/module.c
 @@ -0,0 +1,333 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -21265,7 +21264,7 @@
 +++ b/fs/aufs/module.h
 @@ -0,0 +1,156 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -21424,7 +21423,7 @@
 +++ b/fs/aufs/mvdown.c
 @@ -0,0 +1,704 @@
 +/*
-+ * Copyright (C) 2011-2016 Junjiro R. Okajima
++ * Copyright (C) 2011-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -22131,7 +22130,7 @@
 +++ b/fs/aufs/opts.c
 @@ -0,0 +1,1848 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -23982,7 +23981,7 @@
 +++ b/fs/aufs/opts.h
 @@ -0,0 +1,213 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -24198,7 +24197,7 @@
 +++ b/fs/aufs/plink.c
 @@ -0,0 +1,514 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -24715,7 +24714,7 @@
 +++ b/fs/aufs/poll.c
 @@ -0,0 +1,52 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -24770,7 +24769,7 @@
 +++ b/fs/aufs/posix_acl.c
 @@ -0,0 +1,102 @@
 +/*
-+ * Copyright (C) 2014-2016 Junjiro R. Okajima
++ * Copyright (C) 2014-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -24875,7 +24874,7 @@
 +++ b/fs/aufs/procfs.c
 @@ -0,0 +1,169 @@
 +/*
-+ * Copyright (C) 2010-2016 Junjiro R. Okajima
++ * Copyright (C) 2010-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -25047,7 +25046,7 @@
 +++ b/fs/aufs/rdu.c
 @@ -0,0 +1,381 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -25431,7 +25430,7 @@
 +++ b/fs/aufs/rwsem.h
 @@ -0,0 +1,198 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -25630,9 +25629,9 @@
 +#endif /* __AUFS_RWSEM_H__ */
 --- /dev/null
 +++ b/fs/aufs/sbinfo.c
-@@ -0,0 +1,355 @@
+@@ -0,0 +1,304 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -25678,10 +25677,6 @@
 +	au_rw_write_unlock(&sbinfo->si_rwsem);
 +
 +	au_delayed_kfree(sbinfo->si_branch);
-+	for (i = 0; i < AU_NPIDMAP; i++)
-+		if (sbinfo->au_si_pid.pid_bitmap[i])
-+			au_delayed_kfree(sbinfo->au_si_pid.pid_bitmap[i]);
-+	mutex_destroy(&sbinfo->au_si_pid.pid_mtx);
 +	mutex_destroy(&sbinfo->si_xib_mtx);
 +	AuRwDestroy(&sbinfo->si_rwsem);
 +
@@ -25709,7 +25704,6 @@
 +
 +	au_nwt_init(&sbinfo->si_nowait);
 +	au_rw_init_wlock(&sbinfo->si_rwsem);
-+	mutex_init(&sbinfo->au_si_pid.pid_mtx);
 +
 +	percpu_counter_init(&sbinfo->si_ninodes, 0, GFP_NOFS);
 +	percpu_counter_init(&sbinfo->si_nfiles, 0, GFP_NOFS);
@@ -25940,57 +25934,11 @@
 +	di_write_unlock2(d1, d2);
 +	si_read_unlock(d1->d_sb);
 +}
-+
-+/* ---------------------------------------------------------------------- */
-+
-+static void si_pid_alloc(struct au_si_pid *au_si_pid, int idx)
-+{
-+	unsigned long *p;
-+
-+	BUILD_BUG_ON(sizeof(unsigned long) !=
-+		     sizeof(*au_si_pid->pid_bitmap));
-+
-+	mutex_lock(&au_si_pid->pid_mtx);
-+	p = au_si_pid->pid_bitmap[idx];
-+	while (!p) {
-+		/*
-+		 * bad approach.
-+		 * but keeping 'si_pid_set()' void is more important.
-+		 */
-+		p = kcalloc(BITS_TO_LONGS(AU_PIDSTEP),
-+			    sizeof(*au_si_pid->pid_bitmap),
-+			    GFP_NOFS);
-+		if (p)
-+			break;
-+		cond_resched();
-+	}
-+	au_si_pid->pid_bitmap[idx] = p;
-+	mutex_unlock(&au_si_pid->pid_mtx);
-+}
-+
-+void si_pid_set(struct super_block *sb)
-+{
-+	pid_t bit;
-+	int idx;
-+	unsigned long *bitmap;
-+	struct au_si_pid *au_si_pid;
-+
-+	si_pid_idx_bit(&idx, &bit);
-+	au_si_pid = &au_sbi(sb)->au_si_pid;
-+	bitmap = au_si_pid->pid_bitmap[idx];
-+	if (!bitmap) {
-+		si_pid_alloc(au_si_pid, idx);
-+		bitmap = au_si_pid->pid_bitmap[idx];
-+	}
-+	AuDebugOn(test_bit(bit, bitmap));
-+	set_bit(bit, bitmap);
-+	/* smp_mb(); */
-+}
 --- /dev/null
 +++ b/fs/aufs/spl.h
 @@ -0,0 +1,113 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -26106,7 +26054,7 @@
 +++ b/fs/aufs/super.c
 @@ -0,0 +1,1044 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -27151,9 +27099,9 @@
 +};
 --- /dev/null
 +++ b/fs/aufs/super.h
-@@ -0,0 +1,639 @@
+@@ -0,0 +1,617 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -27233,13 +27181,6 @@
 +#endif
 +};
 +
-+#define AU_PIDSTEP	(int)(BITS_TO_LONGS(PID_MAX_DEFAULT) * BITS_PER_LONG)
-+#define AU_NPIDMAP	(int)DIV_ROUND_UP(PID_MAX_LIMIT, AU_PIDSTEP)
-+struct au_si_pid {
-+	unsigned long	*pid_bitmap[AU_NPIDMAP];
-+	struct mutex	pid_mtx;
-+};
-+
 +struct au_branch;
 +struct au_sbinfo {
 +	/* nowait tasks in the system-wide workqueue */
@@ -27250,9 +27191,6 @@
 +	 * rwsem for au_sbinfo is necessary.
 +	 */
 +	struct au_rwsem		si_rwsem;
-+
-+	/* prevent recursive locking in deleting inode */
-+	struct au_si_pid	au_si_pid;
 +
 +	/*
 +	 * dirty approach to protect sb->sb_inodes and ->s_files (gone) from
@@ -27595,42 +27533,30 @@
 +
 +/* ---------------------------------------------------------------------- */
 +
-+static inline void si_pid_idx_bit(int *idx, pid_t *bit)
-+{
-+	/* the origin of pid is 1, but the bitmap's is 0 */
-+	*bit = current->pid - 1;
-+	*idx = *bit / AU_PIDSTEP;
-+	*bit %= AU_PIDSTEP;
-+}
++/* current->atomic_flags */
++/* this value should never corrupt the ones defined in linux/sched.h */
++#define PFA_AUFS	7
++
++TASK_PFA_TEST(AUFS, test_aufs)	/* task_test_aufs */
++TASK_PFA_SET(AUFS, aufs)	/* task_set_aufs */
++TASK_PFA_CLEAR(AUFS, aufs)	/* task_clear_aufs */
 +
 +static inline int si_pid_test(struct super_block *sb)
 +{
-+	pid_t bit;
-+	int idx;
-+	unsigned long *bitmap;
-+
-+	si_pid_idx_bit(&idx, &bit);
-+	bitmap = au_sbi(sb)->au_si_pid.pid_bitmap[idx];
-+	if (bitmap)
-+		return test_bit(bit, bitmap);
-+	return 0;
++	return !!task_test_aufs(current);
 +}
 +
 +static inline void si_pid_clr(struct super_block *sb)
 +{
-+	pid_t bit;
-+	int idx;
-+	unsigned long *bitmap;
-+
-+	si_pid_idx_bit(&idx, &bit);
-+	bitmap = au_sbi(sb)->au_si_pid.pid_bitmap[idx];
-+	BUG_ON(!bitmap);
-+	AuDebugOn(!test_bit(bit, bitmap));
-+	clear_bit(bit, bitmap);
-+	/* smp_mb(); */
++	AuDebugOn(!task_test_aufs(current));
++	task_clear_aufs(current);
 +}
 +
-+void si_pid_set(struct super_block *sb);
++static inline void si_pid_set(struct super_block *sb)
++{
++	AuDebugOn(task_test_aufs(current));
++	task_set_aufs(current);
++}
 +
 +/* ---------------------------------------------------------------------- */
 +
@@ -27795,7 +27721,7 @@
 +++ b/fs/aufs/sysaufs.c
 @@ -0,0 +1,104 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -27902,7 +27828,7 @@
 +++ b/fs/aufs/sysaufs.h
 @@ -0,0 +1,101 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -28006,7 +27932,7 @@
 +++ b/fs/aufs/sysfs.c
 @@ -0,0 +1,376 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -28385,7 +28311,7 @@
 +++ b/fs/aufs/sysrq.c
 @@ -0,0 +1,157 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -28545,7 +28471,7 @@
 +++ b/fs/aufs/vdir.c
 @@ -0,0 +1,900 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -29448,7 +29374,7 @@
 +++ b/fs/aufs/vfsub.c
 @@ -0,0 +1,899 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -30350,7 +30276,7 @@
 +++ b/fs/aufs/vfsub.h
 @@ -0,0 +1,318 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -30671,7 +30597,7 @@
 +++ b/fs/aufs/wbr_policy.c
 @@ -0,0 +1,830 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -31504,7 +31430,7 @@
 +++ b/fs/aufs/whout.c
 @@ -0,0 +1,1061 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -32568,7 +32494,7 @@
 +++ b/fs/aufs/whout.h
 @@ -0,0 +1,85 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -32656,7 +32582,7 @@
 +++ b/fs/aufs/wkq.c
 @@ -0,0 +1,213 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -32872,7 +32798,7 @@
 +++ b/fs/aufs/wkq.h
 @@ -0,0 +1,93 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -32968,7 +32894,7 @@
 +++ b/fs/aufs/xattr.c
 @@ -0,0 +1,357 @@
 +/*
-+ * Copyright (C) 2014-2016 Junjiro R. Okajima
++ * Copyright (C) 2014-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -33328,7 +33254,7 @@
 +++ b/fs/aufs/xino.c
 @@ -0,0 +1,1318 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -34649,7 +34575,7 @@
 +++ b/include/uapi/linux/aufs_type.h
 @@ -0,0 +1,419 @@
 +/*
-+ * Copyright (C) 2005-2016 Junjiro R. Okajima
++ * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
 + * This program, aufs is free software; you can redistribute it and/or modify
 + * it under the terms of the GNU General Public License as published by
@@ -34689,7 +34615,7 @@
 +
 +#include <linux/limits.h>
 +
-+#define AUFS_VERSION	"4.10-20170206"
++#define AUFS_VERSION	"4.10-20170220"
 +
 +/* todo? move this to linux-2.6.19/include/magic.h */
 +#define AUFS_SUPER_MAGIC	('a' << 24 | 'u' << 16 | 'f' << 8 | 's')
