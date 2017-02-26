@@ -13,6 +13,7 @@ linux (4.10.8-1) unstable; urgency=medium
     Thanks to Jakobus Schurz <jakobus.schurz@gmail.com> (Closes: #846792)
 
   * [x86] kvm: fix page struct leak in handle_vmon (CVE-2017-2596)
+  * time: Disable TIMER_STATS (CVE-2017-5967)
 
  -- Denis Bychkov <manover@gmail.com>  Tue, 04 Apr 2017 03:47:54 -0400
 
