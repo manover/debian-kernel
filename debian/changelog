@@ -12,6 +12,8 @@ linux (4.10.8-1) unstable; urgency=medium
   * ACPI / EC: Use busy polling mode when GPE is not enabled.
     Thanks to Jakobus Schurz <jakobus.schurz@gmail.com> (Closes: #846792)
 
+  * [x86] kvm: fix page struct leak in handle_vmon (CVE-2017-2596)
+
  -- Denis Bychkov <manover@gmail.com>  Tue, 04 Apr 2017 03:47:54 -0400
 
 linux (4.10.6-1) unstable; urgency=medium
