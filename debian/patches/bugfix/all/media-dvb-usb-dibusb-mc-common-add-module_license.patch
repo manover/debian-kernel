@@ -17,8 +17,8 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 
 --- a/drivers/media/usb/dvb-usb/dibusb-mc-common.c
 +++ b/drivers/media/usb/dvb-usb/dibusb-mc-common.c
-@@ -12,6 +12,8 @@
- #include <linux/kconfig.h>
+@@ -11,6 +11,8 @@
+ 
  #include "dibusb.h"
  
 +MODULE_LICENSE("GPL");

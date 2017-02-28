@@ -6,8 +6,9 @@ linux (4.10.1-1) unstable; urgency=medium
     notify event (Closes: #853067)
   * [x86] xen: Fix APIC id mismatch warning on Intel (Closes: #853193)
   * media: dvb-usb-dibusb-mc-common: Add MODULE_LICENSE (Closes: #853110)
+  * Enable Intel P-state frequency driver, run with schedutil scheduler
 
- -- Denis Bychkov <manover@gmail.com>  Mon, 27 Feb 2017 21:18:43 -0500
+ -- Denis Bychkov <manover@gmail.com>  Mon, 27 Feb 2017 22:11:05 -0500
 
 linux (4.10.0-1) unstable; urgency=medium
 

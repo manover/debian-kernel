@@ -28,7 +28,7 @@ Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
 --- a/drivers/platform/x86/acer-wmi.c
 +++ b/drivers/platform/x86/acer-wmi.c
-@@ -1808,11 +1808,24 @@ static int __init acer_wmi_enable_lm(voi
+@@ -1846,11 +1846,24 @@ static int __init acer_wmi_enable_lm(voi
  	return status;
  }
  
@@ -54,7 +54,7 @@ Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
  }
  
  static int __init acer_wmi_get_handle(const char *name, const char *prop,
-@@ -1839,7 +1852,7 @@ static int __init acer_wmi_accel_setup(v
+@@ -1877,7 +1890,7 @@ static int __init acer_wmi_accel_setup(v
  {
  	int err;
  
@@ -63,7 +63,7 @@ Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
  	if (err)
  		return err;
  
-@@ -2177,10 +2190,11 @@ static int __init acer_wmi_init(void)
+@@ -2233,10 +2246,11 @@ static int __init acer_wmi_init(void)
  		err = acer_wmi_input_setup();
  		if (err)
  			return err;
