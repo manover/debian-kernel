@@ -124,7 +124,7 @@ aufs4.9 base patch
  	mm_segment_t old_fs;
 --- a/fs/splice.c
 +++ b/fs/splice.c
-@@ -855,8 +855,8 @@ EXPORT_SYMBOL(generic_splice_sendpage);
+@@ -856,8 +856,8 @@ EXPORT_SYMBOL(generic_splice_sendpage);
  /*
   * Attempt to initiate a splice from pipe to file.
   */
@@ -135,7 +135,7 @@ aufs4.9 base patch
  {
  	ssize_t (*splice_write)(struct pipe_inode_info *, struct file *,
  				loff_t *, size_t, unsigned int);
-@@ -872,9 +872,9 @@ static long do_splice_from(struct pipe_i
+@@ -873,9 +873,9 @@ static long do_splice_from(struct pipe_i
  /*
   * Attempt to initiate a splice from a file to a pipe.
   */

@@ -206,7 +206,7 @@ aufs4.9 standalone patch
  {
 --- a/fs/splice.c
 +++ b/fs/splice.c
-@@ -868,6 +868,7 @@ long do_splice_from(struct pipe_inode_in
+@@ -869,6 +869,7 @@ long do_splice_from(struct pipe_inode_in
  
  	return splice_write(pipe, out, ppos, len, flags);
  }
@@ -214,7 +214,7 @@ aufs4.9 standalone patch
  
  /*
   * Attempt to initiate a splice from a file to a pipe.
-@@ -897,6 +898,7 @@ long do_splice_to(struct file *in, loff_
+@@ -898,6 +899,7 @@ long do_splice_to(struct file *in, loff_
  
  	return splice_read(in, ppos, pipe, len, flags);
  }

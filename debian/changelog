@@ -1,3 +1,15 @@
+linux (4.9.13-1) unstable; urgency=medium
+
+  * Linux 4.9.13
+
+  Import new debian patches/remove merged:
+  * ipc/shm: Fix shmat mmap nil-page protection
+  * sctp: deny peeloff operation on asocs with threads sleeping on it
+  * kvm: fix page struct leak in handle_vmon
+  * time: Mark TIMER_STATS as broken
+
+ -- Denis Bychkov <manover@gmail.com>  Tue, 28 Feb 2017 21:17:22 -0500
+
 linux (4.9.11-2) unstable; urgency=medium
 
   * dccp: fix freeing skb too early for IPV6_RECVPKTINFO (CVE-2017-6074)
