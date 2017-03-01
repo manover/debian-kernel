@@ -1,3 +1,10 @@
+linux (4.9.13-3) unstable; urgency=medium
+
+  * [media] dvb-usb: don't use stack for firmware load or reset (Closes:
+    #853894)
+
+ -- Denis Bychkov <manover@gmail.com>  Sat, 04 Mar 2017 07:57:37 -0500
+
 linux (4.9.13-2) unstable; urgency=medium
 
   * CPU accounting controller for cgroups v2
