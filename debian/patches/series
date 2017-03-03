@@ -144,6 +144,7 @@ manover/modern-intel-cpu.patch
 # Misc minor patches
 manover/misc.patch
 manover/it87-update.patch
+manover/cgroup-v2-cpu.patch
 #unifdef-hang.patch
 #smsc-lpc47m182.patch
 #it87-wdt-new-dev-api.patch
