@@ -7,6 +7,8 @@ linux (4.10.8-1) unstable; urgency=medium
     (Closes: #853976)
   * [armel] dts: kirkwood: Fix SATA pinmux-ing for TS419 (Closes: #855017)
   * [arm64] rtc: tegra: Implement clock handling (Closes: #858514)
+  * Kbuild.include: addtree: Remove quotes before matching path
+    (regression in 4.8) (Closes: #856474)
 
  -- Denis Bychkov <manover@gmail.com>  Tue, 04 Apr 2017 03:47:54 -0400
 
