@@ -1,3 +1,9 @@
+linux (4.7.10-3) unstable; urgency=medium
+
+  * CPU accounting controller for cgroups v2
+
+ -- Denis Bychkov <manover@gmail.com>  Sat, 04 Mar 2017 09:59:48 -0500
+
 linux (4.7.10-2) unstable; urgency=medium
 
   * new patch: Force enable HPET on ICH4-M

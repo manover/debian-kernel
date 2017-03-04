@@ -166,3 +166,4 @@ manover/modern-intel-cpu.patch
 manover/misc.patch
 #manover/thecus_it87.patch
 #unifdef-hang.patch
+manover/cgroup-v2-cpu.patch
