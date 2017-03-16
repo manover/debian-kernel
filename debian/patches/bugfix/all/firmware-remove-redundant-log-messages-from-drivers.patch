@@ -96,7 +96,7 @@ upstream submission.
      fw_size = firmware->size / sizeof(u32);
 --- a/drivers/bluetooth/ath3k.c
 +++ b/drivers/bluetooth/ath3k.c
-@@ -422,10 +422,8 @@ static int ath3k_load_patch(struct usb_d
+@@ -424,10 +424,8 @@ static int ath3k_load_patch(struct usb_d
  		 le32_to_cpu(fw_version.rom_version));
  
  	ret = request_firmware(&firmware, filename, &udev->dev);
@@ -108,7 +108,7 @@ upstream submission.
  
  	pt_rom_version = get_unaligned_le32(firmware->data +
  					    firmware->size - 8);
-@@ -485,10 +483,8 @@ static int ath3k_load_syscfg(struct usb_
+@@ -487,10 +485,8 @@ static int ath3k_load_syscfg(struct usb_
  		le32_to_cpu(fw_version.rom_version), clk_value, ".dfu");
  
  	ret = request_firmware(&firmware, filename, &udev->dev);
@@ -914,7 +914,7 @@ upstream submission.
  	nim9090md_config[1].microcode_B_fe_size = state->frontend_firmware->size;
 --- a/drivers/media/usb/dvb-usb/dvb-usb-firmware.c
 +++ b/drivers/media/usb/dvb-usb/dvb-usb-firmware.c
-@@ -79,13 +79,9 @@ int dvb_usb_download_firmware(struct usb
+@@ -86,13 +86,9 @@ int dvb_usb_download_firmware(struct usb
  	int ret;
  	const struct firmware *fw = NULL;
  
@@ -2026,7 +2026,7 @@ upstream submission.
  	if (qla82xx_validate_firmware_blob(vha,
 --- a/drivers/scsi/qla2xxx/qla_os.c
 +++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -5841,8 +5841,6 @@ qla2x00_request_firmware(scsi_qla_host_t
+@@ -5837,8 +5837,6 @@ qla2x00_request_firmware(scsi_qla_host_t
  		goto out;
  
  	if (request_firmware(&blob->fw, blob->name, &ha->pdev->dev)) {
