@@ -1,3 +1,11 @@
+linux (4.11~rc7-2) experimental; urgency=medium
+
+  * Import debian patches
+  * fjes: Disable auto-loading, as this driver matches a very common ACPI ID
+    (Closes: #853976)
+
+ -- Denis Bychkov <manover@gmail.com>  Wed, 19 Apr 2017 21:19:19 -0400
+
 linux (4.11~rc7-1) experimental; urgency=medium
 
   * Linux 4.11 RC-7
