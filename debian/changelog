@@ -3,6 +3,8 @@ linux (4.9.16-1) unstable; urgency=medium
   * Linux 4.9.16
   * Removed obsolete/refreshed patches
   * New it87 driver from upstream
+  * fjes: Disable auto-loading, as this driver matches a very common ACPI ID
+    (Closes: #853976)
 
  -- Denis Bychkov <manover@gmail.com>  Tue, 21 Mar 2017 04:33:37 -0400
 
