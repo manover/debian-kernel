@@ -34,15 +34,7 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 ---
 --- a/tools/lib/traceevent/kbuffer-parse.c
 +++ b/tools/lib/traceevent/kbuffer-parse.c
-@@ -314,6 +314,7 @@ static unsigned int old_update_pointers(
- 		extend <<= TS_SHIFT;
- 		extend += delta;
- 		delta = extend;
-+		length = 0;
- 		ptr += 4;
- 		break;
- 
-@@ -613,7 +614,7 @@ unsigned long long kbuffer_timestamp(str
+@@ -614,7 +614,7 @@ unsigned long long kbuffer_timestamp(str
  void *kbuffer_read_at_offset(struct kbuffer *kbuf, int offset,
  			     unsigned long long *ts)
  {

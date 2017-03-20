@@ -371,7 +371,7 @@
 +     Peter Zijlstra <peterz@infradead.org>
 --- a/kernel/sched/core.c
 +++ b/kernel/sched/core.c
-@@ -8724,7 +8724,7 @@ static int __cfs_schedulable(struct task
+@@ -7174,7 +7174,7 @@ static int __cfs_schedulable(struct task
  	return ret;
  }
  
@@ -380,7 +380,7 @@
  {
  	struct task_group *tg = css_tg(seq_css(sf));
  	struct cfs_bandwidth *cfs_b = &tg->cfs_bandwidth;
-@@ -8764,7 +8764,7 @@ static u64 cpu_rt_period_read_uint(struc
+@@ -7214,7 +7214,7 @@ static u64 cpu_rt_period_read_uint(struc
  }
  #endif /* CONFIG_RT_GROUP_SCHED */
  
@@ -389,7 +389,7 @@
  #ifdef CONFIG_FAIR_GROUP_SCHED
  	{
  		.name = "shares",
-@@ -8785,7 +8785,7 @@ static struct cftype cpu_files[] = {
+@@ -7235,7 +7235,7 @@ static struct cftype cpu_files[] = {
  	},
  	{
  		.name = "stat",
@@ -398,8 +398,8 @@
  	},
  #endif
  #ifdef CONFIG_RT_GROUP_SCHED
-@@ -8803,6 +8803,139 @@ static struct cftype cpu_files[] = {
- 	{ }	/* terminate */
+@@ -7253,6 +7253,139 @@ static struct cftype cpu_files[] = {
+ 	{ }	/* Terminate */
  };
  
 +static int cpu_stats_show(struct seq_file *sf, void *v)
@@ -537,8 +537,8 @@
 +
  struct cgroup_subsys cpu_cgrp_subsys = {
  	.css_alloc	= cpu_cgroup_css_alloc,
- 	.css_released	= cpu_cgroup_css_released,
-@@ -8810,8 +8943,16 @@ struct cgroup_subsys cpu_cgrp_subsys = {
+ 	.css_online	= cpu_cgroup_css_online,
+@@ -7261,8 +7394,16 @@ struct cgroup_subsys cpu_cgrp_subsys = {
  	.fork		= cpu_cgroup_fork,
  	.can_attach	= cpu_cgroup_can_attach,
  	.attach		= cpu_cgroup_attach,
@@ -601,7 +601,7 @@
 -		seq_printf(sf, "%s %lld\n",
 +		seq_printf(sf, "%s %llu\n",
  			   cpuacct_stat_desc[stat],
- 			   (long long)cputime64_to_clock_t(val[stat]));
+ 			   (long long)nsec_to_clock_t(val[stat]));
  	}
 @@ -340,6 +347,31 @@ static struct cftype files[] = {
  	{ }	/* terminate */

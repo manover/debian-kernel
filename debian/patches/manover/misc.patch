@@ -1,6 +1,6 @@
 --- a/Makefile
 +++ b/Makefile
-@@ -263,10 +263,10 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH"
+@@ -265,10 +265,10 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH"
  	  else if [ -x /bin/bash ]; then echo /bin/bash; \
  	  else echo sh; fi ; fi)
  

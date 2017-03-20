@@ -21,7 +21,7 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 
 --- a/net/rds/af_rds.c
 +++ b/net/rds/af_rds.c
-@@ -669,4 +669,4 @@ MODULE_DESCRIPTION("RDS: Reliable Datagr
+@@ -700,4 +700,4 @@ MODULE_DESCRIPTION("RDS: Reliable Datagr
  		   " v" DRV_VERSION " (" DRV_RELDATE ")");
  MODULE_VERSION(DRV_VERSION);
  MODULE_LICENSE("Dual BSD/GPL");

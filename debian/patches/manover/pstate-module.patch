@@ -1,0 +1,90 @@
+--- a/Documentation/cpu-freq/intel-pstate.txt
++++ b/Documentation/cpu-freq/intel-pstate.txt
+@@ -90,10 +90,10 @@ that can be used for controlling the ope
+ 
+       status: Three settings are possible:
+       "off"     - The driver is not in use at this time.
+-      "active"  - The driver works as a P-state governor (default).
++      "active"  - The driver works as a P-state governor.
+       "passive" - The driver works as a regular cpufreq one and collaborates
+                   with the generic cpufreq governors (it sets P-states as
+-                  requested by those governors).
++                  requested by those governors). This is the new default mode.
+       The current setting is returned by reads from this attribute.  Writing one
+       of the above strings to it changes the operation mode as indicated by that
+       string, if possible.  If HW-managed P-states (HWP) are enabled, it is not
+--- a/drivers/cpufreq/Kconfig.x86
++++ b/drivers/cpufreq/Kconfig.x86
+@@ -3,19 +3,17 @@
+ #
+ 
+ config X86_INTEL_PSTATE
+-       bool "Intel P state control"
++       tristate "Intel P-States driver"
+        depends on X86
+        select ACPI_PROCESSOR if ACPI
+        select ACPI_CPPC_LIB if X86_64 && ACPI && SCHED_MC_PRIO
+        help
+-          This driver provides a P state for Intel core processors.
+-	  The driver implements an internal governor and will become
+-          the scaling driver and governor for Sandy bridge processors.
++         This driver provides a P state for Intel core processors.
++         The driver implements a (non-default) internal governor.
++         If built as a module, it will be called intel_pstate.
+ 
+-	  When this driver is enabled it will become the preferred
+-          scaling driver for Sandy bridge processors.
+-
+-	  If in doubt, say N.
++         When this driver is enabled it will become the preferred
++         scaling driver for Sandy bridge and newer Intel platforms.
+ 
+ config X86_PCC_CPUFREQ
+ 	tristate "Processor Clocking Control interface driver"
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -1980,7 +1980,6 @@ static const struct x86_cpu_id intel_pst
+ 	ICPU(INTEL_FAM6_ATOM_GOLDMONT,		bxt_params),
+ 	{}
+ };
+-MODULE_DEVICE_TABLE(x86cpu, intel_pstate_cpu_ids);
+ 
+ static const struct x86_cpu_id intel_pstate_cpu_oob_ids[] __initconst = {
+ 	ICPU(INTEL_FAM6_BROADWELL_XEON_D, core_params),
+@@ -2404,7 +2403,7 @@ static struct cpufreq_driver intel_cpufr
+ 	.name		= "intel_cpufreq",
+ };
+ 
+-static struct cpufreq_driver *intel_pstate_driver = &intel_pstate;
++static struct cpufreq_driver *intel_pstate_driver = &intel_cpufreq;
+ 
+ static void intel_pstate_driver_cleanup(void)
+ {
+@@ -2771,12 +2770,14 @@ static int __init intel_pstate_setup(cha
+ 	if (!str)
+ 		return -EINVAL;
+ 
++	no_hwp = 1;
++
+ 	if (!strcmp(str, "disable")) {
+ 		no_load = 1;
+-	} else if (!strcmp(str, "passive")) {
+-		pr_info("Passive mode enabled\n");
+-		intel_pstate_driver = &intel_cpufreq;
+-		no_hwp = 1;
++	} else if (!strcmp(str, "active")) {
++		pr_info("Active mode - internal governor\n");
++		intel_pstate_driver = &intel_pstate;
++		no_hwp = 0;
+ 	}
+ 	if (!strcmp(str, "no_hwp")) {
+ 		pr_info("HWP disabled\n");
+@@ -2798,6 +2799,8 @@ static int __init intel_pstate_setup(cha
+ }
+ early_param("intel_pstate", intel_pstate_setup);
+ 
++MODULE_DEVICE_TABLE(x86cpu, intel_pstate_cpu_ids);
++
+ MODULE_AUTHOR("Dirk Brandewie <dirk.j.brandewie@intel.com>");
+ MODULE_DESCRIPTION("'intel_pstate' - P state driver Intel Core processors");
+ MODULE_LICENSE("GPL");

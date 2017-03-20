@@ -47,10 +47,6 @@ bugfix/x86/viafb-autoload-on-olpc-xo1.5-only.patch
 debian/fanotify-taint-on-use-of-fanotify_access_permissions.patch
 
 # Arch bug fixes
-bugfix/x86/asoc-intel-select-dw_dmac_core-since-it-s-mandatory.patch
-bugfix/sparc/sparc-topology_64.h-fix-condition-for-including-cpudata.h.patch
-bugfix/x86/platform-x86-acer-wmi-setup-accelerometer-when-machi.patch
-bugfix/x86/x86-xen-fix-apic-id-mismatch-warning-on-intel.patch
 
 # Arch features
 features/mips/MIPS-increase-MAX-PHYSMEM-BITS-on-Loongson-3-only.patch
@@ -58,7 +54,6 @@ features/mips/MIPS-Loongson-3-Add-Loongson-LS3A-RS780E-1-way-machi.patch
 features/mips/MIPS-octeon-Add-support-for-the-UBNT-E200-board.patch
 features/x86/x86-memtest-WARN-if-bad-RAM-found.patch
 #features/x86/x86-make-x32-syscall-support-conditional.patch
-features/arm/arm-dts-turris-omnia-add-support-for-ethernet-switch.patch
 
 # Miscellaneous bug fixes
 bugfix/all/kbuild-use-nostdinc-in-compile-tests.patch
@@ -108,8 +103,8 @@ manover/bcache-name-device-by-label.patch
 #
 # Thecus N5550
 manover/n5550_leds.patch
-# kdbus
-manover/kdbus.patch
+## kdbus
+#manover/kdbus.patch
 # AUFS
 manover/aufs/aufs4-base.patch
 manover/aufs/aufs4-mmap.patch
@@ -131,3 +126,4 @@ manover/it87-update.patch
 manover/cgroup-v2-cpu.patch
 #unifdef-hang.patch
 #smsc-lpc47m182.patch
+#manover/pstate-module.patch

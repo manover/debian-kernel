@@ -11,37 +11,21 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 ---
 --- a/fs/btrfs/super.c
 +++ b/fs/btrfs/super.c
-@@ -2473,3 +2473,4 @@ late_initcall(init_btrfs_fs);
+@@ -2472,3 +2472,4 @@ late_initcall(init_btrfs_fs);
  module_exit(exit_btrfs_fs)
  
  MODULE_LICENSE("GPL");
 +MODULE_SOFTDEP("pre: crypto-crc32c");
---- a/fs/cifs/cifsfs.c
-+++ b/fs/cifs/cifsfs.c
-@@ -1365,5 +1365,13 @@ MODULE_DESCRIPTION
-     ("VFS to access servers complying with the SNIA CIFS Specification "
-      "e.g. Samba and Windows");
- MODULE_VERSION(CIFS_VERSION);
-+
-+#ifdef CONFIG_CIFS_SMB2
-+#define CIFS_SMB2_EXTRA_SOFTDEPS " crypto-aes crypto-cmac crypto-sha256"
-+#else
-+#define CIFS_SMB2_EXTRA_SOFTDEPS ""
-+#endif
-+MODULE_SOFTDEP("pre: crypto-arc4 crypto-des crypto-ecb crypto-hmac crypto-md4 crypto-md5" CIFS_SMB2_EXTRA_SOFTDEPS);
-+
- module_init(init_cifs)
- module_exit(exit_cifs)
 --- a/fs/crypto/crypto.c
 +++ b/fs/crypto/crypto.c
-@@ -614,3 +614,4 @@ static void __exit fscrypt_exit(void)
+@@ -489,3 +489,4 @@ static void __exit fscrypt_exit(void)
  module_exit(fscrypt_exit);
  
  MODULE_LICENSE("GPL");
 +MODULE_SOFTDEP("pre: crypto-aes crypto-ecb");
 --- a/fs/ext4/super.c
 +++ b/fs/ext4/super.c
-@@ -5695,5 +5695,13 @@ static void __exit ext4_exit_fs(void)
+@@ -5710,5 +5710,13 @@ static void __exit ext4_exit_fs(void)
  MODULE_AUTHOR("Remy Card, Stephen Tweedie, Andrew Morton, Andreas Dilger, Theodore Ts'o and others");
  MODULE_DESCRIPTION("Fourth Extended Filesystem");
  MODULE_LICENSE("GPL");
@@ -57,7 +41,7 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
  module_exit(ext4_exit_fs)
 --- a/fs/f2fs/super.c
 +++ b/fs/f2fs/super.c
-@@ -2265,4 +2265,4 @@ module_exit(exit_f2fs_fs)
+@@ -2314,4 +2314,4 @@ module_exit(exit_f2fs_fs)
  MODULE_AUTHOR("Samsung Electronics's Praesto Team");
  MODULE_DESCRIPTION("Flash Friendly File System");
  MODULE_LICENSE("GPL");

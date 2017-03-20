@@ -4257,10 +4257,10 @@
 +		h_path.mnt = au_sbr_mnt(cpg->dentry->d_sb, cpg->bsrc);
 +		h_src_attr->iflags = h_src_inode->i_flags;
 +		if (!au_test_nfs(h_src_inode->i_sb))
-+			err = vfs_getattr(&h_path, &h_src_attr->st);
++			err = vfsub_getattr(&h_path, &h_src_attr->st);
 +		else {
 +			inode_unlock(h_src_inode);
-+			err = vfs_getattr(&h_path, &h_src_attr->st);
++			err = vfsub_getattr(&h_path, &h_src_attr->st);
 +			inode_lock_nested(h_src_inode, AuLsc_I_CHILD);
 +		}
 +		if (unlikely(err)) {
@@ -5346,15 +5346,15 @@
 +	if (!xf)
 +		goto out;
 +
-+	err = vfs_getattr(&xf->f_path, &st);
++	err = vfsub_getattr(&xf->f_path, &st);
 +	if (!err) {
 +		if (do_fcnt)
 +			p->n = snprintf
-+				(p->a, sizeof(p->a), "%ld, %llux%lu %lld\n",
++				(p->a, sizeof(p->a), "%ld, %llux%u %lld\n",
 +				 (long)file_count(xf), st.blocks, st.blksize,
 +				 (long long)st.size);
 +		else
-+			p->n = snprintf(p->a, sizeof(p->a), "%llux%lu %lld\n",
++			p->n = snprintf(p->a, sizeof(p->a), "%llux%u %lld\n",
 +					st.blocks, st.blksize,
 +					(long long)st.size);
 +		AuDebugOn(p->n >= sizeof(p->a));
@@ -6489,7 +6489,7 @@
 +		return;
 +	dpri("nw %d, gen %u, kobj %d\n",
 +	     atomic_read(&sbinfo->si_nowait.nw_len), sbinfo->si_generation,
-+	     atomic_read(&sbinfo->si_kobj.kref.refcount));
++	     kref_read(&sbinfo->si_kobj.kref));
 +	for (bindex = 0; bindex <= sbinfo->si_bbot; bindex++)
 +		do_pri_br(bindex, sbinfo->si_branch[0 + bindex]);
 +}
@@ -11532,7 +11532,7 @@
 +	 *			 au_flag_conv(vma->vm_flags));
 +	 */
 +	if (!err)
-+		err = h_file->f_op->mmap(h_file, vma);
++		err = call_mmap(h_file, vma);
 +	if (!err) {
 +		au_vm_prfile_set(vma, file);
 +		fsstack_copy_attr_atime(inode, file_inode(h_file));
@@ -14897,7 +14897,7 @@
 +}
 --- /dev/null
 +++ b/fs/aufs/i_op.c
-@@ -0,0 +1,1448 @@
+@@ -0,0 +1,1451 @@
 +/*
 + * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
@@ -16105,15 +16105,17 @@
 +	return err;
 +}
 +
-+static int aufs_getattr(struct vfsmount *mnt __maybe_unused,
-+			struct dentry *dentry, struct kstat *st)
++static int aufs_getattr(const struct path *path, struct kstat *st,
++			u32 request, unsigned int query)
 +{
 +	int err;
 +	unsigned char positive;
 +	struct path h_path;
++	struct dentry *dentry;
 +	struct inode *inode;
 +	struct super_block *sb;
 +
++	dentry = path->dentry;
 +	inode = d_inode(dentry);
 +	sb = dentry->d_sb;
 +	err = si_read_lock(sb, AuLock_FLUSH | AuLock_NOPLM);
@@ -16128,7 +16130,8 @@
 +
 +	positive = d_is_positive(h_path.dentry);
 +	if (positive)
-+		err = vfs_getattr(&h_path, st);
++		/* no vfsub version */
++		err = vfs_getattr(&h_path, st, request, query);
 +	if (!err) {
 +		if (positive)
 +			au_refresh_iattr(inode, st,
@@ -16348,7 +16351,7 @@
 +};
 --- /dev/null
 +++ b/fs/aufs/i_op_add.c
-@@ -0,0 +1,928 @@
+@@ -0,0 +1,920 @@
 +/*
 + * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
@@ -16806,18 +16809,11 @@
 +		goto out_parent;
 +
 +	h_parent = au_h_dptr(parent, bindex);
-+	err = inode_permission(d_inode(h_parent), MAY_WRITE | MAY_EXEC);
-+	if (unlikely(err))
++	h_dentry = vfs_tmpfile(h_parent, mode, /*open_flag*/0);
++	if (IS_ERR(h_dentry)) {
++		err = PTR_ERR(h_dentry);
 +		goto out_mnt;
-+
-+	err = -ENOMEM;
-+	h_dentry = d_alloc(h_parent, &dentry->d_name);
-+	if (unlikely(!h_dentry))
-+		goto out_mnt;
-+
-+	err = h_dir->i_op->tmpfile(h_dir, h_dentry, mode);
-+	if (unlikely(err))
-+		goto out_dentry;
++	}
 +
 +	au_set_dbtop(dentry, bindex);
 +	au_set_dbbot(dentry, bindex);
@@ -16838,9 +16834,8 @@
 +		if (au_ibtop(dir) == au_dbtop(dentry))
 +			au_cpup_attr_timesizes(dir);
 +	}
-+
-+out_dentry:
 +	dput(h_dentry);
++
 +out_mnt:
 +	vfsub_mnt_drop_write(h_mnt);
 +out_parent:
@@ -29447,7 +29442,7 @@
 +	h_sb = h_path->dentry->d_sb;
 +	*did = (!au_test_fs_remote(h_sb) && au_test_fs_refresh_iattr(h_sb));
 +	if (*did)
-+		err = vfs_getattr(h_path, &st);
++		err = vfsub_getattr(h_path, &st);
 +
 +	return err;
 +}
@@ -30274,7 +30269,7 @@
 +}
 --- /dev/null
 +++ b/fs/aufs/vfsub.h
-@@ -0,0 +1,318 @@
+@@ -0,0 +1,323 @@
 +/*
 + * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
@@ -30565,6 +30560,11 @@
 +			struct inode **delegated_inode);
 +int vfsub_unlink(struct inode *dir, struct path *path,
 +		 struct inode **delegated_inode, int force);
++
++static inline int vfsub_getattr(const struct path *path, struct kstat *st)
++{
++	return vfs_getattr(path, st, STATX_BASIC_STATS, AT_STATX_SYNC_AS_STAT);
++}
 +
 +/* ---------------------------------------------------------------------- */
 +
@@ -34615,7 +34615,7 @@
 +
 +#include <linux/limits.h>
 +
-+#define AUFS_VERSION	"4.10-20170313"
++#define AUFS_VERSION	"4.11-20170313"
 +
 +/* todo? move this to linux-2.6.19/include/magic.h */
 +#define AUFS_SUPER_MAGIC	('a' << 24 | 'u' << 16 | 'f' << 8 | 's')

@@ -13,7 +13,7 @@
  MODULE_LICENSE("GPL");
 --- a/drivers/ata/libahci.c
 +++ b/drivers/ata/libahci.c
-@@ -2578,6 +2578,10 @@ int ahci_host_activate(struct ata_host *
+@@ -2586,6 +2586,10 @@ int ahci_host_activate(struct ata_host *
  }
  EXPORT_SYMBOL_GPL(ahci_host_activate);
  
@@ -26,7 +26,7 @@
  MODULE_LICENSE("GPL");
 --- a/drivers/leds/Kconfig
 +++ b/drivers/leds/Kconfig
-@@ -434,6 +434,30 @@ config LEDS_INTEL_SS4200
+@@ -443,6 +443,30 @@ config LEDS_INTEL_SS4200
  	  drive or power LEDs on the front panel. Using this driver
  	  can stop the front LED from blinking after startup.
  
