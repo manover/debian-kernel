@@ -3,12 +3,14 @@ linux (4.9.16-1) unstable; urgency=medium
   * Linux 4.9.16
   * Removed obsolete/refreshed patches
   * New it87 driver from upstream
-  * fjes: Disable auto-loading, as this driver matches a very common ACPI ID
-    (Closes: #853976)
-  * ACPI / EC: Use busy polling mode when GPE is not enabled.
-    Thanks to Jakobus Schurz <jakobus.schurz@gmail.com> (Closes: #846792)
+  * Import new debian patches
+    - fjes: Disable auto-loading, as this driver matches a very common ACPI ID
+      (Closes: #853976)
+    - ACPI / EC: Use busy polling mode when GPE is not enabled.
+      Thanks to Jakobus Schurz <jakobus.schurz@gmail.com> (Closes: #846792)
+    - [amd64] Don't WARN about expected W+X pages on Xen (see #852324)
 
- -- Denis Bychkov <manover@gmail.com>  Tue, 21 Mar 2017 04:33:37 -0400
+ -- Denis Bychkov <manover@gmail.com>  Tue, 21 Mar 2017 05:04:16 -0400
 
 linux (4.9.13-3) unstable; urgency=medium
 
