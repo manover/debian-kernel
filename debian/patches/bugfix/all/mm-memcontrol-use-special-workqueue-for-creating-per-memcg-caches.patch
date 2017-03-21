@@ -53,7 +53,7 @@ Acked-by: Michal Hocko <mhocko@suse.com>
  }
  
  static void memcg_schedule_kmem_cache_create(struct mem_cgroup *memcg,
-@@ -5781,6 +5783,17 @@ static int __init mem_cgroup_init(void)
+@@ -5786,6 +5788,17 @@ static int __init mem_cgroup_init(void)
  {
  	int cpu, node;
  

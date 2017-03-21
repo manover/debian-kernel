@@ -33,7 +33,7 @@ Signed-off-by: Nicholas Krause <xerofoify@gmail.com>
  	depends on INTEL_IOMMU && BROKEN && X86
 --- a/drivers/iommu/intel-iommu.c
 +++ b/drivers/iommu/intel-iommu.c
-@@ -3768,7 +3768,12 @@ static void intel_unmap(struct device *d
+@@ -3769,7 +3769,12 @@ static void intel_unmap(struct device *d
  		return;
  
  	domain = find_domain(dev);
