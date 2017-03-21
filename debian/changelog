@@ -1,3 +1,9 @@
+linux (4.10.4-1) unstable; urgency=medium
+
+  * Linux 4.10.4
+
+ -- Denis Bychkov <manover@gmail.com>  Tue, 21 Mar 2017 01:25:31 -0400
+
 linux (4.10.3-1) unstable; urgency=medium
 
   * Linux 4.10.3
