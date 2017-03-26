@@ -914,7 +914,7 @@ upstream submission.
  	nim9090md_config[1].microcode_B_fe_size = state->frontend_firmware->size;
 --- a/drivers/media/usb/dvb-usb/dvb-usb-firmware.c
 +++ b/drivers/media/usb/dvb-usb/dvb-usb-firmware.c
-@@ -86,13 +86,9 @@ int dvb_usb_download_firmware(struct usb
+@@ -88,13 +88,9 @@ int dvb_usb_download_firmware(struct usb
  	int ret;
  	const struct firmware *fw = NULL;
  
@@ -1714,7 +1714,7 @@ upstream submission.
  	}
 --- a/drivers/net/wireless/marvell/mwifiex/main.c
 +++ b/drivers/net/wireless/marvell/mwifiex/main.c
-@@ -520,11 +520,8 @@ static void mwifiex_fw_dpc(const struct
+@@ -521,11 +521,8 @@ static void mwifiex_fw_dpc(const struct
  	struct wireless_dev *wdev;
  	struct completion *fw_done = adapter->fw_done;
  
