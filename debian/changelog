@@ -1,3 +1,9 @@
+linux (4.11~rc4-2) experimental; urgency=medium
+
+  * AUFS 4.11-20170327
+
+ -- Denis Bychkov <manover@gmail.com>  Mon, 27 Mar 2017 02:52:05 -0400
+
 linux (4.11~rc4-1) experimental; urgency=medium
 
   * Linux 4.11 RC4
