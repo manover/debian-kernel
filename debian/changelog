@@ -17,6 +17,7 @@ linux (4.10.8-1) unstable; urgency=medium
   * xfrm_user: validate XFRM_MSG_NEWAE XFRMA_REPLAY_ESN_VAL replay_window
     (CVE-2017-7184)
   * xfrm_user: validate XFRM_MSG_NEWAE incoming ESN size harder (CVE-2017-7184)
+  * scsi: sg: check length passed to SG_NEXT_CMD_LEN (CVE-2017-7187)
 
  -- Denis Bychkov <manover@gmail.com>  Tue, 04 Apr 2017 03:47:54 -0400
 
