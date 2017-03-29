@@ -2,6 +2,8 @@ linux (4.9.20-1) unstable; urgency=medium
 
   * Linux 4.9.20
 
+  * [arm64] rtc: tegra: Implement clock handling (Closes: #858514)
+
  -- Denis Bychkov <manover@gmail.com>  Tue, 04 Apr 2017 18:42:59 -0400
 
 linux (4.9.16-1) unstable; urgency=medium
