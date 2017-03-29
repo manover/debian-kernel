@@ -20,6 +20,8 @@ linux (4.10.8-1) unstable; urgency=medium
   * scsi: sg: check length passed to SG_NEXT_CMD_LEN (CVE-2017-7187)
   * [x86] vmwgfx: NULL pointer dereference in vmw_surface_define_ioctl()
     (CVE-2017-7261)
+  * [x86] drm/vmwgfx: fix integer overflow in vmw_surface_define_ioctl()
+    (CVE-2017-7294)
 
  -- Denis Bychkov <manover@gmail.com>  Tue, 04 Apr 2017 03:47:54 -0400
 
