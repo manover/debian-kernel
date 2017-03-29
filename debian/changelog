@@ -3,6 +3,7 @@ linux (4.9.20-1) unstable; urgency=medium
   * Linux 4.9.20
 
   * [arm64] rtc: tegra: Implement clock handling (Closes: #858514)
+  * scsi: sg: check length passed to SG_NEXT_CMD_LEN (CVE-2017-7187)
 
  -- Denis Bychkov <manover@gmail.com>  Tue, 04 Apr 2017 18:42:59 -0400
 
