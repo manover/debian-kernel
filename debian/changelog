@@ -9,6 +9,7 @@ linux (4.9.20-1) unstable; urgency=medium
   * [x86] drm/vmwgfx: fix integer overflow in vmw_surface_define_ioctl()
     (CVE-2017-7294)
   * net/packet: Fix integer overflow in various range checks (CVE-2017-7308)
+  * netfilter: nft_ct: add notrack support (Closes: #845500)
 
  -- Denis Bychkov <manover@gmail.com>  Tue, 04 Apr 2017 18:42:59 -0400
 

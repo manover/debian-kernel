@@ -89,6 +89,7 @@ bugfix/all/kbuild-include-addtree-remove-quotes-before-matching-path.patch
 bugfix/all/ACPI-EC-Use-busy-polling-mode-when-GPE-is-not-enable.patch
 
 # Miscellaneous features
+features/all/netfilter-nft_ct-add-notrack-support.patch
 
 # Security fixes
 debian/i386-686-pae-pci-set-pci-nobios-by-default.patch
