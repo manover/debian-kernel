@@ -34,7 +34,7 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
  module_exit(exit_cifs)
 --- a/fs/crypto/crypto.c
 +++ b/fs/crypto/crypto.c
-@@ -614,3 +614,4 @@ static void __exit fscrypt_exit(void)
+@@ -606,3 +606,4 @@ static void __exit fscrypt_exit(void)
  module_exit(fscrypt_exit);
  
  MODULE_LICENSE("GPL");

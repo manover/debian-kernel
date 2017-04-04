@@ -1,3 +1,10 @@
+linux (4.10.8-1) unstable; urgency=medium
+
+  * Linux 4.10.8
+  * Update it87 driver
+
+ -- Denis Bychkov <manover@gmail.com>  Tue, 04 Apr 2017 03:47:54 -0400
+
 linux (4.10.6-1) unstable; urgency=medium
 
   * Linux 4.10.6
