@@ -12,7 +12,7 @@ auto-loading.
 ---
 --- a/drivers/net/fjes/fjes_main.c
 +++ b/drivers/net/fjes/fjes_main.c
-@@ -81,7 +81,7 @@ static const struct acpi_device_id fjes_
+@@ -82,7 +82,7 @@ static const struct acpi_device_id fjes_
  	{"PNP0C02", 0},
  	{"", 0},
  };

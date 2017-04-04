@@ -20,7 +20,7 @@ Acked-by: Eric Dumazet <edumazet@google.com>
 
 --- a/net/packet/af_packet.c
 +++ b/net/packet/af_packet.c
-@@ -4247,6 +4247,8 @@ static int packet_set_ring(struct sock *
+@@ -4189,6 +4189,8 @@ static int packet_set_ring(struct sock *
  		rb->frames_per_block = req->tp_block_size / req->tp_frame_size;
  		if (unlikely(rb->frames_per_block == 0))
  			goto out;

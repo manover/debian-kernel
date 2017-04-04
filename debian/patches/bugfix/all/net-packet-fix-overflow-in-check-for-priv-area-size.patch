@@ -21,7 +21,7 @@ Acked-by: Eric Dumazet <edumazet@google.com>
 
 --- a/net/packet/af_packet.c
 +++ b/net/packet/af_packet.c
-@@ -4235,8 +4235,8 @@ static int packet_set_ring(struct sock *
+@@ -4177,8 +4177,8 @@ static int packet_set_ring(struct sock *
  		if (unlikely(!PAGE_ALIGNED(req->tp_block_size)))
  			goto out;
  		if (po->tp_version >= TPACKET_V3 &&

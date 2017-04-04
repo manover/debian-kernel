@@ -15,7 +15,7 @@ Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 ---
 --- a/arch/x86/kvm/vmx.c
 +++ b/arch/x86/kvm/vmx.c
-@@ -6925,14 +6925,20 @@ static int nested_vmx_check_vmptr(struct
+@@ -7086,13 +7086,18 @@ static int nested_vmx_check_vmptr(struct
  		}
  
  		page = nested_get_page(vcpu, vmptr);
@@ -23,15 +23,13 @@ Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 -		    *(u32 *)kmap(page) != VMCS12_REVISION) {
 +		if (page == NULL) {
  			nested_vmx_failInvalid(vcpu);
-+			skip_emulated_instruction(vcpu);
-+			return 1;
++			return kvm_skip_emulated_instruction(vcpu);
 +		}
 +		if (*(u32 *)kmap(page) != VMCS12_REVISION) {
  			kunmap(page);
 +			nested_release_page_clean(page);
 +			nested_vmx_failInvalid(vcpu);
- 			skip_emulated_instruction(vcpu);
- 			return 1;
+ 			return kvm_skip_emulated_instruction(vcpu);
  		}
  		kunmap(page);
 +		nested_release_page_clean(page);

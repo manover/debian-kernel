@@ -11,7 +11,7 @@ the PREEMPT_RT patch series.
 ---
 --- a/lib/Kconfig.debug
 +++ b/lib/Kconfig.debug
-@@ -964,6 +964,7 @@ config DEBUG_TIMEKEEPING
+@@ -983,6 +983,7 @@ config DEBUG_TIMEKEEPING
  config TIMER_STATS
  	bool "Collect kernel timers statistics"
  	depends on DEBUG_KERNEL && PROC_FS

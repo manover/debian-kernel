@@ -15,9 +15,6 @@ linux (4.10.8-1) unstable; urgency=medium
 
   * [x86] kvm: fix page struct leak in handle_vmon (CVE-2017-2596)
   * time: Disable TIMER_STATS (CVE-2017-5967)
-  * xfrm_user: validate XFRM_MSG_NEWAE XFRMA_REPLAY_ESN_VAL replay_window
-    (CVE-2017-7184)
-  * xfrm_user: validate XFRM_MSG_NEWAE incoming ESN size harder (CVE-2017-7184)
   * scsi: sg: check length passed to SG_NEXT_CMD_LEN (CVE-2017-7187)
   * [x86] vmwgfx: NULL pointer dereference in vmw_surface_define_ioctl()
     (CVE-2017-7261)

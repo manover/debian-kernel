@@ -16,7 +16,7 @@ Acked-by: Eric Dumazet <edumazet@google.com>
 
 --- a/net/packet/af_packet.c
 +++ b/net/packet/af_packet.c
-@@ -3702,6 +3702,8 @@ packet_setsockopt(struct socket *sock, i
+@@ -3644,6 +3644,8 @@ packet_setsockopt(struct socket *sock, i
  			return -EBUSY;
  		if (copy_from_user(&val, optval, sizeof(val)))
  			return -EFAULT;
