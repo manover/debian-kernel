@@ -59,7 +59,7 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
  
 --- a/fs/nfsd/nfsctl.c
 +++ b/fs/nfsd/nfsctl.c
-@@ -1308,5 +1308,8 @@ static void __exit exit_nfsd(void)
+@@ -1331,5 +1331,8 @@ static void __exit exit_nfsd(void)
  
  MODULE_AUTHOR("Olaf Kirch <okir@monad.swb.de>");
  MODULE_LICENSE("GPL");

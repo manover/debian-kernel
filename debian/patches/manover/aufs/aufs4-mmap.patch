@@ -64,7 +64,7 @@ aufs4.x-rcN mmap patch
  		pgoff = (loff_t)vma->vm_pgoff << PAGE_SHIFT;
 --- a/include/linux/mm.h
 +++ b/include/linux/mm.h
-@@ -1292,6 +1292,28 @@ static inline int fixup_user_fault(struc
+@@ -1294,6 +1294,28 @@ static inline int fixup_user_fault(struc
  }
  #endif
  
