@@ -2,14 +2,15 @@ linux (4.9.20-1) unstable; urgency=medium
 
   * Linux 4.9.20
 
-  * [arm64] rtc: tegra: Implement clock handling (Closes: #858514)
-  * scsi: sg: check length passed to SG_NEXT_CMD_LEN (CVE-2017-7187)
-  * [x86] vmwgfx: NULL pointer dereference in vmw_surface_define_ioctl()
-    (CVE-2017-7261)
-  * [x86] drm/vmwgfx: fix integer overflow in vmw_surface_define_ioctl()
-    (CVE-2017-7294)
-  * net/packet: Fix integer overflow in various range checks (CVE-2017-7308)
-  * netfilter: nft_ct: add notrack support (Closes: #845500)
+  * Import debian patches:
+    - [arm64] rtc: tegra: Implement clock handling (Closes: #858514)
+    - scsi: sg: check length passed to SG_NEXT_CMD_LEN (CVE-2017-7187)
+    - [x86] vmwgfx: NULL pointer dereference in vmw_surface_define_ioctl()
+    - (CVE-2017-7261)
+    - [x86] drm/vmwgfx: fix integer overflow in vmw_surface_define_ioctl()
+    - (CVE-2017-7294)
+    - net/packet: Fix integer overflow in various range checks (CVE-2017-7308)
+    - netfilter: nft_ct: add notrack support (Closes: #845500)
 
  -- Denis Bychkov <manover@gmail.com>  Tue, 04 Apr 2017 18:42:59 -0400
 
