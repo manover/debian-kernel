@@ -1,3 +1,9 @@
+linux (4.9.20-2) unstable; urgency=medium
+
+  * drm/nouveau/disp/mcp7x: disable dptmds workaround (Closes: #850219)
+
+ -- Denis Bychkov <manover@gmail.com>  Fri, 07 Apr 2017 23:03:18 -0400
+
 linux (4.9.20-1) unstable; urgency=medium
 
   * Linux 4.9.20
