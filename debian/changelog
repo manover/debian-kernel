@@ -2,6 +2,7 @@ linux (4.9.20-2) unstable; urgency=medium
 
   * drm/nouveau/disp/mcp7x: disable dptmds workaround (Closes: #850219)
   * [powerpc/powerpc64,ppc64*] target: Enable SCSI_IBMVSCSIS as module
+  * ping: implement proper locking (CVE-2017-2671)
 
  -- Denis Bychkov <manover@gmail.com>  Fri, 07 Apr 2017 23:03:18 -0400
 
