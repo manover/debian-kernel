@@ -147,7 +147,7 @@ Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
  	struct acpi_ec *ec =
 --- a/drivers/acpi/internal.h
 +++ b/drivers/acpi/internal.h
-@@ -171,8 +171,8 @@ struct acpi_ec {
+@@ -172,8 +172,8 @@ struct acpi_ec {
  	struct work_struct work;
  	unsigned long timestamp;
  	unsigned long nr_pending_queries;

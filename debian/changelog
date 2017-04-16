@@ -1,3 +1,10 @@
+linux (4.9.22-1) unstable; urgency=medium
+
+  * Linux 4.9.22
+  * Remove obsolete patches
+
+ -- Denis Bychkov <manover@gmail.com>  Sun, 16 Apr 2017 17:51:45 -0400
+
 linux (4.9.21-1) unstable; urgency=medium
 
   * Linux 4.9.21
