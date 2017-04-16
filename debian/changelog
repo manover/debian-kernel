@@ -1,3 +1,10 @@
+linux (4.9.23-1) unstable; urgency=medium
+
+  * crypto: ahash - Fix EINPROGRESS notification callback (CVE-2017-
+    7618)
+
+ -- Denis Bychkov <manover@gmail.com>  Sun, 16 Apr 2017 23:05:54 -0400
+
 linux (4.9.22-1) unstable; urgency=medium
 
   * Linux 4.9.22
