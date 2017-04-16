@@ -1,3 +1,16 @@
+linux (4.11~rc7-1) experimental; urgency=medium
+
+  * Linux 4.11 RC-7
+  * Update it87 driver
+
+ -- Denis Bychkov <manover@gmail.com>  Sun, 16 Apr 2017 18:21:11 -0400
+
+linux (4.11~rc6-1) experimental; urgency=medium
+
+  * Linux 4.11 RC-6
+
+ -- Denis Bychkov <manover@gmail.com>  Mon, 10 Apr 2017 01:21:28 +0000
+
 linux (4.11~rc5-1) experimental; urgency=medium
 
   * Linux 4.11 RC5
