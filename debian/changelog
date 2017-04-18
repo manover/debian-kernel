@@ -1,3 +1,10 @@
+linux (4.10.11-1) unstable; urgency=medium
+
+  * Linux 4.10.11
+  * Remove obsolete patches
+
+ -- Denis Bychkov <manover@gmail.com>  Tue, 18 Apr 2017 14:08:36 -0400
+
 linux (4.10.10-1) unstable; urgency=medium
 
   * Linux 4.10.10
