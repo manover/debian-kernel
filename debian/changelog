@@ -7,8 +7,9 @@ linux (4.11~rc7-2) experimental; urgency=medium
     - [amd64] Don't WARN about expected W+X pages on Xen (see #852324)
     - Kbuild.include: addtree: Remove quotes before matching path
       (regression in 4.8) (Closes: #856474)
+  * Remove obsolete patches
 
- -- Denis Bychkov <manover@gmail.com>  Wed, 19 Apr 2017 21:19:19 -0400
+ -- Denis Bychkov <manover@gmail.com>  Wed, 19 Apr 2017 21:40:32 -0400
 
 linux (4.11~rc7-1) experimental; urgency=medium
 
