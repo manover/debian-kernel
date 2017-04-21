@@ -1,3 +1,11 @@
+linux (4.10.12-1) unstable; urgency=medium
+
+  * Linux 4.10.12
+  * Remove the patches merged upstream
+  * it87 driver updated upstream
+
+ -- Denis Bychkov <manover@gmail.com>  Fri, 21 Apr 2017 06:28:57 -0400
+
 linux (4.10.11-1) unstable; urgency=medium
 
   * Linux 4.10.11
