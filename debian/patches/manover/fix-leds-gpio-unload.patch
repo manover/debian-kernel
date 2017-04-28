@@ -1,0 +1,50 @@
+--- a/drivers/leds/leds-gpio.c
++++ b/drivers/leds/leds-gpio.c
+@@ -259,7 +259,8 @@ static int gpio_led_probe(struct platfor
+ 	return 0;
+ }
+ 
+-static void gpio_led_shutdown(struct platform_device *pdev)
++static inline void gpio_led_for_all_leds(struct platform_device *pdev,
++		void (action)(struct led_classdev *led_cdev))
+ {
+ 	struct gpio_leds_priv *priv = platform_get_drvdata(pdev);
+ 	int i;
+@@ -267,13 +268,36 @@ static void gpio_led_shutdown(struct pla
+ 	for (i = 0; i < priv->num_leds; i++) {
+ 		struct gpio_led_data *led = &priv->leds[i];
+ 
+-		gpio_led_set(&led->cdev, LED_OFF);
++		action(&led->cdev);
+ 	}
+ }
+ 
++static inline void led_shutdown(struct led_classdev *led_cdev)
++{
++	gpio_led_set(led_cdev, LED_OFF);
++}
++
++static inline void led_remove(struct led_classdev *led_cdev)
++{
++	led_shutdown(led_cdev);
++	led_classdev_unregister(led_cdev);
++}
++
++static void gpio_led_shutdown(struct platform_device *pdev)
++{
++	gpio_led_for_all_leds(pdev, led_shutdown);
++}
++
++static int gpio_led_remove(struct platform_device *pdev)
++{
++	gpio_led_for_all_leds(pdev, led_remove);
++	return 0;
++}
++
+ static struct platform_driver gpio_led_driver = {
+ 	.probe		= gpio_led_probe,
+ 	.shutdown	= gpio_led_shutdown,
++	.remove		= gpio_led_remove,
+ 	.driver		= {
+ 		.name	= "leds-gpio",
+ 		.of_match_table = of_gpio_leds_match,

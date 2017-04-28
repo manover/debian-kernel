@@ -1,3 +1,40 @@
+linux (4.11~rc8-3) experimental; urgency=medium
+
+  * Fix broken it87 fix_pwm_polarity behavior
+  * Rebase on latest it87 upstream
+  * Split ACPI MUTEX enabling code into a separate patch
+  * Patch make mrproper behavior to leave debian/ and .config alone
+
+ -- Denis Bychkov <manover@gmail.com>  Thu, 27 Apr 2017 18:07:58 -0400
+
+linux (4.11~rc8-1) experimental; urgency=medium
+
+  * Linux 4.11 RC-8
+  * Add MODULE_DEVICE_TABLE() macro call to it87 driver for autoload on
+    known boards
+  * Add ACPI_MUTEX config parameter to utxfmutex module for turning
+    on/off acpi_{acquire,release}_mutex methods export
+  * Add IT87_USE_ACPI_MUTEX config parameter ti it87 driver that also
+    selects ACPI_MUTEX config parameter
+  * Do not remove .config and debian/ when do mrproper
+
+ -- Denis Bychkov <manover@gmail.com>  Mon, 24 Apr 2017 21:00:52 -0400
+
+linux (4.11~rc7-4) experimental; urgency=medium
+
+  * Update it87 driver from upstream
+  * Make acpi_{acquire,release}_mutex symbols exportable
+  * Turn IT87_USE_ACPI_MUTEX on
+  * Build intel_spi module
+
+ -- Denis Bychkov <manover@gmail.com>  Sat, 22 Apr 2017 01:27:25 -0400
+
+linux (4.11~rc7-3) experimental; urgency=medium
+
+  * Build iSCSI TCP modules
+
+ -- Denis Bychkov <manover@gmail.com>  Thu, 20 Apr 2017 02:52:36 -0400
+
 linux (4.11~rc7-2) experimental; urgency=medium
 
   * Import debian patches

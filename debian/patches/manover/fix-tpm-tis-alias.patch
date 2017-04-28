@@ -1,0 +1,18 @@
+--- a/drivers/char/tpm/tpm_tis.c	2017-04-16 18:13:29.909144563 -0400
++++ b/drivers/char/tpm/tpm_tis.c	2017-04-23 22:47:48.404799119 -0400
+@@ -203,7 +203,6 @@
+ 	{"NSC1200", 0},		/* National */
+ 	{"ICO0102", 0},		/* Intel */
+ 	/* Add new here */
+-	{"", 0},		/* User Specified */
+ 	{"", 0}			/* Terminator */
+ };
+ MODULE_DEVICE_TABLE(pnp, tpm_pnp_tbl);
+@@ -300,7 +299,6 @@
+ static struct acpi_device_id tpm_acpi_tbl[] = {
+ 	{"MSFT0101", 0},	/* TPM 2.0 */
+ 	/* Add new here */
+-	{"", 0},		/* User Specified */
+ 	{"", 0}			/* Terminator */
+ };
+ MODULE_DEVICE_TABLE(acpi, tpm_acpi_tbl);
