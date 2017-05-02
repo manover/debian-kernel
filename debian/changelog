@@ -1,3 +1,9 @@
+linux (4.11.0-1) unstable; urgency=medium
+
+  * Linux 4.11
+
+ -- Denis Bychkov <manover@gmail.com>  Tue, 02 May 2017 01:06:56 -0400
+
 linux (4.11~rc8-3) experimental; urgency=medium
 
   * Fix broken it87 fix_pwm_polarity behavior
