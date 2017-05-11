@@ -1,3 +1,18 @@
+linux (4.10.15-1) unstable; urgency=medium
+
+  * Linux 4.10.15
+  * Backport it87 driver changes from 4.11
+  * AUFS upgrade to 20170410
+  * Backport two x32 support patches from 4.11
+
+ -- Denis Bychkov <manover@gmail.com>  Mon, 08 May 2017 13:18:21 -0400
+
+linux (4.10.13-1) unstable; urgency=medium
+
+  * Linux 4.10.13
+
+ -- Denis Bychkov <manover@gmail.com>  Thu, 27 Apr 2017 17:40:57 -0400
+
 linux (4.10.12-1) unstable; urgency=medium
 
   * Linux 4.10.12

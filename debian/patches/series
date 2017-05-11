@@ -76,8 +76,6 @@ bugfix/all/kbuild-include-addtree-remove-quotes-before-matching-path.patch
 # Security fixes
 debian/i386-686-pae-pci-set-pci-nobios-by-default.patch
 debian/time-mark-timer_stats-as-broken.patch
-bugfix/all/net-packet-fix-overflow-in-check-for-tp_frame_nr.patch
-bugfix/all/net-packet-fix-overflow-in-check-for-tp_reserve.patch
 
 # ABI maintenance
 
@@ -107,6 +105,8 @@ bugfix/all/liblockdep-fix-defined-but-not-used-warning-for-init.patch
 
 # Manover custom patches
 manover/x32-support.patch
+manover/acpica-tools-x32-support.patch
+manover/misc-tools-x32-support.patch
 # Bcache
 manover/bcache-release-correct-minors.patch
 manover/bcache-name-device-by-label.patch
@@ -133,6 +133,7 @@ manover/hpet-force-ich4.patch
 manover/modern-intel-cpu.patch
 # Misc minor patches
 manover/misc.patch
+manover/acpi-mutex-enable.patch
 manover/it87-update.patch
 manover/cgroup-v2-cpu.patch
 #unifdef-hang.patch

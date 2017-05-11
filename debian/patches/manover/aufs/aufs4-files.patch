@@ -2025,7 +2025,7 @@
 +#endif /* __AUFS_H__ */
 --- /dev/null
 +++ b/fs/aufs/branch.c
-@@ -0,0 +1,1412 @@
+@@ -0,0 +1,1423 @@
 +/*
 + * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
@@ -2064,7 +2064,9 @@
 +
 +	if (br->br_xino.xi_file)
 +		fput(br->br_xino.xi_file);
-+	mutex_destroy(&br->br_xino.xi_nondir_mtx);
++	for (i = br->br_xino.xi_nondir.total - 1; i >= 0; i--)
++		AuDebugOn(br->br_xino.xi_nondir.array[i]);
++	au_delayed_kfree(br->br_xino.xi_nondir.array);
 +
 +	AuDebugOn(au_br_count(br));
 +	au_br_count_fin(br);
@@ -2159,14 +2161,19 @@
 +	int err;
 +
 +	err = -ENOMEM;
-+	root = sb->s_root;
 +	add_branch = kzalloc(sizeof(*add_branch), GFP_NOFS);
 +	if (unlikely(!add_branch))
 +		goto out;
++	add_branch->br_xino.xi_nondir.total = 8; /* initial size */
++	add_branch->br_xino.xi_nondir.array
++		= kzalloc(sizeof(ino_t) * add_branch->br_xino.xi_nondir.total,
++			  GFP_NOFS);
++	if (unlikely(!add_branch->br_xino.xi_nondir.array))
++		goto out_br;
 +
 +	err = au_hnotify_init_br(add_branch, perm);
 +	if (unlikely(err))
-+		goto out_br;
++		goto out_xinondir;
 +
 +	if (au_br_writable(perm)) {
 +		/* may be freed separately at changing the branch permission */
@@ -2182,6 +2189,7 @@
 +			goto out_wbr;
 +	}
 +
++	root = sb->s_root;
 +	err = au_sbr_realloc(au_sbi(sb), new_nbranch, /*may_shrink*/0);
 +	if (!err)
 +		err = au_di_realloc(au_di(root), new_nbranch, /*may_shrink*/0);
@@ -2197,6 +2205,8 @@
 +		au_delayed_kfree(add_branch->br_wbr);
 +out_hnotify:
 +	au_hnotify_fin_br(add_branch);
++out_xinondir:
++	au_delayed_kfree(add_branch->br_xino.xi_nondir.array);
 +out_br:
 +	au_delayed_kfree(add_branch);
 +out:
@@ -2410,7 +2420,8 @@
 +	struct inode *h_inode;
 +
 +	err = 0;
-+	mutex_init(&br->br_xino.xi_nondir_mtx);
++	spin_lock_init(&br->br_xino.xi_nondir.spin);
++	init_waitqueue_head(&br->br_xino.xi_nondir.wqh);
 +	br->br_perm = add->perm;
 +	br->br_path = add->path; /* set first, path_get() later */
 +	spin_lock_init(&br->br_dykey_lock);
@@ -3440,7 +3451,7 @@
 +}
 --- /dev/null
 +++ b/fs/aufs/branch.h
-@@ -0,0 +1,309 @@
+@@ -0,0 +1,321 @@
 +/*
 + * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
@@ -3477,7 +3488,14 @@
 +/* a xino file */
 +struct au_xino_file {
 +	struct file		*xi_file;
-+	struct mutex		xi_nondir_mtx;
++	struct {
++		spinlock_t		spin;
++		ino_t			*array;
++		int			total;
++		/* reserved for future use */
++		/* unsigned long	*bitmap; */
++		wait_queue_head_t	wqh;
++	} xi_nondir;
 +
 +	/* todo: make xino files an array to support huge inode number */
 +
@@ -3676,6 +3694,11 @@
 +struct file *au_xino_def(struct super_block *sb);
 +int au_xino_path(struct seq_file *seq, struct file *file);
 +
++void au_xinondir_leave(struct super_block *sb, aufs_bindex_t bindex,
++		       ino_t h_ino, int idx);
++int au_xinondir_enter(struct super_block *sb, aufs_bindex_t bindex, ino_t h_ino,
++		      int *idx);
++
 +/* ---------------------------------------------------------------------- */
 +
 +/* Superblock to branch */
@@ -3793,7 +3816,7 @@
 +-include ${srctree}/${src}/conf_priv.mk
 --- /dev/null
 +++ b/fs/aufs/cpup.c
-@@ -0,0 +1,1388 @@
+@@ -0,0 +1,1407 @@
 +/*
 + * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
@@ -4189,7 +4212,7 @@
 +			.label = &&out_src
 +		}
 +	};
-+	struct super_block *sb;
++	struct super_block *sb, *h_src_sb;
 +	struct inode *h_src_inode;
 +	struct task_struct *tsk = current;
 +
@@ -4207,9 +4230,28 @@
 +
 +	/* try stopping to update while we copyup */
 +	h_src_inode = d_inode(file[SRC].dentry);
-+	if (!au_test_nfs(h_src_inode->i_sb))
++	h_src_sb = h_src_inode->i_sb;
++	if (!au_test_nfs(h_src_sb))
 +		IMustLock(h_src_inode);
-+	err = au_copy_file(file[DST].file, file[SRC].file, cpg->len);
++
++	if (h_src_sb != file_inode(file[DST].file)->i_sb
++	    || !file[DST].file->f_op->clone_file_range)
++		err = au_copy_file(file[DST].file, file[SRC].file, cpg->len);
++	else {
++		if (!au_test_nfs(h_src_sb)) {
++			inode_unlock(h_src_inode);
++			err = vfsub_clone_file_range(file[SRC].file,
++						     file[DST].file, cpg->len);
++			inode_lock(h_src_inode);
++		} else
++			err = vfsub_clone_file_range(file[SRC].file,
++						     file[DST].file, cpg->len);
++		if (unlikely(err == -EOPNOTSUPP && au_test_nfs(h_src_sb)))
++			/* the backend fs on NFS may not support cloning */
++			err = au_copy_file(file[DST].file, file[SRC].file,
++					   cpg->len);
++		AuTraceErr(err);
++	}
 +
 +	/* i wonder if we had O_NO_DELAY_FPUT flag */
 +	if (tsk->flags & PF_KTHREAD)
@@ -8481,11 +8523,11 @@
 +		  || d_inode(d1) == d_inode(d2)
 +		  || d1->d_sb != d2->d_sb);
 +
-+	if (isdir && au_test_subdir(d1, d2)) {
++	if ((isdir && au_test_subdir(d1, d2))
++	    || d1 < d2) {
 +		di_write_lock_child(d1);
 +		di_write_lock_child2(d2);
 +	} else {
-+		/* there should be no races */
 +		di_write_lock_child(d2);
 +		di_write_lock_child2(d1);
 +	}
@@ -8497,11 +8539,11 @@
 +		  || d_inode(d1) == d_inode(d2)
 +		  || d1->d_sb != d2->d_sb);
 +
-+	if (isdir && au_test_subdir(d1, d2)) {
++	if ((isdir && au_test_subdir(d1, d2))
++	    || d1 < d2) {
 +		di_write_lock_parent(d1);
 +		di_write_lock_parent2(d2);
 +	} else {
-+		/* there should be no races */
 +		di_write_lock_parent(d2);
 +		di_write_lock_parent2(d1);
 +	}
@@ -9179,7 +9221,7 @@
 +	struct super_block *sb;
 +	struct inode *inode;
 +
-+	err = au_reval_and_lock_fdi(file, reopen_dir, /*wlock*/1);
++	err = au_reval_and_lock_fdi(file, reopen_dir, /*wlock*/1, /*fi_lsc*/0);
 +	if (unlikely(err))
 +		goto out;
 +
@@ -9248,7 +9290,7 @@
 +
 +	sb = dentry->d_sb;
 +	si_read_lock(sb, AuLock_FLUSH);
-+	err = au_reval_and_lock_fdi(file, reopen_dir, /*wlock*/1);
++	err = au_reval_and_lock_fdi(file, reopen_dir, /*wlock*/1, /*fi_lsc*/0);
 +	if (unlikely(err))
 +		goto out;
 +	err = au_alive_dir(dentry);
@@ -10953,7 +10995,7 @@
 +}
 --- /dev/null
 +++ b/fs/aufs/f_op.c
-@@ -0,0 +1,723 @@
+@@ -0,0 +1,819 @@
 +/*
 + * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
@@ -11098,12 +11140,12 @@
 + */
 +
 +/* Callers should call au_read_post() or fput() in the end */
-+struct file *au_read_pre(struct file *file, int keep_fi)
++struct file *au_read_pre(struct file *file, int keep_fi, unsigned int lsc)
 +{
 +	struct file *h_file;
 +	int err;
 +
-+	err = au_reval_and_lock_fdi(file, au_reopen_nondir, /*wlock*/0);
++	err = au_reval_and_lock_fdi(file, au_reopen_nondir, /*wlock*/0, lsc);
 +	if (!err) {
 +		di_read_unlock(file->f_path.dentry, AuLock_IR);
 +		h_file = au_hf_top(file);
@@ -11124,6 +11166,10 @@
 +}
 +
 +struct au_write_pre {
++	/* input */
++	unsigned int lsc;
++
++	/* output */
 +	blkcnt_t blks;
 +	aufs_bindex_t btop;
 +};
@@ -11139,9 +11185,13 @@
 +	struct file *h_file;
 +	struct dentry *dentry;
 +	int err;
++	unsigned int lsc;
 +	struct au_pin pin;
 +
-+	err = au_reval_and_lock_fdi(file, au_reopen_nondir, /*wlock*/1);
++	lsc = 0;
++	if (wpre)
++		lsc = wpre->lsc;
++	err = au_reval_and_lock_fdi(file, au_reopen_nondir, /*wlock*/1, lsc);
 +	h_file = ERR_PTR(err);
 +	if (unlikely(err))
 +		goto out;
@@ -11203,7 +11253,7 @@
 +	sb = inode->i_sb;
 +	si_read_lock(sb, AuLock_FLUSH | AuLock_NOPLMW);
 +
-+	h_file = au_read_pre(file, /*keep_fi*/0);
++	h_file = au_read_pre(file, /*keep_fi*/0, /*lsc*/0);
 +	err = PTR_ERR(h_file);
 +	if (IS_ERR(h_file))
 +		goto out;
@@ -11253,6 +11303,7 @@
 +	inode = file_inode(file);
 +	au_mtx_and_read_lock(inode);
 +
++	wpre.lsc = 0;
 +	h_file = au_write_pre(file, /*do_ready*/1, &wpre);
 +	err = PTR_ERR(h_file);
 +	if (IS_ERR(h_file))
@@ -11312,7 +11363,7 @@
 +	sb = inode->i_sb;
 +	si_read_lock(sb, AuLock_FLUSH | AuLock_NOPLMW);
 +
-+	h_file = au_read_pre(file, /*keep_fi*/1);
++	h_file = au_read_pre(file, /*keep_fi*/1, /*lsc*/0);
 +	err = PTR_ERR(h_file);
 +	if (IS_ERR(h_file))
 +		goto out;
@@ -11347,6 +11398,7 @@
 +	inode = file_inode(file);
 +	au_mtx_and_read_lock(inode);
 +
++	wpre.lsc = 0;
 +	h_file = au_write_pre(file, /*do_ready*/1, &wpre);
 +	err = PTR_ERR(h_file);
 +	if (IS_ERR(h_file))
@@ -11374,7 +11426,7 @@
 +	sb = inode->i_sb;
 +	si_read_lock(sb, AuLock_FLUSH | AuLock_NOPLMW);
 +
-+	h_file = au_read_pre(file, /*keep_fi*/0);
++	h_file = au_read_pre(file, /*keep_fi*/0, /*lsc*/0);
 +	err = PTR_ERR(h_file);
 +	if (IS_ERR(h_file))
 +		goto out;
@@ -11401,6 +11453,7 @@
 +	inode = file_inode(file);
 +	au_mtx_and_read_lock(inode);
 +
++	wpre.lsc = 0;
 +	h_file = au_write_pre(file, /*do_ready*/1, &wpre);
 +	err = PTR_ERR(h_file);
 +	if (IS_ERR(h_file))
@@ -11426,6 +11479,7 @@
 +	inode = file_inode(file);
 +	au_mtx_and_read_lock(inode);
 +
++	wpre.lsc = 0;
 +	h_file = au_write_pre(file, /*do_ready*/1, &wpre);
 +	err = PTR_ERR(h_file);
 +	if (IS_ERR(h_file))
@@ -11440,6 +11494,88 @@
 +	si_read_unlock(inode->i_sb);
 +	inode_unlock(inode);
 +	return err;
++}
++
++static ssize_t aufs_copy_file_range(struct file *src, loff_t src_pos,
++				    struct file *dst, loff_t dst_pos,
++				    size_t len, unsigned int flags)
++{
++	ssize_t err;
++	struct au_write_pre wpre;
++	enum { SRC, DST };
++	struct {
++		struct inode *inode;
++		struct file *h_file;
++		struct super_block *h_sb;
++	} a[2];
++#define a_src	a[SRC]
++#define a_dst	a[DST]
++
++	err = -EINVAL;
++	a_src.inode = file_inode(src);
++	if (unlikely(!S_ISREG(a_src.inode->i_mode)))
++		goto out;
++	a_dst.inode = file_inode(dst);
++	if (unlikely(!S_ISREG(a_dst.inode->i_mode)))
++		goto out;
++
++	au_mtx_and_read_lock(a_dst.inode);
++	/*
++	 * in order to match the order in di_write_lock2_{child,parent}(),
++	 * use f_path.dentry for this comparision.
++	 */
++	if (src->f_path.dentry < dst->f_path.dentry) {
++		a_src.h_file = au_read_pre(src, /*keep_fi*/1, AuLsc_FI_1);
++		err = PTR_ERR(a_src.h_file);
++		if (IS_ERR(a_src.h_file))
++			goto out_si;
++
++		wpre.lsc = AuLsc_FI_2;
++		a_dst.h_file = au_write_pre(dst, /*do_ready*/1, &wpre);
++		err = PTR_ERR(a_dst.h_file);
++		if (IS_ERR(a_dst.h_file)) {
++			au_read_post(a_src.inode, a_src.h_file);
++			goto out_si;
++		}
++	} else {
++		wpre.lsc = AuLsc_FI_1;
++		a_dst.h_file = au_write_pre(dst, /*do_ready*/1, &wpre);
++		err = PTR_ERR(a_dst.h_file);
++		if (IS_ERR(a_dst.h_file))
++			goto out_si;
++
++		a_src.h_file = au_read_pre(src, /*keep_fi*/1, AuLsc_FI_2);
++		err = PTR_ERR(a_src.h_file);
++		if (IS_ERR(a_src.h_file)) {
++			au_write_post(a_dst.inode, a_dst.h_file, &wpre,
++				      /*written*/0);
++			goto out_si;
++		}
++	}
++
++	err = -EXDEV;
++	a_src.h_sb = file_inode(a_src.h_file)->i_sb;
++	a_dst.h_sb = file_inode(a_dst.h_file)->i_sb;
++	if (unlikely(a_src.h_sb != a_dst.h_sb)) {
++		AuDbgFile(src);
++		AuDbgFile(dst);
++		goto out_file;
++	}
++
++	err = vfsub_copy_file_range(a_src.h_file, src_pos, a_dst.h_file,
++				    dst_pos, len, flags);
++
++out_file:
++	au_write_post(a_dst.inode, a_dst.h_file, &wpre, err);
++	fi_read_unlock(src);
++	au_read_post(a_src.inode, a_src.h_file);
++out_si:
++	si_read_unlock(a_dst.inode->i_sb);
++	inode_unlock(a_dst.inode);
++out:
++	return err;
++#undef a_src
++#undef a_dst
 +}
 +
 +/* ---------------------------------------------------------------------- */
@@ -11571,6 +11707,7 @@
 +	inode = file_inode(file);
 +	au_mtx_and_read_lock(inode);
 +
++	wpre.lsc = 0;
 +	h_file = au_write_pre(file, /*do_ready*/1, &wpre);
 +	err = PTR_ERR(h_file);
 +	if (IS_ERR(h_file))
@@ -11595,7 +11732,7 @@
 +	sb = file->f_path.dentry->d_sb;
 +	si_read_lock(sb, AuLock_FLUSH | AuLock_NOPLMW);
 +
-+	h_file = au_read_pre(file, /*keep_fi*/0);
++	h_file = au_read_pre(file, /*keep_fi*/0, /*lsc*/0);
 +	err = PTR_ERR(h_file);
 +	if (IS_ERR(h_file))
 +		goto out;
@@ -11618,7 +11755,7 @@
 +	sb = file->f_path.dentry->d_sb;
 +	si_read_lock(sb, AuLock_FLUSH | AuLock_NOPLMW);
 +
-+	h_file = au_read_pre(file, /*keep_fi*/0);
++	h_file = au_read_pre(file, /*keep_fi*/0, /*lsc*/0);
 +	err = PTR_ERR(h_file);
 +	if (IS_ERR(h_file))
 +		goto out;
@@ -11675,7 +11812,8 @@
 +	.aio_splice_write = aufs_aio_splice_write,
 +	.aio_splice_read  = aufs_aio_splice_read,
 +#endif
-+	.fallocate	= aufs_fallocate
++	.fallocate	= aufs_fallocate,
++	.copy_file_range = aufs_copy_file_range
 +};
 --- /dev/null
 +++ b/fs/aufs/fhsm.c
@@ -12108,7 +12246,7 @@
 +}
 --- /dev/null
 +++ b/fs/aufs/file.c
-@@ -0,0 +1,857 @@
+@@ -0,0 +1,860 @@
 +/*
 + * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
@@ -12831,7 +12969,7 @@
 +
 +/* common function to regular file and dir */
 +int au_reval_and_lock_fdi(struct file *file, int (*reopen)(struct file *file),
-+			  int wlock)
++			  int wlock, unsigned int fi_lsc)
 +{
 +	int err;
 +	unsigned int sigen, figen;
@@ -12844,9 +12982,12 @@
 +	dentry = file->f_path.dentry;
 +	inode = d_inode(dentry);
 +	sigen = au_sigen(dentry->d_sb);
-+	fi_write_lock(file);
++	fi_write_lock_nested(file, fi_lsc);
 +	figen = au_figen(file);
-+	di_write_lock_child(dentry);
++	if (!fi_lsc)
++		di_write_lock_child(dentry);
++	else
++		di_write_lock_child2(dentry);
 +	btop = au_dbtop(dentry);
 +	pseudo_link = (btop != au_ibtop(inode));
 +	if (sigen == figen && !pseudo_link && au_fbtop(file) == btop) {
@@ -12968,7 +13109,7 @@
 +};
 --- /dev/null
 +++ b/fs/aufs/file.h
-@@ -0,0 +1,294 @@
+@@ -0,0 +1,333 @@
 +/*
 + * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
@@ -13059,7 +13200,7 @@
 +struct au_pin;
 +int au_ready_to_write(struct file *file, loff_t len, struct au_pin *pin);
 +int au_reval_and_lock_fdi(struct file *file, int (*reopen)(struct file *file),
-+			  int wlock);
++			  int wlock, unsigned int fi_lsc);
 +int au_do_flush(struct file *file, fl_owner_t id,
 +		int (*flush)(struct file *file, fl_owner_t id));
 +
@@ -13085,7 +13226,7 @@
 +extern const struct file_operations aufs_file_fop;
 +int au_do_open_nondir(struct file *file, int flags, struct file *h_file);
 +int aufs_release_nondir(struct inode *inode __maybe_unused, struct file *file);
-+struct file *au_read_pre(struct file *file, int keep_fi);
++struct file *au_read_pre(struct file *file, int keep_fi, unsigned int lsc);
 +
 +/* finfo.c */
 +void au_hfput(struct au_hfile *hf, int execed);
@@ -13123,6 +13264,45 @@
 + * fi_read_unlock, fi_write_unlock, fi_downgrade_lock
 + */
 +AuSimpleRwsemFuncs(fi, struct file *f, &au_fi(f)->fi_rwsem);
++
++/* lock subclass for finfo */
++enum {
++	AuLsc_FI_1,
++	AuLsc_FI_2
++};
++
++static inline void fi_read_lock_nested(struct file *f, unsigned int lsc)
++{
++	au_rw_read_lock_nested(&au_fi(f)->fi_rwsem, lsc);
++}
++
++static inline void fi_write_lock_nested(struct file *f, unsigned int lsc)
++{
++	au_rw_write_lock_nested(&au_fi(f)->fi_rwsem, lsc);
++}
++
++/*
++ * fi_read_lock_1, fi_write_lock_1,
++ * fi_read_lock_2, fi_write_lock_2
++ */
++#define AuReadLockFunc(name) \
++static inline void fi_read_lock_##name(struct file *f) \
++{ fi_read_lock_nested(f, AuLsc_FI_##name); }
++
++#define AuWriteLockFunc(name) \
++static inline void fi_write_lock_##name(struct file *f) \
++{ fi_write_lock_nested(f, AuLsc_FI_##name); }
++
++#define AuRWLockFuncs(name) \
++	AuReadLockFunc(name) \
++	AuWriteLockFunc(name)
++
++AuRWLockFuncs(1);
++AuRWLockFuncs(2);
++
++#undef AuReadLockFunc
++#undef AuWriteLockFunc
++#undef AuRWLockFuncs
 +
 +#define FiMustNoWaiters(f)	AuRwMustNoWaiters(&au_fi(f)->fi_rwsem)
 +#define FiMustAnyLock(f)	AuRwMustAnyLock(&au_fi(f)->fi_rwsem)
@@ -14897,7 +15077,7 @@
 +}
 --- /dev/null
 +++ b/fs/aufs/i_op.c
-@@ -0,0 +1,1448 @@
+@@ -0,0 +1,1449 @@
 +/*
 + * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
@@ -15810,7 +15990,8 @@
 +		/* currently ftruncate(2) only */
 +		AuDebugOn(!d_is_reg(dentry));
 +		file = ia->ia_file;
-+		err = au_reval_and_lock_fdi(file, au_reopen_nondir, /*wlock*/1);
++		err = au_reval_and_lock_fdi(file, au_reopen_nondir, /*wlock*/1,
++					    /*fi_lsc*/0);
 +		if (unlikely(err))
 +			goto out_si;
 +		ia->ia_file = au_hf_top(file);
@@ -19249,7 +19430,7 @@
 +}
 --- /dev/null
 +++ b/fs/aufs/inode.c
-@@ -0,0 +1,519 @@
+@@ -0,0 +1,527 @@
 +/*
 + * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
@@ -19587,32 +19768,34 @@
 +int au_ino(struct super_block *sb, aufs_bindex_t bindex, ino_t h_ino,
 +	   unsigned int d_type, ino_t *ino)
 +{
-+	int err;
-+	struct mutex *mtx;
++	int err, idx;
++	const int isnondir = d_type != DT_DIR;
 +
 +	/* prevent hardlinked inode number from race condition */
-+	mtx = NULL;
-+	if (d_type != DT_DIR) {
-+		mtx = &au_sbr(sb, bindex)->br_xino.xi_nondir_mtx;
-+		mutex_lock(mtx);
++	if (isnondir) {
++		err = au_xinondir_enter(sb, bindex, h_ino, &idx);
++		if (unlikely(err))
++			goto out;
 +	}
++
 +	err = au_xino_read(sb, bindex, h_ino, ino);
 +	if (unlikely(err))
-+		goto out;
++		goto out_xinondir;
 +
 +	if (!*ino) {
 +		err = -EIO;
 +		*ino = au_xino_new_ino(sb);
 +		if (unlikely(!*ino))
-+			goto out;
++			goto out_xinondir;
 +		err = au_xino_write(sb, bindex, h_ino, *ino);
 +		if (unlikely(err))
-+			goto out;
++			goto out_xinondir;
 +	}
 +
++out_xinondir:
++	if (isnondir && idx >= 0)
++		au_xinondir_leave(sb, bindex, h_ino, idx);
 +out:
-+	if (mtx)
-+		mutex_unlock(mtx);
 +	return err;
 +}
 +
@@ -19623,9 +19806,8 @@
 +	struct inode *inode, *h_inode;
 +	struct dentry *h_dentry;
 +	struct super_block *sb;
-+	struct mutex *mtx;
 +	ino_t h_ino, ino;
-+	int err;
++	int err, idx, hlinked;
 +	aufs_bindex_t btop;
 +
 +	sb = dentry->d_sb;
@@ -19633,28 +19815,30 @@
 +	h_dentry = au_h_dptr(dentry, btop);
 +	h_inode = d_inode(h_dentry);
 +	h_ino = h_inode->i_ino;
++	hlinked = !d_is_dir(h_dentry) && h_inode->i_nlink > 1;
 +
++new_ino:
 +	/*
 +	 * stop 'race'-ing between hardlinks under different
 +	 * parents.
 +	 */
-+	mtx = NULL;
-+	if (!d_is_dir(h_dentry))
-+		mtx = &au_sbr(sb, btop)->br_xino.xi_nondir_mtx;
++	if (hlinked) {
++		err = au_xinondir_enter(sb, btop, h_ino, &idx);
++		inode = ERR_PTR(err);
++		if (unlikely(err))
++			goto out;
++	}
 +
-+new_ino:
-+	if (mtx)
-+		mutex_lock(mtx);
 +	err = au_xino_read(sb, btop, h_ino, &ino);
 +	inode = ERR_PTR(err);
 +	if (unlikely(err))
-+		goto out;
++		goto out_xinondir;
 +
 +	if (!ino) {
 +		ino = au_xino_new_ino(sb);
 +		if (unlikely(!ino)) {
 +			inode = ERR_PTR(-EIO);
-+			goto out;
++			goto out_xinondir;
 +		}
 +	}
 +
@@ -19662,7 +19846,7 @@
 +	inode = au_iget_locked(sb, ino);
 +	err = PTR_ERR(inode);
 +	if (IS_ERR(inode))
-+		goto out;
++		goto out_xinondir;
 +
 +	AuDbg("%lx, new %d\n", inode->i_state, !!(inode->i_state & I_NEW));
 +	if (inode->i_state & I_NEW) {
@@ -19670,7 +19854,7 @@
 +		err = set_inode(inode, dentry);
 +		if (!err) {
 +			unlock_new_inode(inode);
-+			goto out; /* success */
++			goto out_xinondir; /* success */
 +		}
 +
 +		/*
@@ -19689,19 +19873,23 @@
 +		 * horrible race condition between lookup, readdir and copyup
 +		 * (or something).
 +		 */
-+		if (mtx)
-+			mutex_unlock(mtx);
++		if (hlinked && idx >= 0)
++			au_xinondir_leave(sb, btop, h_ino, idx);
 +		err = reval_inode(inode, dentry);
 +		if (unlikely(err < 0)) {
-+			mtx = NULL;
++			hlinked = 0;
 +			goto out_iput;
 +		}
-+
-+		if (!err) {
-+			mtx = NULL;
++		if (!err)
 +			goto out; /* success */
-+		} else if (mtx)
-+			mutex_lock(mtx);
++		else if (hlinked && idx >= 0) {
++			err = au_xinondir_enter(sb, btop, h_ino, &idx);
++			if (unlikely(err)) {
++				iput(inode);
++				inode = ERR_PTR(err);
++				goto out;
++			}
++		}
 +	}
 +
 +	if (unlikely(au_test_fs_unique_ino(h_inode)))
@@ -19713,17 +19901,18 @@
 +	err = au_xino_write(sb, btop, h_ino, /*ino*/0);
 +	if (!err) {
 +		iput(inode);
-+		if (mtx)
-+			mutex_unlock(mtx);
++		if (hlinked && idx >= 0)
++			au_xinondir_leave(sb, btop, h_ino, idx);
 +		goto new_ino;
 +	}
 +
 +out_iput:
 +	iput(inode);
 +	inode = ERR_PTR(err);
++out_xinondir:
++	if (hlinked && idx >= 0)
++		au_xinondir_leave(sb, btop, h_ino, idx);
 +out:
-+	if (mtx)
-+		mutex_unlock(mtx);
 +	return inode;
 +}
 +
@@ -24749,7 +24938,7 @@
 +	sb = file->f_path.dentry->d_sb;
 +	si_read_lock(sb, AuLock_FLUSH | AuLock_NOPLMW);
 +
-+	h_file = au_read_pre(file, /*keep_fi*/0);
++	h_file = au_read_pre(file, /*keep_fi*/0, /*lsc*/0);
 +	err = PTR_ERR(h_file);
 +	if (IS_ERR(h_file))
 +		goto out;
@@ -30274,7 +30463,7 @@
 +}
 --- /dev/null
 +++ b/fs/aufs/vfsub.h
-@@ -0,0 +1,318 @@
+@@ -0,0 +1,348 @@
 +/*
 + * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
@@ -30542,6 +30731,36 @@
 +int vfsub_trunc(struct path *h_path, loff_t length, unsigned int attr,
 +		struct file *h_file);
 +int vfsub_fsync(struct file *file, struct path *path, int datasync);
++
++/*
++ * re-use branch fs's ioctl(FICLONE) while aufs itself doesn't support such
++ * ioctl.
++ */
++static inline int vfsub_clone_file_range(struct file *src, struct file *dst,
++					 u64 len)
++{
++	int err;
++
++	lockdep_off();
++	err = vfs_clone_file_range(src, 0, dst, 0, len);
++	lockdep_on();
++
++	return err;
++}
++
++/* copy_file_range(2) is a systemcall */
++static inline ssize_t vfsub_copy_file_range(struct file *src, loff_t src_pos,
++					    struct file *dst, loff_t dst_pos,
++					    size_t len, unsigned int flags)
++{
++	ssize_t ssz;
++
++	lockdep_off();
++	ssz = vfs_copy_file_range(src, src_pos, dst, dst_pos, len, flags);
++	lockdep_on();
++
++	return ssz;
++}
 +
 +/* ---------------------------------------------------------------------- */
 +
@@ -33252,7 +33471,7 @@
 +}
 --- /dev/null
 +++ b/fs/aufs/xino.c
-@@ -0,0 +1,1318 @@
+@@ -0,0 +1,1415 @@
 +/*
 + * Copyright (C) 2005-2017 Junjiro R. Okajima
 + *
@@ -34571,6 +34790,103 @@
 +out:
 +	return err;
 +}
++
++/* ---------------------------------------------------------------------- */
++
++void au_xinondir_leave(struct super_block *sb, aufs_bindex_t bindex,
++		       ino_t h_ino, int idx)
++{
++	struct au_xino_file *xino;
++
++	AuDebugOn(!au_opt_test(au_mntflags(sb), XINO));
++	xino = &au_sbr(sb, bindex)->br_xino;
++	AuDebugOn(idx < 0 || xino->xi_nondir.total <= idx);
++
++	spin_lock(&xino->xi_nondir.spin);
++	AuDebugOn(xino->xi_nondir.array[idx] != h_ino);
++	xino->xi_nondir.array[idx] = 0;
++	spin_unlock(&xino->xi_nondir.spin);
++	wake_up_all(&xino->xi_nondir.wqh);
++}
++
++static int au_xinondir_find(struct au_xino_file *xino, ino_t h_ino)
++{
++	int found, total, i;
++
++	found = -1;
++	total = xino->xi_nondir.total;
++	for (i = 0; i < total; i++) {
++		if (xino->xi_nondir.array[i] != h_ino)
++			continue;
++		found = i;
++		break;
++	}
++
++	return found;
++}
++
++static int au_xinondir_expand(struct au_xino_file *xino)
++{
++	int err, sz;
++	ino_t *p;
++
++	BUILD_BUG_ON(KMALLOC_MAX_SIZE > INT_MAX);
++
++	err = -ENOMEM;
++	sz = xino->xi_nondir.total * sizeof(ino_t);
++	if (unlikely(sz > KMALLOC_MAX_SIZE / 2))
++		goto out;
++	p = au_kzrealloc(xino->xi_nondir.array, sz, sz << 1, GFP_ATOMIC,
++			 /*may_shrink*/0);
++	if (p) {
++		xino->xi_nondir.array = p;
++		xino->xi_nondir.total <<= 1;
++		AuDbg("xi_nondir.total %d\n", xino->xi_nondir.total);
++		err = 0;
++	}
++
++out:
++	return err;
++}
++
++int au_xinondir_enter(struct super_block *sb, aufs_bindex_t bindex, ino_t h_ino,
++		      int *idx)
++{
++	int err, found, empty;
++	struct au_xino_file *xino;
++
++	err = 0;
++	*idx = -1;
++	if (!au_opt_test(au_mntflags(sb), XINO))
++		goto out; /* no xino */
++
++	xino = &au_sbr(sb, bindex)->br_xino;
++
++again:
++	spin_lock(&xino->xi_nondir.spin);
++	found = au_xinondir_find(xino, h_ino);
++	if (found == -1) {
++		empty = au_xinondir_find(xino, /*h_ino*/0);
++		if (empty == -1) {
++			empty = xino->xi_nondir.total;
++			err = au_xinondir_expand(xino);
++			if (unlikely(err))
++				goto out_unlock;
++		}
++		xino->xi_nondir.array[empty] = h_ino;
++		*idx = empty;
++	} else {
++		spin_unlock(&xino->xi_nondir.spin);
++		wait_event(xino->xi_nondir.wqh,
++			   xino->xi_nondir.array[found] != h_ino);
++		goto again;
++	}
++
++out_unlock:
++	spin_unlock(&xino->xi_nondir.spin);
++out:
++	return err;
++}
 --- /dev/null
 +++ b/include/uapi/linux/aufs_type.h
 @@ -0,0 +1,419 @@
@@ -34615,7 +34931,7 @@
 +
 +#include <linux/limits.h>
 +
-+#define AUFS_VERSION	"4.10-20170313"
++#define AUFS_VERSION	"4.10-20170410"
 +
 +/* todo? move this to linux-2.6.19/include/magic.h */
 +#define AUFS_SUPER_MAGIC	('a' << 24 | 'u' << 16 | 'f' << 8 | 's')

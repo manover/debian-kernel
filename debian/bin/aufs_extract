@@ -1,0 +1,35 @@
+#!/bin/bash -e
+
+say() {
+	printf "%b\n" "$@" >&2
+}
+
+pf_fmt() {
+	printf "%s/aufs4-%s.patch" "$1" "$2"
+}
+
+AUFS_REPO=~/src/aufs/aufs4-standalone
+AUFS_PATCH_DIR=debian/patches/manover/aufs
+AUFS_PATCHES="base mmap standalone kbuild"
+AUFS_FILES="Documentation fs include/uapi/linux/aufs_type.h"
+FILES_PATCH=$(pf_fmt $AUFS_PATCH_DIR files)
+
+mkdir -p $AUFS_PATCH_DIR
+say "Copying the patches ..."
+for p in $AUFS_PATCHES; do
+	cp -av "$(pf_fmt $AUFS_REPO ${p})" $AUFS_PATCH_DIR
+done
+
+say "\nCreating primary $FILES_PATCH ..."
+:> $FILES_PATCH
+files="$(cd $AUFS_REPO && find $AUFS_FILES -type f -printf '%p\n')"
+
+set +e
+for f in $files; do
+	say "Fetching: $f"
+	diff -uN --suppress-blank-empty --label "/dev/null" --label "b/$f" /dev/null "$AUFS_REPO/$f" >> $FILES_PATCH
+	if [ $? = 2 ]; then
+		say "Error occurred, stopping"
+		exit 2
+	fi
+done
