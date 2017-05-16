@@ -1,3 +1,18 @@
+linux (4.11.0-2) unstable; urgency=medium
+
+  * Test waters using acpi mutexes in w83627ehf hwmonitor driver
+  * Update AUFS to version 4.11-20170410
+  * Fix compilation warnings on x32 arch (time format related) for a
+    couple LED tools
+  * Debian gencontrol: generate separate make targets for cpupower and
+    perf allowing to build only those packages without building kernels
+    for all possible platforms
+  * Include architecture.mk into rules.real to be able to start build
+    process with just make (without dpkg-buildpackage wrapper)
+  * Remove all liblockdep-related patches, dropping the unused package
+
+ -- Denis Bychkov <manover@gmail.com>  Mon, 08 May 2017 18:45:26 -0400
+
 linux (4.11.0-1) unstable; urgency=medium
 
   * Linux 4.11

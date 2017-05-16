@@ -80,28 +80,19 @@ debian/i386-686-pae-pci-set-pci-nobios-by-default.patch
 bugfix/all/usbip-document-tcp-wrappers.patch
 bugfix/all/kbuild-fix-recordmcount-dependency.patch
 bugfix/all/tools-perf-man-date.patch
-bugfix/all/lockdep-fix-oot-build.patch
-bugfix/all/lockdep-fix-soname.patch
 bugfix/all/tools-perf-remove-shebangs.patch
 bugfix/all/tools-lib-traceevent-use-ldflags.patch
-bugfix/all/tools-lib-lockdep-use-ldflags.patch
 bugfix/x86/revert-perf-build-fix-libunwind-feature-detection-on.patch
 bugfix/alpha/alpha-uapi-add-support-for-__sane_userspace_types__.patch
 bugfix/all/tools-build-remove-bpf-run-time-check-at-build-time.patch
 bugfix/all/cpupower-bump-soname-version.patch
 bugfix/all/cpupower-fix-checks-for-cpu-existence.patch
-bugfix/all/liblockdep-fix-undefined-symbol-prandom_u32.patch
-bugfix/all/liblockdep-reduce-max_lock_depth-to-avoid-overflowin.patch
-bugfix/all/liblockdep-define-the-array_size-macro.patch
-bugfix/all/liblockdep-enable-wall-by-default.patch
-bugfix/all/liblockdep-fix-unused-value-warnings.patch
-bugfix/all/liblockdep-fix-set-but-not-used-warnings.patch
-bugfix/all/liblockdep-fix-defined-but-not-used-warning-for-init.patch
 
 # Manover custom patches
 manover/x32-support.patch
 manover/acpica-tools-x32-support.patch
 # Bcache
+manover/misc-tools-x32-support.patch
 manover/bcache-release-correct-minors.patch
 manover/bcache-name-device-by-label.patch
 # Docs
@@ -135,3 +126,4 @@ manover/cgroup-v2-cpu.patch
 #smsc-lpc47m182.patch
 #manover/pstate-module.patch
 manover/fix-leds-gpio-unload.patch
+manover/w83627ehf-mutex.patch

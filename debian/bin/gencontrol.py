@@ -212,6 +212,12 @@ class Gencontrol(Base):
                      ["$(MAKE) -f debian/rules.real install-libc-dev_%s %s" %
                       (arch, makeflags)])
 
+        makefile.add('binary-tools_%s' % arch,
+                     ['source_none_real'],
+                     ["$(MAKE) -f debian/rules.real install-perf %s" % (makeflags,),
+                      "$(MAKE) -f debian/rules.real install-cpupower %s" % (makeflags,)
+                      ])
+
     def do_featureset_setup(self, vars, makeflags, arch, featureset, extra):
         config_base = self.config.merge('base', arch, featureset)
         makeflags['LOCALVERSION_HEADERS'] = vars['localversion_headers'] = vars['localversion']
