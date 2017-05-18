@@ -26,3 +26,14 @@
  	}
  
  	close(fd);
+--- a/tools/vm/page-types.c
++++ b/tools/vm/page-types.c
+@@ -895,7 +895,7 @@ static void show_file(const char *name,
+ 	strftime(atime, sizeof(atime), "%c", localtime(&st->st_atime));
+ 	strftime(mtime, sizeof(mtime), "%c", localtime(&st->st_mtime));
+ 
+-	printf("Modify: %s (%ld seconds ago)\nAccess: %s (%ld seconds ago)\n",
++	printf("Modify: %s (%lld seconds ago)\nAccess: %s (%lld seconds ago)\n",
+ 			mtime, now - st->st_mtime,
+ 			atime, now - st->st_atime);
+ }

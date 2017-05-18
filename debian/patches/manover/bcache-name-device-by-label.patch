@@ -21,7 +21,7 @@
  {
  	struct request_queue *q;
  	size_t n;
-@@ -793,7 +798,11 @@ static int bcache_device_init(struct bca
+@@ -789,7 +794,11 @@ static int bcache_device_init(struct bca
  	}
  
  	set_capacity(d->disk, sectors);
@@ -34,7 +34,7 @@
  
  	d->disk->major		= bcache_major;
  	d->disk->first_minor	= minor;
-@@ -1125,7 +1134,8 @@ static int cached_dev_init(struct cached
+@@ -1121,7 +1130,8 @@ static int cached_dev_init(struct cached
  			q->limits.raid_partial_stripes_expensive;
  
  	ret = bcache_device_init(&dc->disk, block_size,
@@ -44,7 +44,7 @@
  	if (ret)
  		return ret;
  
-@@ -1226,7 +1236,7 @@ static int flash_dev_run(struct cache_se
+@@ -1222,7 +1232,7 @@ static int flash_dev_run(struct cache_se
  
  	kobject_init(&d->kobj, &bch_flash_dev_ktype);
  

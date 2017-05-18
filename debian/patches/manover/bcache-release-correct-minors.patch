@@ -9,7 +9,7 @@
  		put_disk(d->disk);
  	}
  
-@@ -788,7 +788,7 @@ static int bcache_device_init(struct bca
+@@ -784,7 +784,7 @@ static int bcache_device_init(struct bca
  
  	if (!(d->bio_split = bioset_create(4, offsetof(struct bbio, bio))) ||
  	    !(d->disk = alloc_disk(BCACHE_MINORS))) {

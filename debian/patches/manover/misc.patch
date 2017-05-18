@@ -15,7 +15,7 @@
  
  ifeq ($(shell $(HOSTCC) -v 2>&1 | grep -c "clang version"), 1)
  HOSTCFLAGS  += -Wno-unused-value -Wno-unused-parameter \
-@@ -1289,7 +1289,7 @@ CLEAN_DIRS  += $(MODVERDIR)
+@@ -1303,7 +1303,7 @@ CLEAN_DIRS  += $(MODVERDIR)
  # Directories & files removed with 'make mrproper'
  MRPROPER_DIRS  += include/config usr/include include/generated          \
  		  arch/*/include/generated .tmp_objdiff
@@ -26,7 +26,7 @@
  		  x509.genkey extra_certificates signing_key.x509.keyid	\
 --- a/arch/Kconfig
 +++ b/arch/Kconfig
-@@ -811,7 +811,7 @@ config VMAP_STACK
+@@ -831,7 +831,7 @@ config VMAP_STACK
  	  that is incorrect if the stack is in vmalloc space.
  
  config ARCH_OPTIONAL_KERNEL_RWX
@@ -71,7 +71,7 @@
  create_package() {
  	local pname="$1" pdir="$2"
  
-@@ -185,11 +201,6 @@ if grep -q '^CONFIG_MODULES=y' $KCONFIG_
+@@ -180,11 +196,6 @@ if grep -q '^CONFIG_MODULES=y' $KCONFIG_
  	fi
  fi
  
@@ -83,7 +83,7 @@
  # Install the maintainer scripts
  # Note: hook scripts under /etc/kernel are also executed by official Debian
  # kernel packages, as well as kernel packages built using make-kpkg.
-@@ -237,48 +248,6 @@ else
+@@ -232,48 +243,6 @@ else
  fi
  maintainer="$name <$email>"
  
@@ -112,10 +112,10 @@
 -cat <<EOF > debian/copyright
 -This is a packacked upstream version of the Linux kernel.
 -
--The sources may be found at most Linux ftp sites, including:
--ftp://ftp.kernel.org/pub/linux/kernel
+-The sources may be found at most Linux archive sites, including:
+-https://www.kernel.org/pub/linux/kernel
 -
--Copyright: 1991 - 2015 Linus Torvalds and others.
+-Copyright: 1991 - 2017 Linus Torvalds and others.
 -
 -The git repository for mainline kernel development is at:
 -git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
@@ -132,7 +132,7 @@
  build_depends="bc, kmod, cpio "
  
  # Generate a control file
-@@ -370,20 +339,8 @@ EOF
+@@ -361,20 +330,8 @@ EOF
  	create_package "$fwpackagename" "$fwdir"
  fi
  
@@ -153,7 +153,7 @@
  fi
  
  create_package "$packagename" "$tmpdir"
-@@ -440,7 +397,7 @@ EOF
+@@ -430,7 +387,7 @@ EOF
  	mv ${sourcename}_${packageversion}*dsc ..
  	dpkg-genchanges > ../${sourcename}_${packageversion}_${debarch}.changes
  else

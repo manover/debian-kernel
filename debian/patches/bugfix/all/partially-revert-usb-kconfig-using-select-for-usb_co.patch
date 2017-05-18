@@ -14,7 +14,7 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 
 --- a/drivers/usb/Kconfig
 +++ b/drivers/usb/Kconfig
-@@ -154,8 +154,7 @@ source "drivers/usb/gadget/Kconfig"
+@@ -166,8 +166,7 @@ source "drivers/usb/typec/Kconfig"
  
  config USB_LED_TRIG
  	bool "USB LED Triggers"

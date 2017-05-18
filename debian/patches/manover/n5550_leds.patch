@@ -26,7 +26,7 @@
  MODULE_LICENSE("GPL");
 --- a/drivers/leds/Kconfig
 +++ b/drivers/leds/Kconfig
-@@ -443,6 +443,30 @@ config LEDS_INTEL_SS4200
+@@ -459,6 +459,30 @@ config LEDS_INTEL_SS4200
  	  drive or power LEDs on the front panel. Using this driver
  	  can stop the front LED from blinking after startup.
  
@@ -59,14 +59,14 @@
  	depends on LEDS_CLASS
 --- a/drivers/leds/Makefile
 +++ b/drivers/leds/Makefile
-@@ -50,6 +50,7 @@ obj-$(CONFIG_LEDS_WM8350)		+= leds-wm835
+@@ -51,6 +51,7 @@ obj-$(CONFIG_LEDS_WM8350)		+= leds-wm835
  obj-$(CONFIG_LEDS_PWM)			+= leds-pwm.o
  obj-$(CONFIG_LEDS_REGULATOR)		+= leds-regulator.o
  obj-$(CONFIG_LEDS_INTEL_SS4200)		+= leds-ss4200.o
 +obj-$(CONFIG_LEDS_THECUS_N5550) += leds-n5550-ahci.o leds-n5550-board.o
  obj-$(CONFIG_LEDS_LT3593)		+= leds-lt3593.o
  obj-$(CONFIG_LEDS_ADP5520)		+= leds-adp5520.o
- obj-$(CONFIG_LEDS_DELL_NETBOOKS)	+= dell-led.o
+ obj-$(CONFIG_LEDS_MC13783)		+= leds-mc13783.o
 --- /dev/null
 +++ b/drivers/leds/leds-n5550-ahci.c
 @@ -0,0 +1,292 @@

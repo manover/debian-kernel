@@ -18,13 +18,6 @@ bugfix/all/firmware_class-log-every-success-and-failure.patch
 bugfix/all/firmware-remove-redundant-log-messages-from-drivers.patch
 bugfix/all/radeon-firmware-is-required-for-drm-and-kms-on-r600-onward.patch
 
-# Patches from aufs4 repository, imported with
-# debian/patches/features/all/aufs4/gen-patch.  These are only the
-# changes needed to allow aufs to be built out-of-tree.
-#features/all/aufs4/aufs4-base.patch
-#features/all/aufs4/aufs4-mmap.patch
-#features/all/aufs4/aufs4-standalone.patch
-
 # Change some defaults for security reasons
 debian/af_802154-Disable-auto-loading-as-mitigation-against.patch
 debian/rds-Disable-auto-loading-as-mitigation-against-local.patch
@@ -66,7 +59,6 @@ bugfix/all/disable-some-marvell-phys.patch
 bugfix/all/fs-add-module_softdep-declarations-for-hard-coded-cr.patch
 bugfix/all/kbuild-do-not-use-hyphen-in-exported-variable-name.patch
 bugfix/all/partially-revert-usb-kconfig-using-select-for-usb_co.patch
-bugfix/all/media-dvb-usb-dibusb-mc-common-add-module_license.patch
 bugfix/all/kbuild-include-addtree-remove-quotes-before-matching-path.patch
 
 # Miscellaneous features
@@ -122,8 +114,6 @@ manover/fix-tpm-tis-alias.patch
 manover/acpi-mutex-enable.patch
 manover/it87-update.patch
 manover/cgroup-v2-cpu.patch
-#unifdef-hang.patch
-#smsc-lpc47m182.patch
 #manover/pstate-module.patch
 manover/fix-leds-gpio-unload.patch
 manover/w83627ehf-mutex.patch

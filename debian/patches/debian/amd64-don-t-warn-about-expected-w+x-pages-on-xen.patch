@@ -21,7 +21,7 @@ other W+X cases.  So add a condition to the WARN_ON.
  
  #include <asm/kasan.h>
  #include <asm/pgtable.h>
-@@ -229,7 +230,7 @@ static void note_page(struct seq_file *m
+@@ -230,7 +231,7 @@ static void note_page(struct seq_file *m
  		pgprotval_t pr = pgprot_val(st->current_prot);
  
  		if (st->check_wx && (pr & _PAGE_RW) && !(pr & _PAGE_NX)) {

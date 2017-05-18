@@ -1,3 +1,10 @@
+linux (4.12~rc1-1) experimental; urgency=medium
+
+  * Linux 4.12 RC1
+  * Removed and/or refreshed debian patches
+
+ -- Denis Bychkov <manover@gmail.com>  Tue, 16 May 2017 04:11:36 -0400
+
 linux (4.11.1-1) unstable; urgency=medium
 
   * Linux 4.11.1

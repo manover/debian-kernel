@@ -1,6 +1,6 @@
 --- a/tools/perf/Makefile.config
 +++ b/tools/perf/Makefile.config
-@@ -873,11 +873,7 @@ sysconfdir = $(prefix)/etc
+@@ -872,11 +872,7 @@ sysconfdir = $(prefix)/etc
  ETC_PERFCONFIG = etc/perfconfig
  endif
  ifndef lib
@@ -14,7 +14,7 @@
  
 --- a/tools/perf/bench/sched-messaging.c
 +++ b/tools/perf/bench/sched-messaging.c
-@@ -311,12 +311,12 @@ int bench_sched_messaging(int argc, cons
+@@ -310,12 +310,12 @@ int bench_sched_messaging(int argc, cons
  		printf("# %d groups == %d %s run\n\n",
  		       num_groups, num_groups * 2 * num_fds,
  		       thread_mode ? "threads" : "processes");
@@ -51,7 +51,7 @@
  		break;
 --- a/tools/perf/builtin-kvm.c
 +++ b/tools/perf/builtin-kvm.c
-@@ -566,7 +566,7 @@ static void show_timeofday(void)
+@@ -587,7 +587,7 @@ static void show_timeofday(void)
  	gettimeofday(&tv, NULL);
  	if (localtime_r(&tv.tv_sec, &ltime)) {
  		strftime(date, sizeof(date), "%H:%M:%S", &ltime);
@@ -62,7 +62,7 @@
  
 --- a/tools/perf/builtin-stat.c
 +++ b/tools/perf/builtin-stat.c
-@@ -1393,7 +1393,7 @@ static void print_interval(char *prefix,
+@@ -1505,7 +1505,7 @@ static void print_interval(char *prefix,
  	FILE *output = stat_config.output;
  	static int num_print_interval;
  
@@ -110,7 +110,7 @@
  
 --- a/tools/perf/util/unwind-libunwind-local.c
 +++ b/tools/perf/util/unwind-libunwind-local.c
-@@ -520,9 +520,9 @@ static int access_mem(unw_addr_space_t _
+@@ -522,9 +522,9 @@ static int access_mem(unw_addr_space_t _
  	if (addr < start || addr + sizeof(unw_word_t) >= end) {
  		ret = access_dso_mem(ui, addr, valp);
  		if (ret) {
@@ -123,7 +123,7 @@
  			*valp = 0;
  			return ret;
  		}
-@@ -531,8 +531,8 @@ static int access_mem(unw_addr_space_t _
+@@ -533,8 +533,8 @@ static int access_mem(unw_addr_space_t _
  
  	offset = addr - start;
  	*valp  = *(unw_word_t *)&stack->data[offset];

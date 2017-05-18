@@ -15,7 +15,7 @@ the kernel.
 
 --- a/Makefile
 +++ b/Makefile
-@@ -652,6 +652,8 @@ endif
+@@ -648,6 +648,8 @@ endif
  KBUILD_CFLAGS += $(call cc-ifversion, -lt, 0409, \
  			$(call cc-disable-warning,maybe-uninitialized,))
  
@@ -24,7 +24,7 @@ the kernel.
  # Tell gcc to never replace conditional load with a non-conditional one
  KBUILD_CFLAGS	+= $(call cc-option,--param=allow-store-data-races=0)
  
-@@ -776,7 +778,7 @@ KBUILD_CFLAGS += $(call cc-option, -fno-
+@@ -787,7 +789,7 @@ KBUILD_CFLAGS	+= $(call cc-option,-fdata
  endif
  
  # arch Makefile may override CC so keep this after arch Makefile is included
@@ -39,13 +39,13 @@ the kernel.
  # Usage: cflags-y += $(call cc-option,-march=winchip-c6,-march=i586)
  
  cc-option = $(call try-run,\
--	$(CC) $(KBUILD_CPPFLAGS) $(CC_OPTION_CFLAGS) $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
+-	$(CC) -Werror $(KBUILD_CPPFLAGS) $(CC_OPTION_CFLAGS) $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
 +	$(CC) $(NOSTDINC_FLAGS) $(KBUILD_CPPFLAGS) $(CC_OPTION_CFLAGS) $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
  
  # cc-option-yn
  # Usage: flag := $(call cc-option-yn,-march=winchip-c6)
  cc-option-yn = $(call try-run,\
--	$(CC) $(KBUILD_CPPFLAGS) $(CC_OPTION_CFLAGS) $(1) -c -x c /dev/null -o "$$TMP",y,n)
+-	$(CC) -Werror $(KBUILD_CPPFLAGS) $(CC_OPTION_CFLAGS) $(1) -c -x c /dev/null -o "$$TMP",y,n)
 +	$(CC) $(NOSTDINC_FLAGS) $(KBUILD_CPPFLAGS) $(CC_OPTION_CFLAGS) $(1) -c -x c /dev/null -o "$$TMP",y,n)
  
  # cc-option-align
@@ -54,7 +54,7 @@ the kernel.
  # cc-disable-warning
  # Usage: cflags-y += $(call cc-disable-warning,unused-but-set-variable)
  cc-disable-warning = $(call try-run,\
--	$(CC) $(KBUILD_CPPFLAGS) $(CC_OPTION_CFLAGS) -W$(strip $(1)) -c -x c /dev/null -o "$$TMP",-Wno-$(strip $(1)))
+-	$(CC) -Werror $(KBUILD_CPPFLAGS) $(CC_OPTION_CFLAGS) -W$(strip $(1)) -c -x c /dev/null -o "$$TMP",-Wno-$(strip $(1)))
 +	$(CC) $(NOSTDINC_FLAGS) $(KBUILD_CPPFLAGS) $(CC_OPTION_CFLAGS) -W$(strip $(1)) -c -x c /dev/null -o "$$TMP",-Wno-$(strip $(1)))
  
  # cc-name

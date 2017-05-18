@@ -13,12 +13,8 @@
  static inline void
  superio_outb(int ioreg, int reg, int val)
  {
-@@ -135,11 +141,24 @@ superio_select(int ioreg, int ld)
- 	outb(ld, ioreg + 1);
- }
- 
--static inline void
-+static inline int
+@@ -138,6 +144,17 @@ superio_select(int ioreg, int ld)
+ static inline int
  superio_enter(int ioreg)
  {
 +#ifdef CONFIG_ACPI_MUTEX
@@ -32,62 +28,21 @@
 +		}
 +	}
 +#endif
- 	outb(0x87, ioreg);
- 	outb(0x87, ioreg);
-+
-+	return 0;
- }
+ 	if (!request_muxed_region(ioreg, 2, DRVNAME))
+ 		return -EBUSY;
  
- static inline void
-@@ -148,6 +167,10 @@ superio_exit(int ioreg)
- 	outb(0xaa, ioreg);
+@@ -154,6 +171,10 @@ superio_exit(int ioreg)
  	outb(0x02, ioreg);
  	outb(0x02, ioreg + 1);
+ 	release_region(ioreg, 2);
 +#ifdef CONFIG_ACPI_MUTEX
 +	if (w83627ehf_acpi_sio_mutex)
-+		acpi_release_mutex(w83627ehf_acpi_sio_mutex, NULL);
++		 acpi_release_mutex(w83627ehf_acpi_sio_mutex, NULL);
 +#endif
  }
  
  /*
-@@ -1970,7 +1993,9 @@ w83627ehf_check_fan_inputs(const struct
- 		return;
- 	}
- 
--	superio_enter(sio_data->sioreg);
-+	if (superio_enter(sio_data->sioreg))
-+		/* Could not acquire ACPI mutex */
-+		return;
- 
- 	/* fan4 and fan5 share some pins with the GPIO and serial flash */
- 	if (sio_data->kind == nct6775) {
-@@ -2352,7 +2377,11 @@ static int w83627ehf_probe(struct platfo
- 	w83627ehf_init_device(data, sio_data->kind);
- 
- 	data->vrm = vid_which_vrm();
--	superio_enter(sio_data->sioreg);
-+
-+	err = superio_enter(sio_data->sioreg);
-+	if (err)
-+		goto exit_release;
-+
- 	/* Read VID value */
- 	if (sio_data->kind == w83667hg || sio_data->kind == w83667hg_b ||
- 	    sio_data->kind == nct6775 || sio_data->kind == nct6776) {
-@@ -2712,8 +2741,11 @@ static int __init w83627ehf_find(int sio
- 
- 	u16 val;
- 	const char *sio_name;
-+	int err;
- 
--	superio_enter(sioaddr);
-+	err = superio_enter(sioaddr);
-+	if (err)
-+		return err;
- 
- 	if (force_id)
- 		val = force_id;
-@@ -2803,6 +2835,17 @@ static int __init sensors_w83627ehf_init
+@@ -2816,6 +2837,17 @@ static int __init sensors_w83627ehf_init
  	unsigned short address;
  	struct resource res;
  	struct w83627ehf_sio_data sio_data;
