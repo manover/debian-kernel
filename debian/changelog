@@ -1,3 +1,16 @@
+linux (4.12~rc3-1) experimental; urgency=medium
+
+  * Linux 4.12 RC3
+  * Update it87 driver from the upstream
+
+ -- Denis Bychkov <manover@gmail.com>  Tue, 30 May 2017 23:22:18 -0400
+
+linux (4.12~rc2-1) experimental; urgency=medium
+
+  * Linux 4.12 RC2
+
+ -- Denis Bychkov <manover@gmail.com>  Mon, 22 May 2017 12:39:53 -0400
+
 linux (4.12~rc1-1) experimental; urgency=medium
 
   * Linux 4.12 RC1

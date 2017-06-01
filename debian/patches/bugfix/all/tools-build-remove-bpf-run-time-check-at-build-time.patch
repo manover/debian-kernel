@@ -13,9 +13,9 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 ---
 --- a/tools/build/feature/test-bpf.c
 +++ b/tools/build/feature/test-bpf.c
-@@ -30,9 +30,5 @@ int main(void)
- 	attr.log_level = 0;
+@@ -31,9 +31,5 @@ int main(void)
  	attr.kern_version = 0;
+ 	attr.prog_flags = 0;
  
 -	/*
 -	 * Test existence of __NR_bpf and BPF_PROG_LOAD.
