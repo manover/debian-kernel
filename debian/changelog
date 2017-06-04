@@ -15,6 +15,7 @@ linux (4.9.33-1) unstable; urgency=medium
   * [arm64] serial: pl011: add console matching function (Closes: #861898)
   * [x86] pinctrl: cherryview: Add a quirk to make Acer Chromebook keyboard
     work again (Closes: #862723)
+  * btrfs: warn about RAID5/6 being experimental at mount time (Closes: #863290)
   * tracing: Use strlcpy() instead of strcpy() in __trace_find_cmdline()
     (CVE-2017-0605)
   * dccp/tcp: do not inherit mc_list from parent (CVE-2017-8890)
