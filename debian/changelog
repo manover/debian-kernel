@@ -12,6 +12,7 @@ linux (4.13~rc4-2) UNRELEASED; urgency=medium
   * [arm64] enable MVNETA for Espressobin and enable respective
     device in its device tree (Closes: #871049)
   * [armhf] Revert "gpu: host1x: Add IOMMU support"
+  * btrfs: warn about RAID5/6 being experimental at mount time (Closes: #863290)
 
  -- Denis Bychkov <manover@gmail.com>  Tue, 15 Aug 2017 02:06:33 -0400
 
