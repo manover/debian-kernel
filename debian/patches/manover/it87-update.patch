@@ -94,7 +94,7 @@
 +available, something is likely to be wrong.
 --- a/drivers/hwmon/Kconfig
 +++ b/drivers/hwmon/Kconfig
-@@ -648,6 +648,54 @@ config SENSORS_IT87
+@@ -649,6 +649,54 @@ config SENSORS_IT87
  	  This driver can also be built as a module.  If so, the module
  	  will be called it87.
  
