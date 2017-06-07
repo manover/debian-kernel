@@ -1437,7 +1437,7 @@ upstream submission.
  	} else
 --- a/drivers/net/wireless/ath/ath9k/hif_usb.c
 +++ b/drivers/net/wireless/ath/ath9k/hif_usb.c
-@@ -1161,9 +1161,6 @@ static void ath9k_hif_usb_firmware_cb(co
+@@ -1162,9 +1162,6 @@ static void ath9k_hif_usb_firmware_cb(co
  		if (!ret)
  			return;
  
