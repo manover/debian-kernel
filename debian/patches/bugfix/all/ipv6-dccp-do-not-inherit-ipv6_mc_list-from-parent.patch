@@ -41,7 +41,7 @@ Signed-off-by: David S. Miller <davem@davemloft.net>
  	newnp->mcast_oif  = inet6_iif(skb);
 --- a/net/ipv6/tcp_ipv6.c
 +++ b/net/ipv6/tcp_ipv6.c
-@@ -1046,6 +1046,7 @@ static struct sock *tcp_v6_syn_recv_sock
+@@ -1070,6 +1070,7 @@ static struct sock *tcp_v6_syn_recv_sock
  		newtp->af_specific = &tcp_sock_ipv6_mapped_specific;
  #endif
  
@@ -49,7 +49,7 @@ Signed-off-by: David S. Miller <davem@davemloft.net>
  		newnp->ipv6_ac_list = NULL;
  		newnp->ipv6_fl_list = NULL;
  		newnp->pktoptions  = NULL;
-@@ -1115,6 +1116,7 @@ static struct sock *tcp_v6_syn_recv_sock
+@@ -1139,6 +1140,7 @@ static struct sock *tcp_v6_syn_recv_sock
  	   First: no IPv4 options.
  	 */
  	newinet->inet_opt = NULL;

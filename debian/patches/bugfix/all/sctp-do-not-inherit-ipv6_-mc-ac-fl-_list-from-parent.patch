@@ -17,7 +17,7 @@ Signed-off-by: David S. Miller <davem@davemloft.net>
 
 --- a/net/sctp/ipv6.c
 +++ b/net/sctp/ipv6.c
-@@ -666,6 +666,9 @@ static struct sock *sctp_v6_create_accep
+@@ -665,6 +665,9 @@ static struct sock *sctp_v6_create_accep
  	newnp = inet6_sk(newsk);
  
  	memcpy(newnp, np, sizeof(struct ipv6_pinfo));

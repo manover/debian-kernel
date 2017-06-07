@@ -31,7 +31,7 @@ Signed-off-by: David S. Miller <davem@davemloft.net>
 
 --- a/net/ipv6/ip6_output.c
 +++ b/net/ipv6/ip6_output.c
-@@ -1448,6 +1448,11 @@ alloc_new_skb:
+@@ -1467,6 +1467,11 @@ alloc_new_skb:
  			 */
  			alloclen += sizeof(struct frag_hdr);
  
@@ -43,7 +43,7 @@ Signed-off-by: David S. Miller <davem@davemloft.net>
  			if (transhdrlen) {
  				skb = sock_alloc_send_skb(sk,
  						alloclen + hh_len,
-@@ -1497,13 +1502,9 @@ alloc_new_skb:
+@@ -1516,13 +1521,9 @@ alloc_new_skb:
  				data += fraggap;
  				pskb_trim_unique(skb_prev, maxfraglen);
  			}

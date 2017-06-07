@@ -17,7 +17,7 @@ Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 
 --- a/crypto/skcipher.c
 +++ b/crypto/skcipher.c
-@@ -221,6 +221,44 @@ static int crypto_init_skcipher_ops_ablk
+@@ -764,6 +764,44 @@ static int crypto_init_skcipher_ops_ablk
  	return 0;
  }
  
@@ -62,7 +62,7 @@ Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
  static void crypto_skcipher_exit_tfm(struct crypto_tfm *tfm)
  {
  	struct crypto_skcipher *skcipher = __crypto_skcipher_cast(tfm);
-@@ -241,7 +279,7 @@ static int crypto_skcipher_init_tfm(stru
+@@ -784,7 +822,7 @@ static int crypto_skcipher_init_tfm(stru
  	    tfm->__crt_alg->cra_type == &crypto_givcipher_type)
  		return crypto_init_skcipher_ops_ablkcipher(tfm);
  

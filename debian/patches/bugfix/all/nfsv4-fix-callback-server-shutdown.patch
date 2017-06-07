@@ -20,7 +20,7 @@ Signed-off-by: J. Bruce Fields <bfields@redhat.com>
 
 --- a/fs/nfs/callback.c
 +++ b/fs/nfs/callback.c
-@@ -75,7 +75,10 @@ nfs4_callback_svc(void *vrqstp)
+@@ -76,7 +76,10 @@ nfs4_callback_svc(void *vrqstp)
  
  	set_freezable();
  
@@ -32,7 +32,7 @@ Signed-off-by: J. Bruce Fields <bfields@redhat.com>
  		/*
  		 * Listen for a request on the socket
  		 */
-@@ -84,6 +87,8 @@ nfs4_callback_svc(void *vrqstp)
+@@ -85,6 +88,8 @@ nfs4_callback_svc(void *vrqstp)
  			continue;
  		svc_process(rqstp);
  	}
@@ -41,7 +41,7 @@ Signed-off-by: J. Bruce Fields <bfields@redhat.com>
  	return 0;
  }
  
-@@ -102,9 +107,10 @@ nfs41_callback_svc(void *vrqstp)
+@@ -103,9 +108,10 @@ nfs41_callback_svc(void *vrqstp)
  
  	set_freezable();
  
@@ -55,7 +55,7 @@ Signed-off-by: J. Bruce Fields <bfields@redhat.com>
  
  		prepare_to_wait(&serv->sv_cb_waitq, &wq, TASK_INTERRUPTIBLE);
  		spin_lock_bh(&serv->sv_cb_lock);
-@@ -120,11 +126,13 @@ nfs41_callback_svc(void *vrqstp)
+@@ -121,11 +127,13 @@ nfs41_callback_svc(void *vrqstp)
  				error);
  		} else {
  			spin_unlock_bh(&serv->sv_cb_lock);
@@ -71,7 +71,7 @@ Signed-off-by: J. Bruce Fields <bfields@redhat.com>
  	return 0;
  }
  
-@@ -220,14 +228,14 @@ err_bind:
+@@ -221,14 +229,14 @@ err_bind:
  static struct svc_serv_ops nfs40_cb_sv_ops = {
  	.svo_function		= nfs4_callback_svc,
  	.svo_enqueue_xprt	= svc_xprt_do_enqueue,
@@ -90,7 +90,7 @@ Signed-off-by: J. Bruce Fields <bfields@redhat.com>
  
 --- a/include/linux/sunrpc/svc.h
 +++ b/include/linux/sunrpc/svc.h
-@@ -470,6 +470,7 @@ void		   svc_pool_map_put(void);
+@@ -474,6 +474,7 @@ void		   svc_pool_map_put(void);
  struct svc_serv *  svc_create_pooled(struct svc_program *, unsigned int,
  			struct svc_serv_ops *);
  int		   svc_set_num_threads(struct svc_serv *, struct svc_pool *, int);
