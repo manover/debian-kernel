@@ -4,8 +4,10 @@ linux (4.9.33-1) unstable; urgency=medium
   * Remove obsolete/refresh patches
   * Update AUFS to 4.9-20170612
   * Remove kdbus
-
-  [ Ben Hutchings ]
+  
+  * NFSv4.x/callback: Create the callback service through svc_create_pooled
+    (Closes: #862357)
+  * ipv6: Check ip6_find_1stfragopt() return value properly.
   * Ignore ABI changes in ccp and hid-sensors
   * [mips*el/loongson-3] Revert "MIPS: Loongson-3: Select
     MIPS_L1_CACHE_SHIFT_6" to avoid ABI change
