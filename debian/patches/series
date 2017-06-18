@@ -69,6 +69,7 @@ bugfix/all/partially-revert-usb-kconfig-using-select-for-usb_co.patch
 bugfix/all/kbuild-include-addtree-remove-quotes-before-matching-path.patch
 
 # Miscellaneous features
+features/all/usb-serial-option-add-two-longcheer-device-ids.patch
 
 # Security fixes
 debian/i386-686-pae-pci-set-pci-nobios-by-default.patch

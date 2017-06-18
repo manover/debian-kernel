@@ -1,6 +1,7 @@
 linux (4.11.6-1) unstable; urgency=medium
 
   * Linux 4.11.6
+  * USB: serial: option: add two Longcheer device ids (Closes: #864604)
 
  -- Denis Bychkov <manover@gmail.com>  Tue, 20 Jun 2017 20:21:03 -0400
 
