@@ -4,6 +4,7 @@ linux (4.11.6-1) unstable; urgency=medium
   * USB: serial: option: add two Longcheer device ids (Closes: #864604)
   * NFSv4.x/callback: Create the callback service through svc_create_pooled
     (Closes: #862357)
+  * mm: larger stack guard gap, between vmas (CVE-2017-1000364)
 
  -- Denis Bychkov <manover@gmail.com>  Tue, 20 Jun 2017 20:21:03 -0400
 
