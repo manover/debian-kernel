@@ -1,6 +1,8 @@
 linux (4.11.6-1) unstable; urgency=medium
 
   * Linux 4.11.6
+  
+  Import/refresh debian patches:
   * USB: serial: option: add two Longcheer device ids (Closes: #864604)
   * NFSv4.x/callback: Create the callback service through svc_create_pooled
     (Closes: #862357)
@@ -8,7 +10,7 @@ linux (4.11.6-1) unstable; urgency=medium
   * usbip: Fix potential format overflow in userspace tools (fixes FTBFS on
     64-bit architectures with gcc-7)
 
- -- Denis Bychkov <manover@gmail.com>  Tue, 20 Jun 2017 20:21:03 -0400
+ -- Denis Bychkov <manover@gmail.com>  Wed, 21 Jun 2017 01:41:56 -0400
 
 linux (4.11.4-1) unstable; urgency=medium
 

@@ -371,7 +371,7 @@ Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
  
 --- a/fs/proc/task_mmu.c
 +++ b/fs/proc/task_mmu.c
-@@ -303,11 +303,7 @@ show_map_vma(struct seq_file *m, struct
+@@ -300,11 +300,7 @@ show_map_vma(struct seq_file *m, struct
  
  	/* We don't show the stack guard page in /proc/maps */
  	start = vma->vm_start;
@@ -385,7 +385,7 @@ Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
  	seq_printf(m, "%08lx-%08lx %c%c%c%c %08llx %02x:%02x %lu ",
 --- a/include/linux/mm.h
 +++ b/include/linux/mm.h
-@@ -1403,12 +1403,6 @@ int clear_page_dirty_for_io(struct page
+@@ -1381,12 +1381,6 @@ int clear_page_dirty_for_io(struct page
  
  int get_cmdline(struct task_struct *task, char *buffer, int buflen);
  
@@ -398,7 +398,7 @@ Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
  static inline bool vma_is_anonymous(struct vm_area_struct *vma)
  {
  	return !vma->vm_ops;
-@@ -1424,28 +1418,6 @@ bool vma_is_shmem(struct vm_area_struct
+@@ -1402,28 +1396,6 @@ bool vma_is_shmem(struct vm_area_struct
  static inline bool vma_is_shmem(struct vm_area_struct *vma) { return false; }
  #endif
  
@@ -427,7 +427,7 @@ Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
  int vma_is_stack_for_current(struct vm_area_struct *vma);
  
  extern unsigned long move_page_tables(struct vm_area_struct *vma,
-@@ -2232,6 +2204,7 @@ void page_cache_async_readahead(struct a
+@@ -2210,6 +2182,7 @@ void page_cache_async_readahead(struct a
  				pgoff_t offset,
  				unsigned long size);
  
@@ -435,7 +435,7 @@ Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
  /* Generic expand stack which grows the stack according to GROWS{UP,DOWN} */
  extern int expand_stack(struct vm_area_struct *vma, unsigned long address);
  
-@@ -2260,6 +2233,30 @@ static inline struct vm_area_struct * fi
+@@ -2238,6 +2211,30 @@ static inline struct vm_area_struct * fi
  	return vma;
  }
  
