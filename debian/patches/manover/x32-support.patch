@@ -4,7 +4,7 @@
  ETC_PERFCONFIG = etc/perfconfig
  endif
  ifndef lib
--ifeq ($(ARCH)$(IS_64_BIT), x861)
+-ifeq ($(SRCARCH)$(IS_64_BIT), x861)
 -lib = lib64
 -else
  lib = lib

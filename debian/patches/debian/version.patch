@@ -121,7 +121,7 @@ are set.
  #include <linux/sched/clock.h>
  #include <linux/sched/debug.h>
  #include <linux/sched/task_stack.h>
-@@ -3141,11 +3142,12 @@ void __init dump_stack_set_arch_desc(con
+@@ -3115,11 +3116,12 @@ void __init dump_stack_set_arch_desc(con
   */
  void dump_stack_print_info(const char *log_lvl)
  {

@@ -1,3 +1,9 @@
+linux (4.12~rc6-1) experimental; urgency=medium
+
+  * Linux 4.12 RC6
+
+ -- Denis Bychkov <manover@gmail.com>  Tue, 20 Jun 2017 01:12:12 -0400
+
 linux (4.12~rc4-2) experimental; urgency=medium
 
   * Update it87 hwmon driver from the upstream
