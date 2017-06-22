@@ -1,8 +1,9 @@
 linux (4.12~rc6-2) experimental; urgency=medium
 
   * Update AUFS to version 4.11-20170612
+  * Make tools build on gcc-7
 
- -- Denis Bychkov <manover@gmail.com>  Thu, 22 Jun 2017 16:31:20 -0400
+ -- Denis Bychkov <manover@gmail.com>  Thu, 22 Jun 2017 18:42:06 -0400
 
 linux (4.12~rc6-1) experimental; urgency=medium
 

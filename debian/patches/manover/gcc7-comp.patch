@@ -1,0 +1,22 @@
+--- a/tools/perf/arch/x86/util/unwind-libunwind.c
++++ b/tools/perf/arch/x86/util/unwind-libunwind.c
+@@ -7,6 +7,10 @@
+ #include "../../util/debug.h"
+ #endif
+ 
++#ifndef EINVAL
++#define EINVAL 22
++#endif
++
+ #ifdef HAVE_ARCH_X86_64_SUPPORT
+ int LIBUNWIND__ARCH_REG_ID(int regnum)
+ {
+--- a/tools/usb/usbip/src/Makefile.am
++++ b/tools/usb/usbip/src/Makefile.am
+@@ -1,5 +1,5 @@
+ AM_CPPFLAGS = -I$(top_srcdir)/libsrc -DUSBIDS_FILE='"@USBIDS_DIR@/usb.ids"'
+-AM_CFLAGS   = @EXTRA_CFLAGS@
++AM_CFLAGS   = @EXTRA_CFLAGS@ -Wno-error=implicit-fallthrough
+ LDADD       = $(top_builddir)/libsrc/libusbip.la
+ 
+ sbin_PROGRAMS := usbip usbipd

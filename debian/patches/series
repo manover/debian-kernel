@@ -117,3 +117,4 @@ manover/cgroup-v2-cpu.patch
 #manover/pstate-module.patch
 manover/fix-leds-gpio-unload.patch
 manover/w83627ehf-mutex.patch
+manover/gcc7-comp.patch
