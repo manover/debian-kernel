@@ -1,4 +1,4 @@
-aufs4.x-rcN standalone patch
+aufs4.11 standalone patch
 
 --- a/fs/dcache.c
 +++ b/fs/dcache.c
@@ -10,7 +10,7 @@ aufs4.x-rcN standalone patch
  
  struct check_mount {
  	struct vfsmount *mnt;
-@@ -2864,6 +2865,7 @@ void d_exchange(struct dentry *dentry1,
+@@ -2862,6 +2863,7 @@ void d_exchange(struct dentry *dentry1,
  
  	write_sequnlock(&rename_lock);
  }
