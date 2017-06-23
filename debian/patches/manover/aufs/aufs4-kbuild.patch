@@ -2,7 +2,7 @@ aufs4.9 kbuild patch
 
 --- a/fs/Kconfig
 +++ b/fs/Kconfig
-@@ -250,6 +250,7 @@ source "fs/pstore/Kconfig"
+@@ -249,6 +249,7 @@ source "fs/pstore/Kconfig"
  source "fs/sysv/Kconfig"
  source "fs/ufs/Kconfig"
  source "fs/exofs/Kconfig"

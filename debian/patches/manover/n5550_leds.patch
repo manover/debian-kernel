@@ -1,6 +1,6 @@
 --- a/drivers/ata/ahci.c
 +++ b/drivers/ata/ahci.c
-@@ -1676,6 +1676,10 @@ static void ahci_remove_one(struct pci_d
+@@ -1714,6 +1714,10 @@ static void ahci_remove_one(struct pci_d
  
  module_pci_driver(ahci_pci_driver);
  

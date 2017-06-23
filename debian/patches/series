@@ -51,11 +51,7 @@ debian/fanotify-taint-on-use-of-fanotify_access_permissions.patch
 debian/amd64-don-t-warn-about-expected-w+x-pages-on-xen.patch
 
 # Arch bug fixes
-bugfix/x86/asoc-intel-select-dw_dmac_core-since-it-s-mandatory.patch
-bugfix/x86/platform-x86-acer-wmi-setup-accelerometer-when-machi.patch
-bugfix/x86/x86-xen-fix-apic-id-mismatch-warning-on-intel.patch
 bugfix/arm/arm-dts-kirkwood-fix-sata-pinmux-ing-for-ts419.patch
-bugfix/arm64/rtc-tegra-implement-clock-handling.patch
 
 # Arch features
 features/mips/MIPS-increase-MAX-PHYSMEM-BITS-on-Loongson-3-only.patch
@@ -76,32 +72,24 @@ bugfix/all/kbuild-use-nostdinc-in-compile-tests.patch
 bugfix/all/disable-some-marvell-phys.patch
 bugfix/all/fs-add-module_softdep-declarations-for-hard-coded-cr.patch
 bugfix/all/kbuild-do-not-use-hyphen-in-exported-variable-name.patch
-bugfix/all/ext4-fix-bug-838544.patch
-bugfix/all/mm-memcontrol-use-special-workqueue-for-creating-per-memcg-caches.patch
 bugfix/all/partially-revert-usb-kconfig-using-select-for-usb_co.patch
-bugfix/all/nbd-use-loff_t-for-blocksize-and-nbd_set_size-args.patch
-bugfix/all/ath9k-fix-null-pointer-dereference.patch
-bugfix/all/net-ipv6-check-route-protocol-when-deleting-routes.patch
-bugfix/all/media-dvb-usb-dibusb-mc-common-add-module_license.patch
-bugfix/all/media-dvb-usb-don-t-use-stack-for-firmware-load.patch
-bugfix/all/media-dvb-usb-don-t-use-stack-for-reset-either.patch
 bugfix/all/kbuild-include-addtree-remove-quotes-before-matching-path.patch
-bugfix/all/ACPI-EC-Use-busy-polling-mode-when-GPE-is-not-enable.patch
-bugfix/all/drm-nouveau-disp-mcp7x-disable-dptmds-workaround.patch
 
 # Miscellaneous features
 features/all/netfilter-nft_ct-add-notrack-support.patch
 
 # Security fixes
 debian/i386-686-pae-pci-set-pci-nobios-by-default.patch
-bugfix/x86/kvm-fix-page-struct-leak-in-handle_vmon.patch
 debian/time-mark-timer_stats-as-broken.patch
-bugfix/all/sctp-deny-peeloff-operation-on-asocs-with-threads-sl.patch
-bugfix/all/net-packet-fix-overflow-in-check-for-priv-area-size.patch
-bugfix/all/net-packet-fix-overflow-in-check-for-tp_frame_nr.patch
-bugfix/all/net-packet-fix-overflow-in-check-for-tp_reserve.patch
-bugfix/all/ping-implement-proper-locking.patch
-bugfix/all/crypto-ahash-fix-einprogress-notification-callback.patch
+bugfix/all/tracing-Use-strlcpy-instead-of-strcpy-in-__trace_fin.patch
+bugfix/all/dccp-tcp-do-not-inherit-mc_list-from-parent.patch
+bugfix/all/sunrpc-refactor-svc_set_num_threads.patch
+bugfix/all/nfsv4-fix-callback-server-shutdown.patch
+bugfix/all/ipv6-prevent-overrun-when-parsing-v6-header-options.patch
+bugfix/all/sctp-do-not-inherit-ipv6_-mc-ac-fl-_list-from-parent.patch
+bugfix/all/ipv6-dccp-do-not-inherit-ipv6_mc_list-from-parent.patch
+bugfix/all/crypto-skcipher-Add-missing-api-setkey-checks.patch
+bugfix/all/ipv6-fix-out-of-bound-writes-in-__ip6_append_data.patch
 
 # ABI maintenance
 
@@ -128,7 +116,6 @@ bugfix/all/liblockdep-enable-wall-by-default.patch
 bugfix/all/liblockdep-fix-unused-value-warnings.patch
 bugfix/all/liblockdep-fix-set-but-not-used-warnings.patch
 bugfix/all/liblockdep-fix-defined-but-not-used-warning-for-init.patch
-bugfix/x86/cpupower-fix-turbo-frequency-reporting-for-pre-sandy.patch
 
 # Manover custom patches
 manover/x32-support.patch
@@ -141,7 +128,7 @@ manover/bcache-partition-support.patch
 # Thecus N5550
 manover/n5550_leds.patch
 # kdbus
-manover/kdbus.patch
+#manover/kdbus.patch
 # AUFS
 manover/aufs/aufs4-base.patch
 manover/aufs/aufs4-mmap.patch

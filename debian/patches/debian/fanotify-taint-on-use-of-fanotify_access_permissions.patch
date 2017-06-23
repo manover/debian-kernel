@@ -12,7 +12,7 @@ actually used.
 ---
 --- a/fs/notify/fanotify/fanotify_user.c
 +++ b/fs/notify/fanotify/fanotify_user.c
-@@ -858,6 +858,14 @@ SYSCALL_DEFINE5(fanotify_mark, int, fano
+@@ -868,6 +868,14 @@ SYSCALL_DEFINE5(fanotify_mark, int, fano
  #endif
  		return -EINVAL;
  

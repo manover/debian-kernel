@@ -39,7 +39,7 @@ aufs4.9 mmap patch
  		dev = inode->i_sb->s_dev;
  		ino = inode->i_ino;
  		pgoff = ((loff_t)vma->vm_pgoff) << PAGE_SHIFT;
-@@ -1627,7 +1630,7 @@ static int show_numa_map(struct seq_file
+@@ -1634,7 +1637,7 @@ static int show_numa_map(struct seq_file
  	struct proc_maps_private *proc_priv = &numa_priv->proc_maps;
  	struct vm_area_struct *vma = v;
  	struct numa_maps *md = &numa_priv->md;
@@ -294,15 +294,15 @@ aufs4.9 mmap patch
  
 --- /dev/null
 +++ b/mm/prfile.c
-@@ -0,0 +1,86 @@
+@@ -0,0 +1,85 @@
 +/*
-+ * Mainly for aufs which mmap(2) diffrent file and wants to print different path
-+ * in /proc/PID/maps.
++ * Mainly for aufs which mmap(2) different file and wants to print different
++ * path in /proc/PID/maps.
 + * Call these functions via macros defined in linux/mm.h.
 + *
 + * See Documentation/filesystems/aufs/design/06mmap.txt
 + *
-+ * Copyright (c) 2014 Junjro R. Okajima
++ * Copyright (c) 2014-2017 Junjro R. Okajima
 + * Copyright (c) 2014 Ian Campbell
 + */
 +
@@ -316,8 +316,7 @@ aufs4.9 mmap patch
 +{
 +#ifdef PRFILE_TRACE
 +	if (pr)
-+		pr_info("%s:%d: %s, %s\n", func, line, func2,
-+			f ? (char *)f->f_path.dentry->d_name.name : "(null)");
++		pr_info("%s:%d: %s, %pD2\n", func, line, func2, f);
 +#endif
 +}
 +
