@@ -1,3 +1,9 @@
+linux (4.12~rc6-3) experimental; urgency=medium
+
+  * Should have been AUFS 4.12-20170612
+
+ -- Denis Bychkov <manover@gmail.com>  Fri, 23 Jun 2017 03:10:50 -0400
+
 linux (4.12~rc6-2) experimental; urgency=medium
 
   * Update AUFS to version 4.11-20170612

@@ -1,4 +1,4 @@
-aufs4.11 kbuild patch
+aufs4.12-20170612 kbuild patch
 
 --- a/fs/Kconfig
 +++ b/fs/Kconfig

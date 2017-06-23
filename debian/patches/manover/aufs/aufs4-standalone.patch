@@ -1,4 +1,4 @@
-aufs4.11 standalone patch
+aufs4.12-20170612 standalone patch
 
 --- a/fs/dcache.c
 +++ b/fs/dcache.c
@@ -144,30 +144,30 @@ aufs4.11 standalone patch
  
  static void __fsnotify_recalc_mask(struct fsnotify_mark_connector *conn)
  {
-@@ -255,6 +256,7 @@ void fsnotify_put_mark(struct fsnotify_m
- 	queue_delayed_work(system_unbound_wq, &reaper_work,
- 			   FSNOTIFY_REAPER_DELAY);
+@@ -395,6 +396,7 @@ void fsnotify_destroy_mark(struct fsnoti
+ 	mutex_unlock(&group->mark_mutex);
+ 	fsnotify_free_mark(mark);
  }
 +EXPORT_SYMBOL_GPL(fsnotify_destroy_mark);
  
- bool fsnotify_prepare_user_wait(struct fsnotify_iter_info *iter_info)
- {
-@@ -431,6 +433,7 @@ int fsnotify_compare_groups(struct fsnot
- 		return 1;
- 	return -1;
+ /*
+  * Sorting function for lists of fsnotify marks.
+@@ -607,6 +609,7 @@ err:
+ 	fsnotify_put_mark(mark);
+ 	return ret;
  }
 +EXPORT_SYMBOL_GPL(fsnotify_add_mark);
  
- static int fsnotify_attach_connector_to_object(
- 				struct fsnotify_mark_connector __rcu **connp,
-@@ -560,6 +563,7 @@ out_err:
- 	spin_unlock(&mark->lock);
- 	return err;
+ int fsnotify_add_mark(struct fsnotify_mark *mark, struct inode *inode,
+ 		      struct vfsmount *mnt, int allow_dups)
+@@ -742,6 +745,7 @@ void fsnotify_init_mark(struct fsnotify_
+ 	fsnotify_get_group(group);
+ 	mark->group = group;
  }
 +EXPORT_SYMBOL_GPL(fsnotify_init_mark);
  
  /*
-  * Attach an initialized mark to a given group and fs object.
+  * Destroy all marks in destroy_list, waits for SRCU period to finish before
 --- a/fs/open.c
 +++ b/fs/open.c
 @@ -64,6 +64,7 @@ int do_truncate(struct dentry *dentry, l
