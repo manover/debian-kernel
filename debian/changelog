@@ -1,3 +1,9 @@
+linux (4.11.6-2) unstable; urgency=medium
+
+  * Upgrade AUFS to 4.11-20170612
+
+ -- Denis Bychkov <manover@gmail.com>  Fri, 23 Jun 2017 02:27:51 -0400
+
 linux (4.11.6-1) unstable; urgency=medium
 
   * Linux 4.11.6
