@@ -115,7 +115,7 @@ manover/bcache-name-device-by-label.patch
 # Thecus N5550
 manover/n5550_leds.patch
 # kdbus
-manover/kdbus.patch
+#manover/kdbus.patch
 # AUFS
 manover/aufs/aufs4-base.patch
 manover/aufs/aufs4-mmap.patch

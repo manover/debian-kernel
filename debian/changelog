@@ -1,3 +1,11 @@
+linux (4.10.17-1) unstable; urgency=medium
+
+  * Linux 4.10.17
+  * Update it87 hwmon driver to the latest version
+  * Update AUFS to 4.10-20170612
+
+ -- Denis Bychkov <manover@gmail.com>  Fri, 23 Jun 2017 15:49:26 -0400
+
 linux (4.10.15-1) unstable; urgency=medium
 
   * Linux 4.10.15

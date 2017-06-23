@@ -1714,7 +1714,7 @@ upstream submission.
  	}
 --- a/drivers/net/wireless/marvell/mwifiex/main.c
 +++ b/drivers/net/wireless/marvell/mwifiex/main.c
-@@ -524,11 +524,8 @@ static void mwifiex_fw_dpc(const struct
+@@ -525,11 +525,8 @@ static void mwifiex_fw_dpc(const struct
  	struct wireless_dev *wdev;
  	struct completion *fw_done = adapter->fw_done;
  
@@ -2026,7 +2026,7 @@ upstream submission.
  	if (qla82xx_validate_firmware_blob(vha,
 --- a/drivers/scsi/qla2xxx/qla_os.c
 +++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -5843,8 +5843,6 @@ qla2x00_request_firmware(scsi_qla_host_t
+@@ -5844,8 +5844,6 @@ qla2x00_request_firmware(scsi_qla_host_t
  		goto out;
  
  	if (request_firmware(&blob->fw, blob->name, &ha->pdev->dev)) {
@@ -2342,7 +2342,7 @@ upstream submission.
  
 --- a/drivers/usb/serial/ti_usb_3410_5052.c
 +++ b/drivers/usb/serial/ti_usb_3410_5052.c
-@@ -1706,10 +1706,8 @@ static int ti_download_firmware(struct t
+@@ -1702,10 +1702,8 @@ static int ti_download_firmware(struct t
  	}
  
  check_firmware:
