@@ -7,9 +7,6 @@ linux (4.9.33-1) unstable; urgency=medium
   
   * NFSv4.x/callback: Create the callback service through svc_create_pooled
     (Closes: #862357)
-  * ipv6: Check ip6_find_1stfragopt() return value properly.
-  * ipv6: xfrm: Handle errors reported by xfrm6_find_1stfragopt()
-  * ipv6: Fix leak in ipv6_gso_segment().
   * [mips*el/loongson-3] Revert "MIPS: Loongson-3: Select
     MIPS_L1_CACHE_SHIFT_6" to avoid ABI change
   * [arm64] serial: pl011: add console matching function (Closes: #861898)
@@ -18,15 +15,8 @@ linux (4.9.33-1) unstable; urgency=medium
   * btrfs: warn about RAID5/6 being experimental at mount time (Closes: #863290)
   * tracing: Use strlcpy() instead of strcpy() in __trace_find_cmdline()
     (CVE-2017-0605)
-  * dccp/tcp: do not inherit mc_list from parent (CVE-2017-8890)
   * SUNRPC: Refactor svc_set_num_threads()
   * NFSv4: Fix callback server shutdown (CVE-2017-9059)
-  * ipv6: Prevent overrun when parsing v6 header options (CVE-2017-9074)
-  * sctp: do not inherit ipv6_{mc|ac|fl}_list from parent (CVE-2017-9075)
-  * ipv6/dccp: do not inherit ipv6_mc_list from parent (CVE-2017-9076,
-    CVE-2017-9077)
-  * crypto: skcipher - Add missing API setkey checks (CVE-2017-9211)
-  * ipv6: fix out of bound writes in __ip6_append_data() (CVE-2017-9242)
   * [mips*/octeon] Drop obsolete patch adding support for the UBNT E200
     board.
 
