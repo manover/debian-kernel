@@ -96,6 +96,7 @@ bugfix/all/crypto-skcipher-Add-missing-api-setkey-checks.patch
 bugfix/all/ipv6-fix-out-of-bound-writes-in-__ip6_append_data.patch
 
 # ABI maintenance
+debian/revert-mips-loongson-3-select-mips_l1_cache_shift_6.patch
 
 # Tools bug fixes
 bugfix/all/usbip-document-tcp-wrappers.patch
