@@ -2526,7 +2526,7 @@ upstream submission.
  	snd_emu1010_fpga_read(emu, EMU_HANA_ID, &reg);
 --- a/sound/pci/hda/hda_intel.c
 +++ b/sound/pci/hda/hda_intel.c
-@@ -1956,10 +1956,8 @@ static void azx_firmware_cb(const struct
+@@ -1958,10 +1958,8 @@ static void azx_firmware_cb(const struct
  	struct azx *chip = card->private_data;
  	struct pci_dev *pci = chip->pci;
  

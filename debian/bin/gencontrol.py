@@ -214,8 +214,11 @@ class Gencontrol(Base):
 
         makefile.add('binary-tools_%s' % arch,
                      ['source_none_real'],
-                     ["$(MAKE) -f debian/rules.real install-perf %s" % (makeflags,),
-                      "$(MAKE) -f debian/rules.real install-cpupower %s" % (makeflags,)
+                     ["$(MAKE) scripts",
+                      "$(MAKE) -f debian/rules.real install-perf %s" % (makeflags,),
+                      "$(MAKE) -f debian/rules.real install-cpupower %s" % (makeflags,),
+                      "$(MAKE) -f debian/rules.real install-kbuild %s" % (makeflags,),
+                      "$(MAKE) -f debian/rules.real install-libc-dev_%s %s" % (arch, makeflags),
                       ])
 
     def do_featureset_setup(self, vars, makeflags, arch, featureset, extra):

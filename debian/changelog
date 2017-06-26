@@ -1,3 +1,12 @@
+linux (4.12~rc7-1) experimental; urgency=medium
+
+  * Linux 4.12 RC7
+  * Refresh patches
+  * Fix binary-tools_<arch> generated Make target, add linux-kbuild and
+    linux-libc-dev_<arch> packages to it
+
+ -- Denis Bychkov <manover@gmail.com>  Sun, 25 Jun 2017 22:32:18 -0400
+
 linux (4.12~rc6-3) experimental; urgency=medium
 
   * Should have been AUFS 4.12-20170612

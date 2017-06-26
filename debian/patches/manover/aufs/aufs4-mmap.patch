@@ -174,7 +174,7 @@ aufs4.12-20170612 mmap patch
  
  	/* Undo any partial mapping done by a device driver. */
  	unmap_region(mm, vma, prev, vma->vm_start, vma->vm_end);
-@@ -2566,7 +2566,7 @@ int __split_vma(struct mm_struct *mm, st
+@@ -2571,7 +2571,7 @@ int __split_vma(struct mm_struct *mm, st
  		goto out_free_mpol;
  
  	if (new->vm_file)
@@ -183,7 +183,7 @@ aufs4.12-20170612 mmap patch
  
  	if (new->vm_ops && new->vm_ops->open)
  		new->vm_ops->open(new);
-@@ -2585,7 +2585,7 @@ int __split_vma(struct mm_struct *mm, st
+@@ -2590,7 +2590,7 @@ int __split_vma(struct mm_struct *mm, st
  	if (new->vm_ops && new->vm_ops->close)
  		new->vm_ops->close(new);
  	if (new->vm_file)
@@ -192,7 +192,7 @@ aufs4.12-20170612 mmap patch
  	unlink_anon_vmas(new);
   out_free_mpol:
  	mpol_put(vma_policy(new));
-@@ -2739,7 +2739,7 @@ SYSCALL_DEFINE5(remap_file_pages, unsign
+@@ -2744,7 +2744,7 @@ SYSCALL_DEFINE5(remap_file_pages, unsign
  	struct vm_area_struct *vma;
  	unsigned long populate = 0;
  	unsigned long ret = -EINVAL;
@@ -201,7 +201,7 @@ aufs4.12-20170612 mmap patch
  
  	pr_warn_once("%s (%d) uses deprecated remap_file_pages() syscall. See Documentation/vm/remap_file_pages.txt.\n",
  		     current->comm, current->pid);
-@@ -2814,10 +2814,27 @@ SYSCALL_DEFINE5(remap_file_pages, unsign
+@@ -2819,10 +2819,27 @@ SYSCALL_DEFINE5(remap_file_pages, unsign
  		}
  	}
  
@@ -230,7 +230,7 @@ aufs4.12-20170612 mmap patch
  out:
  	up_write(&mm->mmap_sem);
  	if (populate)
-@@ -3108,7 +3125,7 @@ struct vm_area_struct *copy_vma(struct v
+@@ -3113,7 +3130,7 @@ struct vm_area_struct *copy_vma(struct v
  		if (anon_vma_clone(new_vma, vma))
  			goto out_free_mempol;
  		if (new_vma->vm_file)
