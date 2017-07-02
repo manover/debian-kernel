@@ -1,0 +1,22 @@
+commit 0b260c46387c6b7364839f9c58e76091c2123915
+Author: Tang Junhui <tang.junhui@zte.com.cn>
+Date:   Tue Jun 27 17:30:39 2017 -0700
+
+    bcache: delete redundant calling set_gc_sectors()
+    
+    set_gc_sectors() has been called in bch_gc_thread(), and it was called
+    again in bch_btree_gc_finish() . The following call is unnecessary, so
+    delete it.
+    
+    Signed-off-by: Tang Junhui <tang.junhui@zte.com.cn>
+
+--- a/drivers/md/bcache/btree.c
++++ b/drivers/md/bcache/btree.c
+@@ -1662,7 +1662,6 @@ static size_t bch_btree_gc_finish(struct
+ 
+ 	mutex_lock(&c->bucket_lock);
+ 
+-	set_gc_sectors(c);
+ 	c->gc_mark_valid = 1;
+ 	c->need_gc	= 0;
+ 

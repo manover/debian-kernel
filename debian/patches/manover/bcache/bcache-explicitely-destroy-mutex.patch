@@ -1,0 +1,32 @@
+commit bf8e8345e8e01c2418f816ad843b9fe1abaf401b
+Author: Liang Chen <liangchen.linux@gmail.com>
+Date:   Tue May 9 12:18:58 2017 -0700
+
+    bcache: explicitly destory mutex while exiting
+    
+    mutex_destroy does nothing most of time, but it's better to call
+    it to make the code future proof and it also has some meaning
+    for like mutex debug.
+    
+    Signed-off-by: Liang Chen <liangchen.linux@gmail.com>
+    Reviewed-by: Eric Wheeler <bcache@linux.ewheeler.net>
+    Cc: stable@vger.kernel.org
+
+--- a/drivers/md/bcache/super.c
++++ b/drivers/md/bcache/super.c
+@@ -2091,6 +2091,7 @@ static void bcache_exit(void)
+ 	if (bcache_major)
+ 		unregister_blkdev(bcache_major, "bcache");
+ 	unregister_reboot_notifier(&reboot);
++	mutex_destroy(&bch_register_lock);
+ }
+ 
+ static int __init bcache_init(void)
+@@ -2108,6 +2109,7 @@ static int __init bcache_init(void)
+ 
+ 	bcache_major = register_blkdev(0, "bcache");
+ 	if (bcache_major < 0) {
++		mutex_destroy(&bch_register_lock);
+ 		unregister_reboot_notifier(&reboot);
+ 		return bcache_major;
+ 	}

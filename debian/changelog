@@ -1,3 +1,22 @@
+linux (4.11.8-1) unstable; urgency=medium
+
+  * Linux 4.11.8
+  * Apply a large set of bcache fixes
+    - fix calling ida_simple_remove() with incorrect minor
+    - fix leak of bdev reference
+    - fix for gc and write-back race
+    - fix issue of writeback rate at minimum 1 key per second 
+    - correct return value for sysfs attach errors
+    - fix sequential large write IO bypass
+    - update bucket_in_use periodically
+    - do not subtract sectors_to_gc for bypassed IO
+    - increase the number of open buckets
+    - fix wrong cache_misses statistics
+    - explicitly destory mutex while exiting
+    - delete redundant calling set_gc_sectors()
+
+ -- Denis Bychkov <manover@gmail.com>  Fri, 30 Jun 2017 05:42:51 -0400
+
 linux (4.11.7-1) unstable; urgency=medium
 
   * Linux 4.11.7
