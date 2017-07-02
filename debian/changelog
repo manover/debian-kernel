@@ -1,3 +1,11 @@
+linux (4.11.8-2) unstable; urgency=medium
+
+  * bcache: if name_device_by_label enabled and label is empty, use
+    bcache_nolabel_%i template, where %i is device minor
+  * Upgrade AUFS to 4.11-20170703
+
+ -- Denis Bychkov <manover@gmail.com>  Sun, 02 Jul 2017 18:28:06 -0400
+
 linux (4.11.8-1) unstable; urgency=medium
 
   * Linux 4.11.8

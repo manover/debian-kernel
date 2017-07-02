@@ -21,20 +21,23 @@
  {
  	struct request_queue *q;
  	size_t n;
-@@ -797,7 +802,11 @@ static int bcache_device_init(struct bca
+@@ -797,7 +802,14 @@ static int bcache_device_init(struct bca
  	}
  
  	set_capacity(d->disk, sectors);
 -	snprintf(d->disk->disk_name, DISK_NAME_LEN, "bcache%i", minor);
 +
-+	if (name_device_by_label && label[0] && label[1])
-+		memcpy(d->disk->disk_name, label, min(DISK_NAME_LEN, SB_LABEL_SIZE));
++	if (name_device_by_label)
++		if (label[0] && label[1])
++			snprintf(d->disk->disk_name, min(DISK_NAME_LEN, SB_LABEL_SIZE), "%s", label);
++		else
++			snprintf(d->disk->disk_name, DISK_NAME_LEN, "bcache_nolabel_%i", minor);
 +	else
 +		snprintf(d->disk->disk_name, DISK_NAME_LEN, "bcache%i", minor);
  
  	d->disk->major		= bcache_major;
  	d->disk->first_minor	= IDA_TO_BCACHE_MINORS(minor);
-@@ -1131,7 +1140,8 @@ static int cached_dev_init(struct cached
+@@ -1131,7 +1143,8 @@ static int cached_dev_init(struct cached
  			q->limits.raid_partial_stripes_expensive;
  
  	ret = bcache_device_init(&dc->disk, block_size,
@@ -44,7 +47,7 @@
  	if (ret)
  		return ret;
  
-@@ -1232,7 +1242,7 @@ static int flash_dev_run(struct cache_se
+@@ -1232,7 +1245,7 @@ static int flash_dev_run(struct cache_se
  
  	kobject_init(&d->kobj, &bch_flash_dev_ktype);
  

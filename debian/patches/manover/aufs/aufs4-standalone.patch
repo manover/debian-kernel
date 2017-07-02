@@ -1,4 +1,4 @@
-aufs4.11 standalone patch
+aufs4.11.7+ standalone patch
 
 --- a/fs/dcache.c
 +++ b/fs/dcache.c
