@@ -83,10 +83,7 @@ bugfix/all/cpupower-fix-checks-for-cpu-existence.patch
 # Manover custom patches
 manover/x32-support.patch
 manover/acpica-tools-x32-support.patch
-# Bcache
 manover/misc-tools-x32-support.patch
-manover/bcache-release-correct-minors.patch
-manover/bcache-name-device-by-label.patch
 # Docs
 #
 # Thecus N5550
@@ -119,3 +116,18 @@ manover/fix-leds-gpio-unload.patch
 manover/w83627ehf-mutex.patch
 manover/gcc7-comp.patch
 #manover/aspm-force.patch
+# Bcache
+manover/bcache/bcache-fix-remove-incorrect-minors.patch
+manover/bcache/bcache-fix-bdev-leak.patch
+manover/bcache/bcache-fix-gc-wb-race.patch
+manover/bcache/bcache-fix-writeback-rate-minimum-1-per-sec.patch
+manover/bcache/bcache-correct-return-value-for-attach-errors.patch
+manover/bcache/bcache-fix-sequential-large-bypass.patch
+manover/bcache/bcache-update-bucket-in-use-periodically.patch
+manover/bcache/bcache-do-not-subtract-gc-sectors-for-bypass.patch
+manover/bcache/bcache-increase-number-of-open-buckets.patch
+manover/bcache/bcache-fix-wrong-misses-stats.patch
+manover/bcache/bcache-explicitely-destroy-mutex.patch
+manover/bcache/bcache-delete-redundant-calling-set-gc-sectors.patch
+#
+manover/bcache/bcache-name-device-by-label.patch

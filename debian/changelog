@@ -1,3 +1,25 @@
+linux (4.12.0-1) unstable; urgency=medium
+
+  * Linux 4.12
+  * Apply a large set of bcache fixes
+    - fix calling ida_simple_remove() with incorrect minor
+    - fix leak of bdev reference
+    - fix for gc and write-back race
+    - fix issue of writeback rate at minimum 1 key per second
+    - correct return value for sysfs attach errors
+    - fix sequential large write IO bypass
+    - update bucket_in_use periodically
+    - do not subtract sectors_to_gc for bypassed IO
+    - increase the number of open buckets
+    - fix wrong cache_misses statistics
+    - explicitly destory mutex while exiting
+    - delete redundant calling set_gc_sectors()
+  * Refresh AUFS to 4.12-20170703
+  * Make bpf test really always pass
+  * Enable linking with libbfd
+
+ -- Denis Bychkov <manover@gmail.com>  Mon, 03 Jul 2017 00:50:34 -0400
+
 linux (4.12~rc7-1) experimental; urgency=medium
 
   * Linux 4.12 RC7
