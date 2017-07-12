@@ -1,3 +1,15 @@
+linux (4.12.1-1) unstable; urgency=medium
+
+  * Linux 4.12.1
+
+ -- Denis Bychkov <manover@gmail.com>  Wed, 12 Jul 2017 14:08:16 -0400
+
+linux (4.12.0-2) unstable; urgency=medium
+
+  * Enable veth module for atom kernels 
+
+ -- Denis Bychkov <manover@gmail.com>  Thu, 06 Jul 2017 01:36:48 -0400
+
 linux (4.12.0-1) unstable; urgency=medium
 
   * Linux 4.12
