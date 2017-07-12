@@ -1,3 +1,10 @@
+linux (4.11.10-1) unstable; urgency=medium
+
+  * Linux 4.11.10
+  * Remove obsolete patches
+
+ -- Denis Bychkov <manover@gmail.com>  Wed, 12 Jul 2017 13:58:21 -0400
+
 linux (4.11.8-2) unstable; urgency=medium
 
   * bcache: if name_device_by_label enabled and label is empty, use

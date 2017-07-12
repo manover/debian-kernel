@@ -69,14 +69,12 @@ bugfix/all/partially-revert-usb-kconfig-using-select-for-usb_co.patch
 bugfix/all/kbuild-include-addtree-remove-quotes-before-matching-path.patch
 
 # Miscellaneous features
-features/all/usb-serial-option-add-two-longcheer-device-ids.patch
 
 # Security fixes
 debian/i386-686-pae-pci-set-pci-nobios-by-default.patch
 bugfix/all/tracing-Use-strlcpy-instead-of-strcpy-in-__trace_fin.patch
 bugfix/all/sunrpc-refactor-svc_set_num_threads.patch
 bugfix/all/nfsv4-fix-callback-server-shutdown.patch
-bugfix/all/nfsv4.x-callback-create-the-callback-service-through.patch
 
 # ABI maintenance
 
