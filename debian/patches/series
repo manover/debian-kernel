@@ -129,6 +129,8 @@ manover/bcache/bcache-increase-number-of-open-buckets.patch
 manover/bcache/bcache-fix-wrong-misses-stats.patch
 manover/bcache/bcache-explicitely-destroy-mutex.patch
 manover/bcache/bcache-delete-redundant-calling-set-gc-sectors.patch
+manover/bcache/bcache-cleanup-continue-at-closure.patch
+manover/bcache/bcache-introduce-sysfs-entries-for-ioprio-based-hints.patch
 #
 manover/bcache/bcache-name-device-by-label.patch
 #
