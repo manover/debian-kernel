@@ -4,6 +4,8 @@ linux (4.12.2-2) unstable; urgency=medium
   * binfmt_elf: use ELF_ET_DYN_BASE only for PIE (CVE-2017-1000370,
     CVE-2017-1000371)
   * btrfs: warn about RAID5/6 being experimental at mount time (Closes: #863290)
+  * [x86] ideapad-laptop: Add various IdeaPad models to no_hw_rfkill list
+    (Closes: #866706)
 
  -- Denis Bychkov <manover@gmail.com>  Wed, 19 Jul 2017 11:23:39 -0400
 
