@@ -1,6 +1,8 @@
 linux (4.12.2-2) unstable; urgency=medium
 
   * Import new debian patches/remove obsolete
+  * binfmt_elf: use ELF_ET_DYN_BASE only for PIE (CVE-2017-1000370,
+    CVE-2017-1000371)
 
  -- Denis Bychkov <manover@gmail.com>  Wed, 19 Jul 2017 11:23:39 -0400
 
