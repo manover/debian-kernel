@@ -1,3 +1,9 @@
+linux (4.13~rc3-2) experimental; urgency=medium
+
+  * Apply certain debian patches from the 4.12.y line
+
+ -- Denis Bychkov <manover@gmail.com>  Wed, 02 Aug 2017 02:30:53 -0400
+
 linux (4.13~rc3-1) experimental; urgency=medium
 
   * Linux 4.13 RC3
