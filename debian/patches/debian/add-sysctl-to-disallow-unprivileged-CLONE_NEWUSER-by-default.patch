@@ -27,7 +27,7 @@ Signed-off-by: Serge Hallyn <serge.hallyn@ubuntu.com>
  
  /*
   * Minimum number of threads to boot the kernel
-@@ -1532,6 +1537,10 @@ static __latent_entropy struct task_stru
+@@ -1530,6 +1535,10 @@ static __latent_entropy struct task_stru
  	if ((clone_flags & (CLONE_NEWUSER|CLONE_FS)) == (CLONE_NEWUSER|CLONE_FS))
  		return ERR_PTR(-EINVAL);
  
@@ -38,7 +38,7 @@ Signed-off-by: Serge Hallyn <serge.hallyn@ubuntu.com>
  	/*
  	 * Thread groups must share signals as well, and detached threads
  	 * can only be started up within the thread group.
-@@ -2327,6 +2336,12 @@ SYSCALL_DEFINE1(unshare, unsigned long,
+@@ -2325,6 +2334,12 @@ SYSCALL_DEFINE1(unshare, unsigned long,
  	if (unshare_flags & CLONE_NEWNS)
  		unshare_flags |= CLONE_FS;
  
@@ -63,7 +63,7 @@ Signed-off-by: Serge Hallyn <serge.hallyn@ubuntu.com>
  extern int pid_max;
  extern int pid_max_min, pid_max_max;
  extern int percpu_pagelist_fraction;
-@@ -490,6 +493,15 @@ static struct ctl_table kern_table[] = {
+@@ -511,6 +514,15 @@ static struct ctl_table kern_table[] = {
  		.mode		= 0644,
  		.proc_handler	= proc_dointvec,
  	},

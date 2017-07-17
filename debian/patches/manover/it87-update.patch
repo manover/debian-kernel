@@ -94,7 +94,7 @@
 +available, something is likely to be wrong.
 --- a/drivers/hwmon/Kconfig
 +++ b/drivers/hwmon/Kconfig
-@@ -649,6 +649,54 @@ config SENSORS_IT87
+@@ -649,6 +649,53 @@ config SENSORS_IT87
  	  This driver can also be built as a module.  If so, the module
  	  will be called it87.
  
@@ -102,7 +102,6 @@
 +	bool "Experimental ACPI mutex on IT87 SIO" if EXPERT
 +	depends on SENSORS_IT87
 +	default n
-+	select ACPI_MUTEX
 +	help
 +		There is a (currently small) list of motherboards who play nice
 +		with ACPI native mutex primitives (and also some boards may not

@@ -55,9 +55,9 @@ Date:   Tue May 9 12:14:06 2017 -0700
  
 -	minor *= BCACHE_MINORS;
  
- 	if (!(d->bio_split = bioset_create(4, offsetof(struct bbio, bio))) ||
- 	    !(d->disk = alloc_disk(BCACHE_MINORS))) {
-@@ -792,7 +796,7 @@ static int bcache_device_init(struct bca
+ 	if (!(d->bio_split = bioset_create(4, offsetof(struct bbio, bio),
+ 					   BIOSET_NEED_BVECS |
+@@ -794,7 +798,7 @@ static int bcache_device_init(struct bca
  	snprintf(d->disk->disk_name, DISK_NAME_LEN, "bcache%i", minor);
  
  	d->disk->major		= bcache_major;

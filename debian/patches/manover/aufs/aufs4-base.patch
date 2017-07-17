@@ -2,7 +2,7 @@ aufs4.x-rcN base patch
 
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -2348,6 +2348,19 @@ F:	include/linux/audit.h
+@@ -2396,6 +2396,19 @@ F:	include/linux/audit.h
  F:	include/uapi/linux/audit.h
  F:	kernel/audit*
  
@@ -24,7 +24,7 @@ aufs4.x-rcN base patch
  W:	http://miguelojeda.es/auxdisplay.htm
 --- a/drivers/block/loop.c
 +++ b/drivers/block/loop.c
-@@ -700,6 +700,24 @@ static inline int is_loop_device(struct
+@@ -707,6 +707,24 @@ static inline int is_loop_device(struct
  	return i && S_ISBLK(i->i_mode) && MAJOR(i->i_rdev) == LOOP_MAJOR;
  }
  
@@ -51,7 +51,7 @@ aufs4.x-rcN base patch
  static ssize_t loop_attr_show(struct device *dev, char *page,
 --- a/fs/dcache.c
 +++ b/fs/dcache.c
-@@ -1164,7 +1164,7 @@ enum d_walk_ret {
+@@ -1197,7 +1197,7 @@ enum d_walk_ret {
   *
   * The @enter() and @finish() callbacks are called with d_lock held.
   */
@@ -82,7 +82,7 @@ aufs4.x-rcN base patch
  
 --- a/fs/inode.c
 +++ b/fs/inode.c
-@@ -1640,7 +1640,7 @@ EXPORT_SYMBOL(generic_update_time);
+@@ -1641,7 +1641,7 @@ EXPORT_SYMBOL(generic_update_time);
   * This does the actual work of updating an inodes time or version.  Must have
   * had called mnt_want_write() before calling this.
   */
@@ -93,7 +93,7 @@ aufs4.x-rcN base patch
  
 --- a/fs/read_write.c
 +++ b/fs/read_write.c
-@@ -513,6 +513,28 @@ ssize_t __vfs_write(struct file *file, c
+@@ -473,6 +473,28 @@ ssize_t __vfs_write(struct file *file, c
  }
  EXPORT_SYMBOL(__vfs_write);
  
@@ -171,15 +171,15 @@ aufs4.x-rcN base patch
  {
 --- a/include/linux/fs.h
 +++ b/include/linux/fs.h
-@@ -1248,6 +1248,7 @@ extern void fasync_free(struct fasync_st
+@@ -1261,6 +1261,7 @@ extern void fasync_free(struct fasync_st
  /* can be called from interrupts */
  extern void kill_fasync(struct fasync_struct **, int, int);
  
 +extern int setfl(int fd, struct file * filp, unsigned long arg);
  extern void __f_setown(struct file *filp, struct pid *, enum pid_type, int force);
- extern void f_setown(struct file *filp, unsigned long arg, int force);
+ extern int f_setown(struct file *filp, unsigned long arg, int force);
  extern void f_delown(struct file *filp);
-@@ -1674,6 +1675,7 @@ struct file_operations {
+@@ -1682,6 +1683,7 @@ struct file_operations {
  	ssize_t (*sendpage) (struct file *, struct page *, int, size_t, loff_t *, int);
  	unsigned long (*get_unmapped_area)(struct file *, unsigned long, unsigned long, unsigned long, unsigned long);
  	int (*check_flags)(int);
@@ -187,7 +187,7 @@ aufs4.x-rcN base patch
  	int (*flock) (struct file *, int, struct file_lock *);
  	ssize_t (*splice_write)(struct pipe_inode_info *, struct file *, loff_t *, size_t, unsigned int);
  	ssize_t (*splice_read)(struct file *, loff_t *, struct pipe_inode_info *, size_t, unsigned int);
-@@ -1750,6 +1752,12 @@ ssize_t rw_copy_check_uvector(int type,
+@@ -1752,6 +1754,12 @@ ssize_t rw_copy_check_uvector(int type,
  			      struct iovec *fast_pointer,
  			      struct iovec **ret_pointer);
  
@@ -200,7 +200,7 @@ aufs4.x-rcN base patch
  extern ssize_t __vfs_read(struct file *, char __user *, size_t, loff_t *);
  extern ssize_t __vfs_write(struct file *, const char __user *, size_t, loff_t *);
  extern ssize_t vfs_read(struct file *, char __user *, size_t, loff_t *);
-@@ -2131,6 +2139,7 @@ extern int current_umask(void);
+@@ -2156,6 +2164,7 @@ extern int current_umask(void);
  extern void ihold(struct inode * inode);
  extern void iput(struct inode *);
  extern int generic_update_time(struct inode *, struct timespec *, int);
@@ -208,7 +208,7 @@ aufs4.x-rcN base patch
  
  /* /sys/fs */
  extern struct kobject *fs_kobj;
-@@ -2411,6 +2420,7 @@ static inline bool sb_is_blkdev_sb(struc
+@@ -2436,6 +2445,7 @@ static inline bool sb_is_blkdev_sb(struc
  	return false;
  }
  #endif

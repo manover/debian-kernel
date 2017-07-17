@@ -21,7 +21,7 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 
 --- a/net/ieee802154/socket.c
 +++ b/net/ieee802154/socket.c
-@@ -1126,4 +1126,4 @@ module_init(af_ieee802154_init);
+@@ -1124,4 +1124,4 @@ module_init(af_ieee802154_init);
  module_exit(af_ieee802154_remove);
  
  MODULE_LICENSE("GPL");

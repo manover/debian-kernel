@@ -1,21 +1,24 @@
 --- a/Makefile
 +++ b/Makefile
-@@ -265,10 +265,10 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH"
- 	  else if [ -x /bin/bash ]; then echo /bin/bash; \
- 	  else echo sh; fi ; fi)
+@@ -262,12 +262,12 @@ HOST_LFS_CFLAGS := $(shell getconf LFS_C
+ HOST_LFS_LDFLAGS := $(shell getconf LFS_LDFLAGS)
+ HOST_LFS_LIBS := $(shell getconf LFS_LIBS)
  
 -HOSTCC       = gcc
 -HOSTCXX      = g++
--HOSTCFLAGS   = -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu89
--HOSTCXXFLAGS = -O2
+-HOSTCFLAGS   := -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 \
 +HOSTCC       ?= gcc
 +HOSTCXX      ?= g++
-+HOSTCFLAGS   ?= -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu89
-+HOSTCXXFLAGS ?= -O2
++HOSTCFLAGS   ?= -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 \
+ 		-fomit-frame-pointer -std=gnu89 $(HOST_LFS_CFLAGS)
+-HOSTCXXFLAGS := -O2 $(HOST_LFS_CFLAGS)
+-HOSTLDFLAGS  := $(HOST_LFS_LDFLAGS)
++HOSTCXXFLAGS ?= -O2 $(HOST_LFS_CFLAGS)
++HOSTLDFLAGS  ?= $(HOST_LFS_LDFLAGS)
+ HOST_LOADLIBES := $(HOST_LFS_LIBS)
  
  ifeq ($(shell $(HOSTCC) -v 2>&1 | grep -c "clang version"), 1)
- HOSTCFLAGS  += -Wno-unused-value -Wno-unused-parameter \
-@@ -1303,7 +1303,7 @@ CLEAN_DIRS  += $(MODVERDIR)
+@@ -1306,7 +1306,7 @@ CLEAN_DIRS  += $(MODVERDIR)
  # Directories & files removed with 'make mrproper'
  MRPROPER_DIRS  += include/config usr/include include/generated          \
  		  arch/*/include/generated .tmp_objdiff
@@ -26,7 +29,7 @@
  		  x509.genkey extra_certificates signing_key.x509.keyid	\
 --- a/arch/Kconfig
 +++ b/arch/Kconfig
-@@ -831,7 +831,7 @@ config VMAP_STACK
+@@ -895,7 +895,7 @@ config VMAP_STACK
  	  that is incorrect if the stack is in vmalloc space.
  
  config ARCH_OPTIONAL_KERNEL_RWX

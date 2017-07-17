@@ -42,7 +42,7 @@ Date:   Wed Jun 28 14:47:07 2017 +0300
   * continue_at_nobarrier().
 --- a/drivers/md/bcache/super.c
 +++ b/drivers/md/bcache/super.c
-@@ -1378,9 +1378,6 @@ static void cache_set_flush(struct closu
+@@ -1380,9 +1380,6 @@ static void cache_set_flush(struct closu
  	struct btree *b;
  	unsigned i;
  

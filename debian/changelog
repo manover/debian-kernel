@@ -1,3 +1,10 @@
+linux (4.13~rc1-1) experimental; urgency=medium
+
+  * Linux 4.13 RC1
+  * Update/refresh debian patches
+
+ -- Denis Bychkov <manover@gmail.com>  Mon, 17 Jul 2017 07:06:31 -0400
+
 linux (4.12.2-1) unstable; urgency=medium
 
   * Linux 4.12.2

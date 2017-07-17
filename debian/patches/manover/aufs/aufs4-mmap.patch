@@ -2,7 +2,7 @@ aufs4.x-rcN mmap patch
 
 --- a/fs/proc/base.c
 +++ b/fs/proc/base.c
-@@ -1943,7 +1943,7 @@ static int map_files_get_link(struct den
+@@ -1986,7 +1986,7 @@ static int map_files_get_link(struct den
  	down_read(&mm->mmap_sem);
  	vma = find_exact_vma(mm, vm_start, vm_end);
  	if (vma && vma->vm_file) {
@@ -39,7 +39,7 @@ aufs4.x-rcN mmap patch
  		dev = inode->i_sb->s_dev;
  		ino = inode->i_ino;
  		pgoff = ((loff_t)vma->vm_pgoff) << PAGE_SHIFT;
-@@ -1638,7 +1641,7 @@ static int show_numa_map(struct seq_file
+@@ -1637,7 +1640,7 @@ static int show_numa_map(struct seq_file
  	struct proc_maps_private *proc_priv = &numa_priv->proc_maps;
  	struct vm_area_struct *vma = v;
  	struct numa_maps *md = &numa_priv->md;
@@ -113,7 +113,7 @@ aufs4.x-rcN mmap patch
  #ifndef CONFIG_MMU
 --- a/kernel/fork.c
 +++ b/kernel/fork.c
-@@ -670,7 +670,7 @@ static __latent_entropy int dup_mmap(str
+@@ -668,7 +668,7 @@ static __latent_entropy int dup_mmap(str
  			struct inode *inode = file_inode(file);
  			struct address_space *mapping = file->f_mapping;
  
@@ -135,7 +135,7 @@ aufs4.x-rcN mmap patch
  
 --- a/mm/filemap.c
 +++ b/mm/filemap.c
-@@ -2408,7 +2408,7 @@ int filemap_page_mkwrite(struct vm_fault
+@@ -2541,7 +2541,7 @@ int filemap_page_mkwrite(struct vm_fault
  	int ret = VM_FAULT_LOCKED;
  
  	sb_start_pagefault(inode->i_sb);
@@ -174,7 +174,7 @@ aufs4.x-rcN mmap patch
  
  	/* Undo any partial mapping done by a device driver. */
  	unmap_region(mm, vma, prev, vma->vm_start, vma->vm_end);
-@@ -2571,7 +2571,7 @@ int __split_vma(struct mm_struct *mm, st
+@@ -2568,7 +2568,7 @@ int __split_vma(struct mm_struct *mm, st
  		goto out_free_mpol;
  
  	if (new->vm_file)
@@ -183,7 +183,7 @@ aufs4.x-rcN mmap patch
  
  	if (new->vm_ops && new->vm_ops->open)
  		new->vm_ops->open(new);
-@@ -2590,7 +2590,7 @@ int __split_vma(struct mm_struct *mm, st
+@@ -2587,7 +2587,7 @@ int __split_vma(struct mm_struct *mm, st
  	if (new->vm_ops && new->vm_ops->close)
  		new->vm_ops->close(new);
  	if (new->vm_file)
@@ -192,7 +192,7 @@ aufs4.x-rcN mmap patch
  	unlink_anon_vmas(new);
   out_free_mpol:
  	mpol_put(vma_policy(new));
-@@ -2744,7 +2744,7 @@ SYSCALL_DEFINE5(remap_file_pages, unsign
+@@ -2741,7 +2741,7 @@ SYSCALL_DEFINE5(remap_file_pages, unsign
  	struct vm_area_struct *vma;
  	unsigned long populate = 0;
  	unsigned long ret = -EINVAL;
@@ -201,7 +201,7 @@ aufs4.x-rcN mmap patch
  
  	pr_warn_once("%s (%d) uses deprecated remap_file_pages() syscall. See Documentation/vm/remap_file_pages.txt.\n",
  		     current->comm, current->pid);
-@@ -2819,10 +2819,27 @@ SYSCALL_DEFINE5(remap_file_pages, unsign
+@@ -2816,10 +2816,27 @@ SYSCALL_DEFINE5(remap_file_pages, unsign
  		}
  	}
  
@@ -230,7 +230,7 @@ aufs4.x-rcN mmap patch
  out:
  	up_write(&mm->mmap_sem);
  	if (populate)
-@@ -3113,7 +3130,7 @@ struct vm_area_struct *copy_vma(struct v
+@@ -3110,7 +3127,7 @@ struct vm_area_struct *copy_vma(struct v
  		if (anon_vma_clone(new_vma, vma))
  			goto out_free_mempol;
  		if (new_vma->vm_file)

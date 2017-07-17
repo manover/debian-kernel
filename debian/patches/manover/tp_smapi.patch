@@ -364,7 +364,7 @@
 +http://documentation.renesas.com/eng/products/mpumcu/rej09b0300_2140bhm.pdf
 --- a/drivers/platform/x86/Kconfig
 +++ b/drivers/platform/x86/Kconfig
-@@ -521,10 +521,38 @@ config THINKPAD_ACPI_HOTKEY_POLL
+@@ -511,10 +511,38 @@ config THINKPAD_ACPI_HOTKEY_POLL
  	  If you are not sure, say Y here.  The driver enables polling only if
  	  it is strictly necessary to do so.
  

@@ -14,7 +14,7 @@ Date:   Tue May 9 12:18:58 2017 -0700
 
 --- a/drivers/md/bcache/super.c
 +++ b/drivers/md/bcache/super.c
-@@ -2087,6 +2087,7 @@ static void bcache_exit(void)
+@@ -2091,6 +2091,7 @@ static void bcache_exit(void)
  	if (bcache_major)
  		unregister_blkdev(bcache_major, "bcache");
  	unregister_reboot_notifier(&reboot);
@@ -22,7 +22,7 @@ Date:   Tue May 9 12:18:58 2017 -0700
  }
  
  static int __init bcache_init(void)
-@@ -2104,6 +2105,7 @@ static int __init bcache_init(void)
+@@ -2108,6 +2109,7 @@ static int __init bcache_init(void)
  
  	bcache_major = register_blkdev(0, "bcache");
  	if (bcache_major < 0) {

@@ -15,7 +15,7 @@ the kernel.
 
 --- a/Makefile
 +++ b/Makefile
-@@ -648,6 +648,8 @@ endif
+@@ -650,6 +650,8 @@ endif
  KBUILD_CFLAGS += $(call cc-ifversion, -lt, 0409, \
  			$(call cc-disable-warning,maybe-uninitialized,))
  
@@ -24,7 +24,7 @@ the kernel.
  # Tell gcc to never replace conditional load with a non-conditional one
  KBUILD_CFLAGS	+= $(call cc-option,--param=allow-store-data-races=0)
  
-@@ -787,7 +789,7 @@ KBUILD_CFLAGS	+= $(call cc-option,-fdata
+@@ -790,7 +792,7 @@ KBUILD_CFLAGS	+= $(call cc-option,-fdata
  endif
  
  # arch Makefile may override CC so keep this after arch Makefile is included
@@ -35,22 +35,22 @@ the kernel.
  # warn about C99 declaration after statement
 --- a/scripts/Kbuild.include
 +++ b/scripts/Kbuild.include
-@@ -116,12 +116,12 @@ CC_OPTION_CFLAGS = $(filter-out $(GCC_PL
- # Usage: cflags-y += $(call cc-option,-march=winchip-c6,-march=i586)
+@@ -111,7 +111,7 @@ as-instr = $(call try-run,\
+ # __cc-option
+ # Usage: MY_CFLAGS += $(call __cc-option,$(CC),$(MY_CFLAGS),-march=winchip-c6,-march=i586)
+ __cc-option = $(call try-run,\
+-	$(1) -Werror $(2) $(3) -c -x c /dev/null -o "$$TMP",$(3),$(4))
++	$(1) $(NOSTDINC_FLAGS) $(2) $(3) -c -x c /dev/null -o "$$TMP",$(3),$(4))
  
- cc-option = $(call try-run,\
--	$(CC) -Werror $(KBUILD_CPPFLAGS) $(CC_OPTION_CFLAGS) $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
-+	$(CC) $(NOSTDINC_FLAGS) $(KBUILD_CPPFLAGS) $(CC_OPTION_CFLAGS) $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
- 
+ # Do not attempt to build with gcc plugins during cc-option tests.
+ # (And this uses delayed resolution so the flags will be up to date.)
+@@ -131,23 +131,24 @@ hostcc-option = $(call __cc-option, $(HO
  # cc-option-yn
  # Usage: flag := $(call cc-option-yn,-march=winchip-c6)
  cc-option-yn = $(call try-run,\
 -	$(CC) -Werror $(KBUILD_CPPFLAGS) $(CC_OPTION_CFLAGS) $(1) -c -x c /dev/null -o "$$TMP",y,n)
 +	$(CC) $(NOSTDINC_FLAGS) $(KBUILD_CPPFLAGS) $(CC_OPTION_CFLAGS) $(1) -c -x c /dev/null -o "$$TMP",y,n)
  
- # cc-option-align
- # Prefix align with either -falign or -malign
-@@ -131,18 +131,19 @@ cc-option-align = $(subst -functions=0,,
  # cc-disable-warning
  # Usage: cflags-y += $(call cc-disable-warning,unused-but-set-variable)
  cc-disable-warning = $(call try-run,\
@@ -73,7 +73,7 @@ the kernel.
  
  # cc-ifversion
  # Usage:  EXTRA_CFLAGS += $(call cc-ifversion, -lt, 0402, -O1)
-@@ -160,7 +161,7 @@ cc-ldoption = $(call try-run,\
+@@ -165,7 +166,7 @@ cc-ldoption = $(call try-run,\
  # ld-option
  # Usage: LDFLAGS += $(call ld-option, -X)
  ld-option = $(call try-run,\

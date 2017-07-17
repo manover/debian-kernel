@@ -108,7 +108,6 @@ manover/modern-intel-cpu.patch
 # Misc minor patches
 manover/misc.patch
 manover/fix-tpm-tis-alias.patch
-manover/acpi-mutex-enable.patch
 manover/it87-update.patch
 manover/cgroup-v2-cpu.patch
 #manover/pstate-module.patch

@@ -1,6 +1,6 @@
 --- a/drivers/md/md.c
 +++ b/drivers/md/md.c
-@@ -2270,7 +2270,7 @@ static void export_array(struct mddev *m
+@@ -2287,7 +2287,7 @@ static void export_array(struct mddev *m
  
  static bool set_in_sync(struct mddev *mddev)
  {

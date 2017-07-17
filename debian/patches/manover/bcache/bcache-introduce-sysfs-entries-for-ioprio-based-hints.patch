@@ -49,7 +49,7 @@ Date:   Wed Oct 19 17:36:37 2016 -0700
     Signed-off-by: Eric Wheeler <bcache@linux.ewheeler.net>
 --- a/Documentation/bcache.txt
 +++ b/Documentation/bcache.txt
-@@ -133,6 +133,86 @@ the backing devices to passthrough mode.
+@@ -140,6 +140,86 @@ the backing devices to passthrough mode.
     writeback mode). It currently doesn't do anything intelligent if it fails to
     read some of the dirty data, though.
  
@@ -134,7 +134,7 @@ Date:   Wed Oct 19 17:36:37 2016 -0700
 +
 +See `man ionice` for more detail about per-process IO priority in Linux.
  
- HOWTO/COOKBOOK
+ Howto/cookbook
  --------------
 --- a/drivers/md/bcache/bcache.h
 +++ b/drivers/md/bcache/bcache.h

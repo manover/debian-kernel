@@ -1,6 +1,6 @@
 --- a/drivers/ata/ahci.c
 +++ b/drivers/ata/ahci.c
-@@ -1753,6 +1753,10 @@ static void ahci_remove_one(struct pci_d
+@@ -1755,6 +1755,10 @@ static void ahci_remove_one(struct pci_d
  
  module_pci_driver(ahci_pci_driver);
  
@@ -13,7 +13,7 @@
  MODULE_LICENSE("GPL");
 --- a/drivers/ata/libahci.c
 +++ b/drivers/ata/libahci.c
-@@ -2586,6 +2586,10 @@ int ahci_host_activate(struct ata_host *
+@@ -2592,6 +2592,10 @@ int ahci_host_activate(struct ata_host *
  }
  EXPORT_SYMBOL_GPL(ahci_host_activate);
  

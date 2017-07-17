@@ -37,7 +37,7 @@ Date:   Tue May 9 12:09:26 2017 -0700
 +				  !s->cache_missed, s->iop.bypass);
  	trace_bcache_read(s->orig_bio, !s->cache_miss, s->iop.bypass);
  
- 	if (s->iop.error)
+ 	if (s->iop.status)
 @@ -777,6 +779,8 @@ static int cached_dev_cache_miss(struct
  	struct cached_dev *dc = container_of(s->d, struct cached_dev, disk);
  	struct bio *miss, *cache_bio;
