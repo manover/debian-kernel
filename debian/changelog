@@ -1,6 +1,6 @@
 linux (4.11.11-1) unstable; urgency=medium
 
-  * Linux 4.11.11
+  * Linux 4.11.11; import new debian patches
   * binfmt_elf: use ELF_ET_DYN_BASE only for PIE (CVE-2017-1000370,
     CVE-2017-1000371)
   * [x86] ideapad-laptop: Add various IdeaPad models to no_hw_rfkill list
