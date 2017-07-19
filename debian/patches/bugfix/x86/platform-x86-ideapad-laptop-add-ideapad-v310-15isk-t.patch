@@ -17,7 +17,7 @@ Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
 --- a/drivers/platform/x86/ideapad-laptop.c
 +++ b/drivers/platform/x86/ideapad-laptop.c
-@@ -872,6 +872,13 @@ static const struct dmi_system_id no_hw_
+@@ -876,6 +876,13 @@ static const struct dmi_system_id no_hw_
  		},
  	},
  	{
