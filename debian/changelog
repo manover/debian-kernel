@@ -7,6 +7,7 @@ linux (4.12.5-1) unstable; urgency=medium
   * [i386] perf tools: Fix unwind build (fixes FTBFS)
   * [armhf] Add ARM Mali Midgard device tree bindings and gpu node for rk3288
     (thanks to Guillaume Tucker) (Closes: #865646)
+  * [mips*/octeon] Fix broken EDAC driver (fixes FTBFS)
 
  -- Denis Bychkov <manover@gmail.com>  Tue, 08 Aug 2017 21:06:52 -0400
 
