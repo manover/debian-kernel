@@ -4,6 +4,7 @@ linux (4.12.5-1) unstable; urgency=medium
   * Refresh patches
   * ipv6: avoid overflow of offset in ip6_find_1stfragopt (CVE-2017-7542)
   * media: saa7164: fix double fetch PCIe access condition (CVE-2017-8831)
+  * [i386] perf tools: Fix unwind build (fixes FTBFS)
 
  -- Denis Bychkov <manover@gmail.com>  Tue, 08 Aug 2017 21:06:52 -0400
 
