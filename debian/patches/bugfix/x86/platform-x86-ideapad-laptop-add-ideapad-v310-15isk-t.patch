@@ -17,7 +17,7 @@ Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
 --- a/drivers/platform/x86/ideapad-laptop.c
 +++ b/drivers/platform/x86/ideapad-laptop.c
-@@ -872,6 +872,13 @@ static const struct dmi_system_id no_hw_
+@@ -979,6 +979,13 @@ static const struct dmi_system_id no_hw_
  		},
  	},
  	{
@@ -30,4 +30,4 @@ Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 +	{
  		.ident = "Lenovo ideapad 310-15IKB",
  		.matches = {
- 		        DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+ 			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
