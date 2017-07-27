@@ -138,6 +138,9 @@ manover/bcache/bcache-delete-redundant-calling-set-gc-sectors.patch
 manover/bcache/bcache-cleanup-continue-at-closure.patch
 manover/bcache/bcache-introduce-sysfs-entries-for-ioprio-based-hints.patch
 #
+# Backport it87_wdt clean-up from 4.13
+manover/it87_wdt_4.13_cleanup.patch
+#
 manover/bcache/bcache-name-device-by-label.patch
 #
 ##Try to fix MD crashes in i386
