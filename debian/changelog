@@ -1,3 +1,10 @@
+linux (4.12.4-1) unstable; urgency=medium
+
+  * Linux 4.12.4
+  * Refresh patches
+
+ -- Denis Bychkov <manover@gmail.com>  Thu, 27 Jul 2017 21:48:58 -0400
+
 linux (4.12.3-2) unstable; urgency=medium
 
   * Backport it87_wdt watchdog cllean-up from 4.13

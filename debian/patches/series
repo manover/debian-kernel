@@ -145,4 +145,3 @@ manover/bcache/bcache-name-device-by-label.patch
 #
 ##Try to fix MD crashes in i386
 #manover/fix-v4.12-md.patch
-manover/remove-in-sync-warn-on.patch

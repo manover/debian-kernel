@@ -15,7 +15,7 @@ the kernel.
 
 --- a/Makefile
 +++ b/Makefile
-@@ -648,6 +648,8 @@ endif
+@@ -651,6 +651,8 @@ endif
  KBUILD_CFLAGS += $(call cc-ifversion, -lt, 0409, \
  			$(call cc-disable-warning,maybe-uninitialized,))
  
@@ -24,7 +24,7 @@ the kernel.
  # Tell gcc to never replace conditional load with a non-conditional one
  KBUILD_CFLAGS	+= $(call cc-option,--param=allow-store-data-races=0)
  
-@@ -787,7 +789,7 @@ KBUILD_CFLAGS	+= $(call cc-option,-fdata
+@@ -790,7 +792,7 @@ KBUILD_CFLAGS	+= $(call cc-option,-fdata
  endif
  
  # arch Makefile may override CC so keep this after arch Makefile is included

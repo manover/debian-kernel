@@ -113,7 +113,7 @@ aufs4.x-rcN mmap patch
  #ifndef CONFIG_MMU
 --- a/kernel/fork.c
 +++ b/kernel/fork.c
-@@ -670,7 +670,7 @@ static __latent_entropy int dup_mmap(str
+@@ -664,7 +664,7 @@ static __latent_entropy int dup_mmap(str
  			struct inode *inode = file_inode(file);
  			struct address_space *mapping = file->f_mapping;
  
