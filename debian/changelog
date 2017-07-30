@@ -2,8 +2,9 @@ linux (4.13~rc2-2) experimental; urgency=medium
 
   * Update it87 hwmon driver
   * Fix x86_energy_perf_policy tool FTBF
+  * Add nouveau patches for 4.13-rc3
 
- -- Denis Bychkov <manover@gmail.com>  Sun, 30 Jul 2017 03:17:03 -0400
+ -- Denis Bychkov <manover@gmail.com>  Sun, 30 Jul 2017 04:58:10 -0400
 
 linux (4.13~rc2-1) experimental; urgency=medium
 
