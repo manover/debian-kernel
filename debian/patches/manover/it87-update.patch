@@ -1489,15 +1489,22 @@
  		int reg27, reg29;
  
  		superio_select(sioaddr, GPIO);
-@@ -2608,12 +3040,52 @@ static int __init it87_find(int sioaddr,
+@@ -2608,12 +3040,59 @@ static int __init it87_find(int sioaddr,
  		if (reg29 & BIT(2))
  			sio_data->skip_fan |= BIT(1);
  
 -		sio_data->skip_in |= BIT(5); /* No VIN5 */
 -		sio_data->skip_in |= BIT(6); /* No VIN6 */
-+		if (sio_data->type == it8603) {
++		switch (sio_data->type) {
++		case it8603:
 +			sio_data->skip_in |= BIT(5); /* No VIN5 */
 +			sio_data->skip_in |= BIT(6); /* No VIN6 */
++			break;
++		case it8607:
++			sio_data->skip_pwm |= BIT(0);/* No fan1 */
++			sio_data->skip_fan |= BIT(0);
++		default:
++			break;
 +		}
  
  		sio_data->beep_pin = superio_inb(sioaddr,
@@ -1545,7 +1552,7 @@
  		int reg;
  
  		superio_select(sioaddr, GPIO);
-@@ -2656,10 +3128,14 @@ static int __init it87_find(int sioaddr,
+@@ -2656,10 +3135,14 @@ static int __init it87_find(int sioaddr,
  
  		/* Check if AVCC is on VIN3 */
  		reg = superio_inb(sioaddr, IT87_SIO_PINX2_REG);
@@ -1563,7 +1570,7 @@
  
  		sio_data->beep_pin = superio_inb(sioaddr,
  						 IT87_SIO_BEEP_PIN_REG) & 0x3f;
-@@ -2700,6 +3176,113 @@ static int __init it87_find(int sioaddr,
+@@ -2700,6 +3183,113 @@ static int __init it87_find(int sioaddr,
  
  		sio_data->beep_pin = superio_inb(sioaddr,
  						 IT87_SIO_BEEP_PIN_REG) & 0x3f;
@@ -1677,7 +1684,7 @@
  	} else {
  		int reg;
  		bool uart6;
-@@ -2804,30 +3387,71 @@ static int __init it87_find(int sioaddr,
+@@ -2804,30 +3394,71 @@ static int __init it87_find(int sioaddr,
  	if (sio_data->beep_pin)
  		pr_info("Beeping is supported\n");
  
@@ -1768,7 +1775,7 @@
  /* Called when we have found a new IT87. */
  static void it87_init_device(struct platform_device *pdev)
  {
-@@ -2867,10 +3491,10 @@ static void it87_init_device(struct plat
+@@ -2867,10 +3498,10 @@ static void it87_init_device(struct plat
  		if (tmp == 0xff)
  			it87_write_value(data, IT87_REG_VIN_MIN(i), 0);
  	}
@@ -1782,7 +1789,7 @@
  	}
  
  	/*
-@@ -2911,26 +3535,44 @@ static void it87_init_device(struct plat
+@@ -2911,26 +3542,44 @@ static void it87_init_device(struct plat
  	}
  
  	/* Check for additional fans */
@@ -1841,7 +1848,7 @@
  	}
  
  	/* Start monitoring */
-@@ -2959,39 +3601,33 @@ static int it87_check_pwm(struct device
+@@ -2959,39 +3608,33 @@ static int it87_check_pwm(struct device
  			 */
  			int i;
  			u8 pwm[3];
@@ -1894,7 +1901,7 @@
  	}
  
  	return 1;
-@@ -3022,8 +3658,12 @@ static int it87_probe(struct platform_de
+@@ -3022,8 +3665,12 @@ static int it87_probe(struct platform_de
  	data->addr = res->start;
  	data->type = sio_data->type;
  	data->features = it87_devices[sio_data->type].features;
@@ -1907,7 +1914,7 @@
  	/*
  	 * IT8705F Datasheet 0.4.1, 3h == Version G.
  	 * IT8712F Datasheet 0.9.1, section 8.3.5 indicates 8h == Version J.
-@@ -3056,11 +3696,14 @@ static int it87_probe(struct platform_de
+@@ -3056,11 +3703,14 @@ static int it87_probe(struct platform_de
  
  	mutex_init(&data->update_lock);
  
@@ -1923,7 +1930,7 @@
  		if (sio_data->internal & BIT(0))
  			data->in_scaled |= BIT(3);	/* in3 is AVCC */
  		if (sio_data->internal & BIT(1))
-@@ -3173,8 +3816,7 @@ static int __init it87_device_add(int in
+@@ -3173,8 +3823,7 @@ static int __init it87_device_add(int in
  		goto exit_device_put;
  	}
  
@@ -1933,7 +1940,7 @@
  	if (err) {
  		pr_err("Platform data allocation failed\n");
  		goto exit_device_put;
-@@ -3194,43 +3836,170 @@ exit_device_put:
+@@ -3194,43 +3843,170 @@ exit_device_put:
  	return err;
  }
  
@@ -2123,7 +2130,7 @@
  	}
  
  	if (!found) {
-@@ -3255,13 +4024,13 @@ static void __exit sm_it87_exit(void)
+@@ -3255,13 +4031,13 @@ static void __exit sm_it87_exit(void)
  	platform_driver_unregister(&it87_driver);
  }
  
