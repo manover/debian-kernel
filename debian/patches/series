@@ -133,6 +133,5 @@ manover/bcache/bcache-introduce-sysfs-entries-for-ioprio-based-hints.patch
 #
 manover/bcache/bcache-name-device-by-label.patch
 #
-manover/nouveau-rc3-updates.patch
 ##Try to fix MD crashes in i386
 #manover/fix-v4.12-md.patch
