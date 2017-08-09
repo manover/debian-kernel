@@ -9,6 +9,13 @@ linux (4.12.5-1) unstable; urgency=medium
     (thanks to Guillaume Tucker) (Closes: #865646)
   * [mips*/octeon] Fix broken EDAC driver (fixes FTBFS)
   * [armhf] Revert "gpu: host1x: Add IOMMU support"
+  * linux-compile: bump gcc version gcc-6 => gcc-7
+  * linux-tools: add flag "tools_only" to allow tools-only builds
+  * linux-perf: enable GTK2 support
+  * linux-perf: build with bpf_feature=1
+  * linux-perf: build with clang support on amd64 and i386
+  * Add linker -Wl,--as-needed flag for userspace tools
+  * Rules clean-up
 
  -- Denis Bychkov <manover@gmail.com>  Tue, 08 Aug 2017 21:54:18 -0400
 

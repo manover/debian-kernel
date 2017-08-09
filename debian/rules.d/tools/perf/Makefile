@@ -29,7 +29,7 @@ endif
 MAKE_PERF := $(MAKE) O=$(CURDIR) prefix=/usr V=1 ARCH=$(KERNEL_ARCH_PERF) EXTRA_WARNINGS=-Wno-error EXTRA_CFLAGS='$(CFLAGS) $(CPPFLAGS)' LDFLAGS='$(LDFLAGS)'
 
 # Disable Gtk UI until it's more usable
-MAKE_PERF += NO_GTK2=1
+#MAKE_PERF += NO_GTK2=1
 
 # Include version in all directory names
 MAKE_PERF += perfexecdir=lib/perf_$(VERSION)-core plugindir=/usr/lib/traceevent_$(VERSION)/plugins STRACE_GROUPS_DIR=share/perf_$(VERSION)-core/strace/groups tipdir=share/doc/linux-perf-$(VERSION)
@@ -44,7 +44,7 @@ MAKE_PERF += feature-libbfd=1 HAVE_CPLUS_DEMANGLE_SUPPORT=1
 # perf can link against libcrypto if available, but the result is
 # undistributable as GPL v2 and OpenSSL are not compatible without
 # an explicit exception.  Override detection of libcrypto.
-MAKE_PERF += NO_LIBCRYPTO=1
+#MAKE_PERF += NO_LIBCRYPTO=1
 
 all:
 ifdef KERNEL_ARCH_PERF
