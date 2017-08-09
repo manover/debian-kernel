@@ -721,7 +721,7 @@ upstream submission.
  
 --- a/drivers/media/pci/ngene/ngene-core.c
 +++ b/drivers/media/pci/ngene/ngene-core.c
-@@ -1256,13 +1256,8 @@ static int ngene_load_firm(struct ngene
+@@ -1252,13 +1252,8 @@ static int ngene_load_firm(struct ngene
  		break;
  	}
  
@@ -736,7 +736,7 @@ upstream submission.
  	if (size == 0)
  		size = fw->size;
  	if (size != fw->size) {
-@@ -1270,8 +1265,6 @@ static int ngene_load_firm(struct ngene
+@@ -1266,8 +1261,6 @@ static int ngene_load_firm(struct ngene
  			": Firmware %s has invalid size!", fw_name);
  		err = -1;
  	} else {
