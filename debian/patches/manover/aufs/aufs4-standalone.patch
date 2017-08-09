@@ -2,7 +2,7 @@ aufs4.x-rcN standalone patch
 
 --- a/fs/dcache.c
 +++ b/fs/dcache.c
-@@ -1273,6 +1273,7 @@ rename_retry:
+@@ -1300,6 +1300,7 @@ rename_retry:
  	seq = 1;
  	goto again;
  }
@@ -10,7 +10,7 @@ aufs4.x-rcN standalone patch
  
  struct check_mount {
  	struct vfsmount *mnt;
-@@ -2863,6 +2864,7 @@ void d_exchange(struct dentry *dentry1,
+@@ -2890,6 +2891,7 @@ void d_exchange(struct dentry *dentry1,
  
  	write_sequnlock(&rename_lock);
  }
