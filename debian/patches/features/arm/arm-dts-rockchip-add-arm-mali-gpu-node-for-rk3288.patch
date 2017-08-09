@@ -24,7 +24,7 @@ Signed-off-by: Heiko Stuebner <heiko@sntech.de>
  #include <dt-bindings/thermal/thermal.h>
  #include <dt-bindings/power/rk3288-power.h>
  #include <dt-bindings/soc/rockchip,boot-mode.h>
-@@ -1187,6 +1188,48 @@
+@@ -1195,6 +1196,48 @@
  		reg = <0xffaf0080 0x20>;
  	};
  
