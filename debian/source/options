@@ -1,2 +1,1 @@
-compression = "xz"
-tar-ignore = debian/*.local
+#tar-ignore = debian/*.local

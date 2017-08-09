@@ -12,7 +12,7 @@ DISTRIBUTION := $(shell dpkg-parsechangelog -SDistribution)
 SOURCE_DATE := $(shell dpkg-parsechangelog -SDate)
 SOURCE_DATE_UTC_ISO := $(shell date -u -d '$(SOURCE_DATE)' +%Y-%m-%d)
 
-include /usr/share/dpkg/architecture.mk
+include debian/rules.defs
 
 DISTRIBUTOR := $(shell lsb_release -is 2>/dev/null)
 ifeq ($(DISTRIBUTOR),)
@@ -33,10 +33,6 @@ export DH_OPTIONS
 export DEB_HOST_ARCH DEB_HOST_GNU_TYPE DEB_BUILD_ARCH
 export DEB_BUILD_PATH = $(CURDIR)  # for dpkg-buildflags
 export LC_ALL = C.UTF-8
-
-include debian/rules.defs
-
-stamp = [ -d $(dir $@) ] || mkdir $(dir $@); touch $@
 
 setup_env := env -u ABINAME -u ARCH -u FEATURESET -u FLAVOUR -u VERSION -u LOCALVERSION
 setup_env += DISTRIBUTION_OFFICIAL_BUILD=1 DISTRIBUTOR="$(DISTRIBUTOR)" DISTRIBUTION_VERSION="$(SOURCEVERSION)" KBUILD_BUILD_TIMESTAMP="$(SOURCE_DATE)" KBUILD_BUILD_VERSION_TIMESTAMP="$(DISTRIBUTOR) $(SOURCEVERSION) ($(SOURCE_DATE_UTC_ISO))" KBUILD_BUILD_USER="$(word 1,$(subst @, ,$(MAINTAINER)))" KBUILD_BUILD_HOST="$(word 2,$(subst @, ,$(MAINTAINER)))"
@@ -60,12 +56,17 @@ endif
 ifneq ($(DO_LIBC),False)
   binary-arch-arch: install-libc-dev_$(ARCH)
 endif
-binary-arch-featureset: install-headers_$(ARCH)_$(FEATURESET)
-binary-arch-flavour: install-image_$(ARCH)_$(FEATURESET)_$(FLAVOUR)
-ifeq ($(DEBUG),True)
-  binary-arch-flavour: install-image-dbg_$(ARCH)_$(FEATURESET)_$(FLAVOUR)
+
+binary-arch-featureset:
+binary-arch-flavour:
+ifneq ($(DO_KERNEL),False)
+  binary-arch-featureset: install-headers_$(ARCH)_$(FEATURESET)
+  binary-arch-flavour: install-image_$(ARCH)_$(FEATURESET)_$(FLAVOUR)
+  ifeq ($(DEBUG),True)
+    binary-arch-flavour: install-image-dbg_$(ARCH)_$(FEATURESET)_$(FLAVOUR)
+  endif
+  binary-arch-flavour: install-headers_$(ARCH)_$(FEATURESET)_$(FLAVOUR)
 endif
-binary-arch-flavour: install-headers_$(ARCH)_$(FEATURESET)_$(FLAVOUR)
 
 ifneq ($(DO_DOCS),False)
   binary-indep: install-doc
@@ -77,22 +78,38 @@ binary-indep: install-support
 
 ifneq ($(DO_TOOLS),False)
   build-arch-arch: $(STAMPS_DIR)/build-tools
-  binary-arch-arch: install-kbuild install-usbip install-cpupower
-  ifneq ($(filter alpha amd64 arm64 armel armhf hppa i386 mips mips64 mips64el mipsel powerpc powerpcspe ppc64 ppc64el s390 s390x sh4 sparc sparc64 x32,$(DEB_HOST_ARCH)),)
+  binary-arch-arch: install-kbuild install-cpupower
+  ifneq ($(DO_USBIP),False)
+    binary-arch-arch: install-usbip
+  endif
+  ifneq ($(filter alpha amd64 arm64 armel armhf hppa i386 \
+		mips mips64 mips64el mipsel powerpc powerpcspe ppc64 \
+		ppc64el s390 s390x sh4 sparc sparc64 x32,$(DEB_HOST_ARCH)),)
     ifeq ($(filter nopython,$(DEB_BUILD_PROFILES)),)
       binary-arch-arch: install-perf
     endif
   endif
+  ifneq ($(DO_HYPERV),False)
   ifneq ($(filter i386 amd64 x32,$(DEB_HOST_ARCH)),)
     binary-arch-arch: install-hyperv-daemons
   endif
+  endif
 endif
 
+build-arch-flavour:
+ifneq ($(DO_KERNEL),False)
 build-arch-flavour: $(STAMPS_DIR)/build_$(ARCH)_$(FEATURESET)_$(FLAVOUR)
+endif
 
+setup-arch-flavour:
+ifneq ($(DO_KERNEL),False)
 setup-arch-flavour: $(STAMPS_DIR)/setup_$(ARCH)_$(FEATURESET)_$(FLAVOUR)
+endif
 
+source-featureset:
+ifneq ($(DO_KERNEL),False)
 source-featureset: $(STAMPS_DIR)/source_$(FEATURESET)
+endif
 
 $(BUILD_DIR)/config.$(ARCH)_$(FEATURESET)_$(FLAVOUR): $(KCONFIG)
 	mkdir -p '$(dir $@)'
