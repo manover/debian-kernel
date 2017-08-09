@@ -9,6 +9,8 @@ linux (4.13~rc4-2) UNRELEASED; urgency=medium
   * bfq: Enable auto-loading when built as a module
   * [amd64,arm64] mm: Revert x86_64 and arm64 ELF_ET_DYN_BASE base
     (Closes: #869090)
+  * [arm64] enable MVNETA for Espressobin and enable respective
+    device in its device tree (Closes: #871049)
 
  -- Denis Bychkov <manover@gmail.com>  Tue, 15 Aug 2017 02:06:33 -0400
 
