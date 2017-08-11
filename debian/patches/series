@@ -79,6 +79,7 @@ bugfix/all/kbuild-include-addtree-remove-quotes-before-matching-path.patch
 
 # Security fixes
 debian/i386-686-pae-pci-set-pci-nobios-by-default.patch
+bugfix/all/packet-fix-tp_reserve-race-in-packet_set_ring.patch
 
 # ABI maintenance
 
