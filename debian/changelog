@@ -23,6 +23,8 @@ linux (4.12.6-1) unstable; urgency=medium
   * rtlwifi: Fix memory leak when firmware request fails
   * rtlwifi: Fix fallback firmware loading (Closes: #869084)
   * bfq: Enable auto-loading when built as a module
+  * [amd64,arm64] mm: Revert x86_64 and arm64 ELF_ET_DYN_BASE base
+    (Closes: #869090)
 
  -- Denis Bychkov <manover@gmail.com>  Mon, 14 Aug 2017 23:21:44 -0400
 
