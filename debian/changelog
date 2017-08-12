@@ -19,6 +19,7 @@ linux (4.12.6-1) unstable; urgency=medium
     [New Debian Patches]
   * packet: fix tp_reserve race in packet_set_ring (CVE-2017-1000111)
   * udp: consistently apply ufo or fragmentation (CVE-2017-1000112)
+  * xfrm: policy: check policy direction value (CVE-2017-11600)
 
  -- Denis Bychkov <manover@gmail.com>  Mon, 14 Aug 2017 23:21:44 -0400
 
