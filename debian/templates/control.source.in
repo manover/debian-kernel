@@ -59,7 +59,6 @@ Build-Depends-Indep:
 # used by upstream to build documentation
  python-sphinx <!stage1 !nodoc>,
  python-sphinx-rtd-theme <!stage1 !nodoc>,
- xmlto <!stage1 !nodoc>,
 Vcs-Git: https://anonscm.debian.org/git/kernel/linux.git
 Vcs-Browser: https://anonscm.debian.org/cgit/kernel/linux.git
 Homepage: https://www.kernel.org/
