@@ -33,7 +33,7 @@ MAKE_PERF := $(MAKE) O=$(CURDIR) prefix=/usr V=1 ARCH=$(KERNEL_ARCH_PERF) EXTRA_
 
 # Include version in all directory names
 MAKE_PERF += perfexecdir=lib/perf_$(VERSION)-core libdir=/usr/lib/$(DEB_HOST_MULTIARCH) \
-	plugindir=/usr/lib/$(DEB_HOST_MULTIARCH)/traceevent_plugins-$(VERSION)/ \
+	plugindir=\$${libdir}/traceevent-plugins_$(VERSION)/ feature_bpf=1 \
 	STRACE_GROUPS_DIR=share/perf_$(VERSION)-core/strace/groups tipdir=share/doc/linux-perf-$(VERSION)
 
 # perf can link against libbfd if available, but the result is

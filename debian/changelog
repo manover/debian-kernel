@@ -2,6 +2,8 @@ linux (4.12.6-1) unstable; urgency=medium
 
   * Linux 4.12.6
   * Refresh/remove obsolete patches
+  * Make libperf-gtk.so versioned, i.e. libperf-gtk_4.12.so to avoid
+    collision with other versions of linux-perftool
 
  -- Denis Bychkov <manover@gmail.com>  Sun, 13 Aug 2017 17:10:42 -0400
 
