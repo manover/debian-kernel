@@ -232,6 +232,12 @@ install-dummy:
 	dh_prep
 	+$(MAKE_SELF) install-base
 
+install-compiler-%-$(ARCH):
+	dh_testdir
+	dh_testroot
+	dh_prep
+	dh_installdocs --link-doc=$*
+
 install-doc: PACKAGE_NAME = $(SOURCE_PACKAGE_NAME)-doc-$(VERSION)
 install-doc: DIR = $(BUILD_DIR)/build-doc
 install-doc: PACKAGE_DIR = debian/$(PACKAGE_NAME)

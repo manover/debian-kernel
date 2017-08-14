@@ -1,0 +1,55 @@
+--- a/tools/perf/Makefile.perf
++++ b/tools/perf/Makefile.perf
+@@ -344,7 +344,7 @@ ifneq ($(OUTPUT),)
+ endif
+ 
+ ifndef NO_GTK2
+-  ALL_PROGRAMS += $(OUTPUT)libperf-gtk.so
++  ALL_PROGRAMS += $(OUTPUT)libperf-gtk_$(VERSION).so
+   GTK_IN := $(OUTPUT)gtk-in.o
+ endif
+ 
+@@ -423,7 +423,7 @@ $(OUTPUT)perf: $(PERFLIBS) $(PERF_IN) $(
+ $(GTK_IN): FORCE
+ 	$(Q)$(MAKE) $(build)=gtk
+ 
+-$(OUTPUT)libperf-gtk.so: $(GTK_IN) $(PERFLIBS)
++$(OUTPUT)libperf-gtk_$(VERSION).so: $(GTK_IN) $(PERFLIBS)
+ 	$(QUIET_LINK)$(CC) -o $@ -shared $(LDFLAGS) $(filter %.o,$^) $(GTK_LIBS)
+ 
+ $(OUTPUT)common-cmds.h: util/generate-cmdlist.sh command-list.txt
+@@ -638,10 +638,10 @@ check: $(OUTPUT)common-cmds.h
+ ### Installation rules
+ 
+ ifndef NO_GTK2
+-install-gtk: $(OUTPUT)libperf-gtk.so
++install-gtk: $(OUTPUT)libperf-gtk_$(VERSION).so
+ 	$(call QUIET_INSTALL, 'GTK UI') \
+ 		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(libdir_SQ)'; \
+-		$(INSTALL) $(OUTPUT)libperf-gtk.so '$(DESTDIR_SQ)$(libdir_SQ)'
++		$(INSTALL) $(OUTPUT)libperf-gtk_$(VERSION).so '$(DESTDIR_SQ)$(libdir_SQ)'
+ else
+ install-gtk:
+ endif
+--- a/tools/perf/ui/Build
++++ b/tools/perf/ui/Build
+@@ -5,7 +5,7 @@ libperf-y += util.o
+ libperf-y += hist.o
+ libperf-y += stdio/hist.o
+ 
+-CFLAGS_setup.o += -DLIBDIR="BUILD_STR($(LIBDIR))"
++CFLAGS_setup.o += -DLIBDIR="BUILD_STR($(LIBDIR))" -DVERSION="BUILD_STR($(VERSION))"
+ 
+ libperf-$(CONFIG_SLANG) += browser.o
+ libperf-$(CONFIG_SLANG) += browsers/
+--- a/tools/perf/ui/setup.c
++++ b/tools/perf/ui/setup.c
+@@ -10,7 +10,7 @@ pthread_mutex_t ui__lock = PTHREAD_MUTEX
+ void *perf_gtk_handle;
+ int use_browser = -1;
+ 
+-#define PERF_GTK_DSO "libperf-gtk.so"
++#define PERF_GTK_DSO "libperf-gtk_"VERSION".so"
+ 
+ #ifdef HAVE_GTK2_SUPPORT
+ 
