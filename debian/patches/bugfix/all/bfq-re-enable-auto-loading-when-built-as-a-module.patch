@@ -13,7 +13,7 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 
 --- a/block/bfq-iosched.c
 +++ b/block/bfq-iosched.c
-@@ -4974,6 +4974,7 @@ static struct elevator_type iosched_bfq_
+@@ -4998,6 +4998,7 @@ static struct elevator_type iosched_bfq_
  	.elevator_name =	"bfq",
  	.elevator_owner =	THIS_MODULE,
  };

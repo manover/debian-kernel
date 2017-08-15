@@ -22,7 +22,7 @@ Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
 
 --- a/net/xfrm/xfrm_policy.c
 +++ b/net/xfrm/xfrm_policy.c
-@@ -3301,9 +3301,15 @@ int xfrm_migrate(const struct xfrm_selec
+@@ -3308,9 +3308,15 @@ int xfrm_migrate(const struct xfrm_selec
  	struct xfrm_state *x_new[XFRM_MAX_DEPTH];
  	struct xfrm_migrate *mp;
  

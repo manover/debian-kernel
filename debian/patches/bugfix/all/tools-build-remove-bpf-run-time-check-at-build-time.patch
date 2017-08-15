@@ -13,7 +13,7 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 ---
 --- a/tools/build/feature/test-bpf.c
 +++ b/tools/build/feature/test-bpf.c
-@@ -1,39 +1,5 @@
+@@ -1,41 +1,4 @@
 -#include <asm/unistd.h>
 -#include <linux/bpf.h>
 -#include <unistd.h>
@@ -27,6 +27,8 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 -#  define __NR_bpf 280
 -# elif defined(__sparc__)
 -#  define __NR_bpf 349
+-# elif defined(__s390__)
+-#  define __NR_bpf 351
 -# else
 -#  error __NR_bpf not defined. libbpf does not support your arch.
 -# endif
@@ -46,7 +48,7 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 -	attr.log_level = 0;
 -	attr.kern_version = 0;
 -	attr.prog_flags = 0;
- 
+-
 -	/*
 -	 * Test existence of __NR_bpf and BPF_PROG_LOAD.
 -	 * This call should fail if we run the testcase.

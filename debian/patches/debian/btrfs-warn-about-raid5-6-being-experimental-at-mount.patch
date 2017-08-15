@@ -17,7 +17,7 @@ Signed-off-by: Adam Borowski <kilobyte@angband.pl>
 
 --- a/fs/btrfs/disk-io.c
 +++ b/fs/btrfs/disk-io.c
-@@ -3098,6 +3098,15 @@ retry_root_backup:
+@@ -3065,6 +3065,15 @@ retry_root_backup:
  		btrfs_set_opt(fs_info->mount_opt, SSD);
  	}
  

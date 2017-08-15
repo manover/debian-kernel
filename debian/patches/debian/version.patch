@@ -77,7 +77,7 @@ are set.
  
  #include <asm/pgtable.h>
  #include <asm/io.h>
-@@ -1397,8 +1398,9 @@ void show_regs(struct pt_regs * regs)
+@@ -1393,8 +1394,9 @@ void show_regs(struct pt_regs * regs)
  
  	printk("NIP: "REG" LR: "REG" CTR: "REG"\n",
  	       regs->nip, regs->link, regs->ctr);
