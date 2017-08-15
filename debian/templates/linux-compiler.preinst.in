@@ -1,0 +1,5 @@
+# Give way to symlink
+if [ -d /usr/share/doc/linux-compiler-#COMPILER# ]; then
+	rm -rf /usr/share/doc/linux-compiler-#COMPILER#
+fi
+# End automatically added section

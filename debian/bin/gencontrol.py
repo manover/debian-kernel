@@ -59,6 +59,7 @@ class Gencontrol(Base):
         for src, dst, optional in names:
             if src in data or not optional:
                 makeflags[dst] = data[src]
+        self.makeflags = makeflags.copy()
 
     def _substitute_file(self, template, vars, target, append=False):
         with codecs.open(target, 'a' if append else 'w', 'utf-8') as f:
@@ -75,6 +76,7 @@ class Gencontrol(Base):
 
         # Prepare to generate debian/tests/control
         self.tests_control = None
+        self.makeflags = makeflags.copy()
 
     def do_main_makefile(self, makefile, makeflags, extra):
         fs_enabled = [featureset

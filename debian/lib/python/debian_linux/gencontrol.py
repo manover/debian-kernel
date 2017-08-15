@@ -137,10 +137,16 @@ class Gencontrol(object):
                 i = extra_arches.get(arch, [])
                 i.append(package)
                 extra_arches[arch] = i
+        cmakeflags = self.makeflags.copy()
         for arch in sorted(extra_arches.keys()):
             cmds = []
+            cmakeflags.update(KERNEL_ARCH=self.config['base', arch]["kernel-arch"])
             for i in extra_arches[arch]:
-                cmds.append("$(MAKE) -f debian/rules.real install-dummy ARCH='%s' DH_OPTIONS='-p%s'" % (arch, i['Package']))
+                package = i["Package"]
+                compiler = i["Depends"][0]
+                cmakeflags.update(ARCH=arch, PACKAGE_NAME=package, COMPILER=compiler)
+                #print("\nPackage: {}, Arch: {}, Base-arch: {}\n".format(package, arch, KArch))
+                cmds.append("$(MAKE) -f debian/rules.real install-{} {}".format(package, cmakeflags))
             makefile.add('binary-arch_%s' % arch, ['binary-arch_%s_extra' % arch])
             makefile.add("binary-arch_%s_extra" % arch, cmds = cmds)
 
