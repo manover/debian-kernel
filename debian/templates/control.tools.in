@@ -10,7 +10,8 @@ Package: linux-cpupower
 Build-Profiles: <!stage1 !pkg.linux.notools>
 Section: admin
 Architecture: linux-any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Multi-Arch: foreign
+Depends: ${shlibs:Depends}, ${misc:Depends}, libcpupower1 (= ${binary:Version})
 Description: CPU power management tools for Linux
  The cpupower command allows inspection and control of cpufreq and
  cpuidle tunables for hardware that support these features.  It
@@ -22,6 +23,7 @@ Package: libcpupower1
 Build-Profiles: <!stage1 !pkg.linux.notools>
 Section: libs
 Architecture: linux-any
+Multi-Arch: same
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: CPU frequency and voltage scaling tools for Linux (libraries)
  This package contains the shared library.
@@ -31,6 +33,7 @@ Build-Profiles: <!stage1 !pkg.linux.notools>
 Section: libdevel
 Architecture: linux-any
 Depends: ${shlibs:Depends}, ${misc:Depends}, libcpupower1 (= ${binary:Version})
+Multi-Arch: same
 Provides: libcpufreq-dev
 Conflicts: libcpufreq-dev
 Replaces: libcpufreq-dev
