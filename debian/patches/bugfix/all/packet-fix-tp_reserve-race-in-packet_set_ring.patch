@@ -18,11 +18,9 @@ Signed-off-by: David S. Miller <davem@davemloft.net>
  net/packet/af_packet.c | 13 +++++++++----
  1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
-index 0615c2a950fa..008a45ca3112 100644
 --- a/net/packet/af_packet.c
 +++ b/net/packet/af_packet.c
-@@ -3700,14 +3700,19 @@ packet_setsockopt(struct socket *sock, int level, int optname, char __user *optv
+@@ -3705,14 +3705,19 @@ packet_setsockopt(struct socket *sock, i
  
  		if (optlen != sizeof(val))
  			return -EINVAL;
@@ -46,6 +44,3 @@ index 0615c2a950fa..008a45ca3112 100644
  	}
  	case PACKET_LOSS:
  	{
--- 
-2.11.0
-
