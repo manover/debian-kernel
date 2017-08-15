@@ -101,7 +101,7 @@ maintainerclean:
 
 clean: debian/control
 	dh_testdir
-	dh_clean
+	dh_clean debian/linux-compiler*.preinst
 	rm -f $$(find debian -maxdepth 1 -name linux-headers-[3-5].*.[0-9]-*-*)
 	rm -f $$(find debian -maxdepth 1 -name linux-image-[3-5].*.[0-9]-*-*)
 	rm -rf $(BUILD_DIR) $(STAMPS_DIR) debian/lib/python/debian_linux/*.pyc \

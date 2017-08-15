@@ -215,10 +215,13 @@ $(STAMPS_DIR)/build-doc: $(STAMPS_DIR)/source
 	@$(stamp)
 
 install-base:
-ifeq (,$(filter nodoc,$(DEB_BUILD_PROFILES)))
-	dh_installdocs $(INSTALLDOCS_ARGS)
-endif
+ifneq (,$(LINK_GCC_DOC))
+	mkdir -p $(PACKAGE_DOC)
+	ln -sf $(COMPILER) $(PACKAGE_DOC)/$(PACKAGE_NAME)
+else ifeq (,$(filter nodoc,$(DEB_BUILD_PROFILES)))
+	dh_installdocs
 	dh_installchangelogs
+endif
 	dh_compress
 	dh_fixperms
 	dh_installdeb
@@ -232,11 +235,17 @@ install-dummy:
 	dh_prep
 	+$(MAKE_SELF) install-base
 
-install-compiler-%-$(ARCH):
-	dh_testdir
-	dh_testroot
-	dh_prep
-	dh_installdocs --link-doc=$*
+install-linux-compiler-$(COMPILER)-$(KERNEL_ARCH): export DH_OPTIONS = -p$(PACKAGE_NAME)
+install-linux-compiler-$(COMPILER)-$(KERNEL_ARCH): export LINK_GCC_DOC = $(COMPILER)
+install-linux-compiler-$(COMPILER)-$(KERNEL_ARCH): export PACKAGE_PATH = debian/$(PACKAGE_NAME)
+install-linux-compiler-$(COMPILER)-$(KERNEL_ARCH): export PACKAGE_DOC = $(PACKAGE_PATH)/usr/share/doc
+install-linux-compiler-$(COMPILER)-$(KERNEL_ARCH): export LCC_M_SCRIPT = $(PACKAGE_PATH).preinst
+install-linux-compiler-$(COMPILER)-$(KERNEL_ARCH): install-dummy
+
+$(LCC_M_SCRIPT):
+	echo "if [ -d /usr/share/doc/$(PACKAGE_NAME) ]; then" > $@
+	echo "rm -rf /usr/share/doc/$(PACKAGE_NAME)" >> $@
+	echo "fi" >> $@
 
 install-doc: PACKAGE_NAME = $(SOURCE_PACKAGE_NAME)-doc-$(VERSION)
 install-doc: DIR = $(BUILD_DIR)/build-doc
@@ -595,9 +604,9 @@ ifneq ($(filter i386 amd64 x32,$(DEB_HOST_ARCH)),)
 'savings.'
 endif
 	dh_install --sourcedir=$(DIR)
-	dh_installchangelogs
+	dh_installchangelogs -Nlibcpupower-dev -Nlinux-cpupower
 ifeq (,$(filter nodoc,$(DEB_BUILD_PROFILES)))
-	dh_installdocs
+	dh_installdocs --link-doc=libcpupower1
 ifneq ($(filter i386 amd64 x32,$(DEB_HOST_ARCH)),)
 	dh_installman tools/power/x86/turbostat/turbostat.8 \
 		tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.8

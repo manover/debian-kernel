@@ -4,8 +4,19 @@ linux (4.12.6-1) unstable; urgency=medium
   * Refresh/remove obsolete patches
   * Make libperf-gtk.so versioned, i.e. libperf-gtk_4.12.so to avoid
     collision with other versions of linux-perftool
+  * Make necessary changes to the build system to support more flexible
+    linux-compiler-* packages; based on that work perform symlinking of
+    <linux-compiler> doc directory  to the proper dependent system compiler
+    doc directory, removing the copy of the linux kernel changelog and freeng
+    400K of wasted disk space in the process
+  * Make libcpupower{1,-dev} Multi-Arch: same by moving the arch-
+    dependent files into lib multi-arch dir
+  * Make packages much smaller doing link-doc linux-cpupower and
+    libcpupower-dev to libcpupower1
+  * Update linux-cpupower with libcpupower1 in lock-step by setting
+    libcpupower1 (= ${binary:Version}) dependency
 
- -- Denis Bychkov <manover@gmail.com>  Sun, 13 Aug 2017 17:10:42 -0400
+ -- Denis Bychkov <manover@gmail.com>  Mon, 14 Aug 2017 23:21:44 -0400
 
 linux (4.12.5-1) unstable; urgency=medium
 
