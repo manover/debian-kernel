@@ -1,5 +1,7 @@
 include $(top_rulesdir)/Makefile.inc
 
+export libdir=/usr/lib/$(DEB_HOST_MULTIARCH)
+
 MAKE_CPUPOWER := $(shell dpkg-buildflags --export=cmdline) $(MAKE) O=$(CURDIR) CPUFREQ_BENCH=false V=true mandir=/usr/share/man
 
 MAKE_CPUPOWER += DEBUG=$(if $(findstring nostrip,$(DEB_BUILD_OPTIONS)),true,)
