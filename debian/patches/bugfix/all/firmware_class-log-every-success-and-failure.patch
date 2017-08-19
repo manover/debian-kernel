@@ -23,7 +23,7 @@ format to detect missing firmware.
 ---
 --- a/drivers/base/firmware_class.c
 +++ b/drivers/base/firmware_class.c
-@@ -418,21 +418,22 @@ fw_get_filesystem_firmware(struct device
+@@ -414,21 +414,22 @@ fw_get_filesystem_firmware(struct device
  		rc = kernel_read_file_from_path(path, &buf->data, &size, msize,
  						id);
  		if (rc) {
@@ -53,7 +53,7 @@ format to detect missing firmware.
  	return rc;
  }
  
-@@ -1190,7 +1191,7 @@ _request_firmware(const struct firmware
+@@ -1208,7 +1209,7 @@ _request_firmware(const struct firmware
  	if (opt_flags & FW_OPT_NOWAIT) {
  		timeout = usermodehelper_read_lock_wait(timeout);
  		if (!timeout) {

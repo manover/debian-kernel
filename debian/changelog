@@ -1,3 +1,10 @@
+linux (4.12.8-1) unstable; urgency=medium
+
+  * Linux 4.12.8
+  * Refresh/remove obsolete patches
+
+ -- Denis Bychkov <manover@gmail.com>  Sat, 19 Aug 2017 19:37:43 -0400
+
 linux (4.12.6-1) unstable; urgency=medium
 
   * Linux 4.12.6
