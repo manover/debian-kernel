@@ -1,3 +1,10 @@
+linux (4.13~rc6-1) experimental; urgency=medium
+
+  * Linux 4.13 RC 6
+  * Refresh/remove obsolete patches
+
+ -- Denis Bychkov <manover@gmail.com>  Mon, 21 Aug 2017 01:28:30 -0400
+
 linux (4.13~rc5-1) experimental; urgency=medium
 
   * Linux 4.13 RC 5
