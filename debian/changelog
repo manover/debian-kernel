@@ -1,3 +1,9 @@
+linux (4.13~rc6-2) experimental; urgency=medium
+
+  * Bump AUFS version to 4.13-20170828
+
+ -- Denis Bychkov <manover@gmail.com>  Sun, 27 Aug 2017 15:59:49 -0400
+
 linux (4.13~rc6-1) experimental; urgency=medium
 
   * Linux 4.13 RC 6
