@@ -1,3 +1,11 @@
+linux (4.12.9-1) unstable; urgency=medium
+
+  * Linux 4.12.9
+  * Refresh/remove obsolete patches
+  * Bump compat level 9 => 10
+
+ -- Denis Bychkov <manover@gmail.com>  Sun, 27 Aug 2017 04:41:41 -0400
+
 linux (4.12.8-1) unstable; urgency=medium
 
   * Linux 4.12.8
