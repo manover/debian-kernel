@@ -24,7 +24,7 @@ aufs4.x-rcN base patch
  W:	http://miguelojeda.es/auxdisplay.htm
 --- a/drivers/block/loop.c
 +++ b/drivers/block/loop.c
-@@ -707,6 +707,24 @@ static inline int is_loop_device(struct
+@@ -700,6 +700,24 @@ static inline int is_loop_device(struct
  	return i && S_ISBLK(i->i_mode) && MAJOR(i->i_rdev) == LOOP_MAJOR;
  }
  

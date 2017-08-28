@@ -18,7 +18,7 @@
  HOST_LOADLIBES := $(HOST_LFS_LIBS)
  
  ifeq ($(shell $(HOSTCC) -v 2>&1 | grep -c "clang version"), 1)
-@@ -1306,7 +1306,7 @@ CLEAN_DIRS  += $(MODVERDIR)
+@@ -1307,7 +1307,7 @@ CLEAN_DIRS  += $(MODVERDIR)
  # Directories & files removed with 'make mrproper'
  MRPROPER_DIRS  += include/config usr/include include/generated          \
  		  arch/*/include/generated .tmp_objdiff
