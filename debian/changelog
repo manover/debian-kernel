@@ -2,6 +2,7 @@ linux (4.13~rc7-1) experimental; urgency=medium
 
   * Linux 4.13 RC 7
   * Refresh/remove obsolete patches
+  * Bump compat level 9 => 10
 
  -- Denis Bychkov <manover@gmail.com>  Mon, 28 Aug 2017 05:54:04 -0400
 
