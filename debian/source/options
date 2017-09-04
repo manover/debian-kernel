@@ -1,1 +1,2 @@
-#tar-ignore = debian/*.local
+tar-ignore = .config
+diff-ignore = \.config

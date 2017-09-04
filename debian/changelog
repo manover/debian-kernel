@@ -1,3 +1,11 @@
+linux (4.13.0-1) unstable; urgency=medium
+
+  * Linux 4.13
+  * Update AUFS to 4.13-20170904
+  * Refresh/remove obsolete patches
+
+ -- Denis Bychkov <manover@gmail.com>  Mon, 04 Sep 2017 05:07:29 -0400
+
 linux (4.13~rc7-2) experimental; urgency=medium
 
   * Remove support for upstream DocBook-based documentation, including
