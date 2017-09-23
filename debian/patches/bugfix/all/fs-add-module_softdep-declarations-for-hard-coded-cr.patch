@@ -11,7 +11,7 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 ---
 --- a/fs/btrfs/super.c
 +++ b/fs/btrfs/super.c
-@@ -2430,3 +2430,4 @@ late_initcall(init_btrfs_fs);
+@@ -2432,3 +2432,4 @@ late_initcall(init_btrfs_fs);
  module_exit(exit_btrfs_fs)
  
  MODULE_LICENSE("GPL");

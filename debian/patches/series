@@ -74,6 +74,11 @@ bugfix/all/bfq-re-enable-auto-loading-when-built-as-a-module.patch
 
 # Security fixes
 debian/i386-686-pae-pci-set-pci-nobios-by-default.patch
+bugfix/all/nl80211-check-for-the-required-netlink-attributes-presence.patch
+bugfix/x86/kvm-nvmx-don-t-allow-l2-to-access-the-hardware-cr8.patch
+bugfix/all/video-fbdev-aty-do-not-leak-uninitialized-padding-in.patch
+bugfix/all/scsi-fix-the-issue-that-iscsi_if_rx-doesn-t-parse-nlmsg-properly.patch
+bugfix/x86/kvm-vmx-do-not-bug-on-out-of-bounds-guest-irq.patch
 
 # ABI maintenance
 

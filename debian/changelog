@@ -1,9 +1,24 @@
+linux (4.13.3-1) unstable; urgency=medium
+
+  * Linux 4.13.3
+  * Update AUFS to 4.13-20170918
+  
+  [Debian patches]
+  * nl80211: check for the required netlink attributes presence (CVE-2017-12153)
+  * [x86] kvm: nVMX: Don't allow L2 to access the hardware CR8 (CVE-2017-12154)
+  * video: fbdev: aty: do not leak uninitialized padding in clk to userspace
+    (CVE-2017-14156)
+  * scsi: fix the issue that iscsi_if_rx doesn't parse nlmsg properly
+    (CVE-2017-14489)
+  * [x86] KVM: VMX: Do not BUG() on out-of-bounds guest IRQ (CVE-2017-1000252)
+
+ -- Denis Bychkov <manover@gmail.com>  Sat, 23 Sep 2017 03:29:32 -0400
+
 linux (4.13.0-1) unstable; urgency=medium
 
   * Linux 4.13
   * Update AUFS to 4.13-20170904
   * Refresh/remove obsolete patches
-  * Update AUFS to 4.13-20170918
 
  -- Denis Bychkov <manover@gmail.com>  Mon, 04 Sep 2017 05:07:29 -0400
 
@@ -852,6 +867,7 @@ linux (4.8.11-1) unstable; urgency=medium
     (CVE-2016-6213)
 
   [ Ben Hutchings ]
+<<<<<<< HEAD
   * [arm64] Enable more drivers for X-Gene (Really closes: #840061):
     - DMA: Enable XGENE_DMA as module
     - EDAC: Enable EDAC and EDAC_MM_EDAC, EDAC_XGENE as modules
@@ -1295,6 +1311,27 @@ linux (4.8.4-1~exp1) experimental; urgency=medium
     back to writing a placeholder
   * [rt] Update to 4.8.2-rt2 and re-enable
   * aufs: Update support patchest to aufs4.8-20161010 (no functional change)
+=======
+  * fs: Consolidate softdep declarations in each module
+  * Bump ABI to 2
+  * [armel/marvell] dts: kirkwood: fix SD slot default configuration for OpenRD
+    (Closes: #811351)
+  * atl2: Disable unimplemented scatter/gather feature (CVE-2016-2117)
+  * [x86] sound/soc/intel: Enable SND_SOC_INTEL_BYTCR_RT5640_MACH (replacing
+    SND_SOC_INTEL_BYT_RT5640_MACH; closes: #822267),
+    SND_SOC_INTEL_BYTCR_RT5651_MACH, SND_SOC_INTEL_CHT_BSW_RT5672_MACH,
+    SND_SOC_INTEL_CHT_BSW_RT5645_MACH, SND_SOC_INTEL_CHT_BSW_MAX98090_TI_MACH,
+    SND_SOC_INTEL_SKL_RT286_MACH, SND_SOC_INTEL_SKL_NAU88L25_SSM4567_MACH,
+    SND_SOC_INTEL_SKL_NAU88L25_MAX98357A_MACH as modules
+  * module: Invalidate signatures on force-loaded modules
+  * linux-source: Fix up module signing configuration in included kernel
+    config files
+  * README.Debian: Change more URLs to use https: scheme
+  * [sparc] Implement and wire up hotplug and modalias_show for vio, thanks to
+    Adrian Glaubitz (Closes: #815977)
+  * linux-headers: Avoid mixed implicit and normal rules in Makefile, thanks to
+    Thierry Herbelot (Closes: #822666)
+>>>>>>> 9fa5f38a4... linux-headers: Avoid mixed implicit and normal rules in Makefile
 
   [ Aurelien Jarno ]
   * [arm64] Enable SERIAL_8250_EXTENDED, SERIAL_8250_SHARE_IRQ and
