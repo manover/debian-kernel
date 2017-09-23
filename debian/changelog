@@ -3,6 +3,7 @@ linux (4.13.0-1) unstable; urgency=medium
   * Linux 4.13
   * Update AUFS to 4.13-20170904
   * Refresh/remove obsolete patches
+  * Update AUFS to 4.13-20170918
 
  -- Denis Bychkov <manover@gmail.com>  Mon, 04 Sep 2017 05:07:29 -0400
 

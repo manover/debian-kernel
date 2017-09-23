@@ -1,4 +1,4 @@
-aufs4.x-rcN standalone patch
+aufs4.13 standalone patch
 
 --- a/fs/dcache.c
 +++ b/fs/dcache.c
@@ -74,7 +74,7 @@ aufs4.x-rcN standalone patch
  { 
 --- a/fs/inode.c
 +++ b/fs/inode.c
-@@ -1650,6 +1650,7 @@ int update_time(struct inode *inode, str
+@@ -1651,6 +1651,7 @@ int update_time(struct inode *inode, str
  
  	return update_time(inode, time, flags);
  }
