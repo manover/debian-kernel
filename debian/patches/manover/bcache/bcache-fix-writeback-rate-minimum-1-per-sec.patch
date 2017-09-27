@@ -28,7 +28,7 @@ Date:   Tue Jun 27 17:36:52 2017 -0700
 
 --- a/drivers/md/bcache/util.c
 +++ b/drivers/md/bcache/util.c
-@@ -210,7 +210,14 @@ uint64_t bch_next_delay(struct bch_ratel
+@@ -230,7 +230,14 @@ uint64_t bch_next_delay(struct bch_ratel
  {
  	uint64_t now = local_clock();
  
@@ -55,7 +55,7 @@ Date:   Tue Jun 27 17:36:52 2017 -0700
  /* Rate limiting */
  
  static void __update_writeback_rate(struct cached_dev *dc)
-@@ -55,13 +57,14 @@ static void __update_writeback_rate(stru
+@@ -56,13 +58,14 @@ static void __update_writeback_rate(stru
  
  	/* Don't increase writeback rate if the device isn't keeping up */
  	if (change > 0 &&
@@ -71,7 +71,7 @@ Date:   Tue Jun 27 17:36:52 2017 -0700
  
  	dc->writeback_rate_proportional = proportional;
  	dc->writeback_rate_derivative = derivative;
-@@ -420,15 +423,15 @@ static int bch_writeback_thread(void *ar
+@@ -421,15 +424,15 @@ static int bch_writeback_thread(void *ar
  	while (!kthread_should_stop()) {
  		down_write(&dc->writeback_lock);
  		if (!atomic_read(&dc->has_dirty) ||

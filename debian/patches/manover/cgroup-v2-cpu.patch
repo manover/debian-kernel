@@ -371,7 +371,7 @@
 +     Peter Zijlstra <peterz@infradead.org>
 --- a/kernel/sched/core.c
 +++ b/kernel/sched/core.c
-@@ -6578,7 +6578,7 @@ static int __cfs_schedulable(struct task
+@@ -6577,7 +6577,7 @@ static int __cfs_schedulable(struct task
  	return ret;
  }
  
@@ -380,7 +380,7 @@
  {
  	struct task_group *tg = css_tg(seq_css(sf));
  	struct cfs_bandwidth *cfs_b = &tg->cfs_bandwidth;
-@@ -6618,7 +6618,7 @@ static u64 cpu_rt_period_read_uint(struc
+@@ -6617,7 +6617,7 @@ static u64 cpu_rt_period_read_uint(struc
  }
  #endif /* CONFIG_RT_GROUP_SCHED */
  
@@ -389,7 +389,7 @@
  #ifdef CONFIG_FAIR_GROUP_SCHED
  	{
  		.name = "shares",
-@@ -6639,7 +6639,7 @@ static struct cftype cpu_files[] = {
+@@ -6638,7 +6638,7 @@ static struct cftype cpu_files[] = {
  	},
  	{
  		.name = "stat",
@@ -398,7 +398,7 @@
  	},
  #endif
  #ifdef CONFIG_RT_GROUP_SCHED
-@@ -6657,6 +6657,139 @@ static struct cftype cpu_files[] = {
+@@ -6656,6 +6656,139 @@ static struct cftype cpu_files[] = {
  	{ }	/* Terminate */
  };
  
@@ -538,7 +538,7 @@
  struct cgroup_subsys cpu_cgrp_subsys = {
  	.css_alloc	= cpu_cgroup_css_alloc,
  	.css_online	= cpu_cgroup_css_online,
-@@ -6665,8 +6798,16 @@ struct cgroup_subsys cpu_cgrp_subsys = {
+@@ -6664,8 +6797,16 @@ struct cgroup_subsys cpu_cgrp_subsys = {
  	.fork		= cpu_cgroup_fork,
  	.can_attach	= cpu_cgroup_can_attach,
  	.attach		= cpu_cgroup_attach,

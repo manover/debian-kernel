@@ -130,13 +130,8 @@ manover/gcc7-comp.patch
 #manover/aspm-force.patch
 # Bcache
 manover/bcache/bcache-fix-remove-incorrect-minors.patch
-manover/bcache/bcache-fix-bdev-leak.patch
-manover/bcache/bcache-fix-gc-wb-race.patch
 manover/bcache/bcache-fix-writeback-rate-minimum-1-per-sec.patch
-manover/bcache/bcache-correct-return-value-for-attach-errors.patch
-manover/bcache/bcache-fix-sequential-large-bypass.patch
 manover/bcache/bcache-update-bucket-in-use-periodically.patch
-manover/bcache/bcache-do-not-subtract-gc-sectors-for-bypass.patch
 manover/bcache/bcache-increase-number-of-open-buckets.patch
 manover/bcache/bcache-fix-wrong-misses-stats.patch
 manover/bcache/bcache-explicitely-destroy-mutex.patch

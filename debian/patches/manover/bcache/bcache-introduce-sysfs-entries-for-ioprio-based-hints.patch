@@ -301,7 +301,7 @@ Date:   Wed Oct 19 17:36:37 2016 -0700
  KTYPE(bch_cached_dev);
 --- a/drivers/md/bcache/writeback.c
 +++ b/drivers/md/bcache/writeback.c
-@@ -514,6 +514,14 @@ void bch_cached_dev_writeback_init(struc
+@@ -515,6 +515,14 @@ void bch_cached_dev_writeback_init(struc
  	dc->writeback_rate_d_term	= 30;
  	dc->writeback_rate_p_term_inverse = 6000;
  
@@ -318,7 +318,7 @@ Date:   Wed Oct 19 17:36:37 2016 -0700
  
 --- a/drivers/md/bcache/writeback.h
 +++ b/drivers/md/bcache/writeback.h
-@@ -43,6 +43,8 @@ static inline bool should_writeback(stru
+@@ -62,6 +62,8 @@ static inline bool should_writeback(stru
  				    unsigned cache_mode, bool would_skip)
  {
  	unsigned in_use = dc->disk.c->gc_stats.in_use;
@@ -327,7 +327,7 @@ Date:   Wed Oct 19 17:36:37 2016 -0700
  
  	if (cache_mode != CACHE_MODE_WRITEBACK ||
  	    test_bit(BCACHE_DEV_DETACHING, &dc->disk.flags) ||
-@@ -57,7 +59,30 @@ static inline bool should_writeback(stru
+@@ -76,7 +78,30 @@ static inline bool should_writeback(stru
  	if (would_skip)
  		return false;
  

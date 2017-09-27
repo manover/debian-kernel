@@ -25,7 +25,7 @@ Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 +MODULE_SOFTDEP("pre: crypto-aes crypto-ecb");
 --- a/fs/ext4/super.c
 +++ b/fs/ext4/super.c
-@@ -5829,5 +5829,13 @@ static void __exit ext4_exit_fs(void)
+@@ -5853,5 +5853,13 @@ static void __exit ext4_exit_fs(void)
  MODULE_AUTHOR("Remy Card, Stephen Tweedie, Andrew Morton, Andreas Dilger, Theodore Ts'o and others");
  MODULE_DESCRIPTION("Fourth Extended Filesystem");
  MODULE_LICENSE("GPL");
